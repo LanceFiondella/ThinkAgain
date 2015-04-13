@@ -11,9 +11,61 @@
   <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
   <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 </head>
 
 <body style = "height: 100%;">
+
+<script type="text/javascript">
+
+function hideAllErrors(){
+  $('#loginErrorMsg').hide();
+  $('#disabledErrorMsg').hide();
+  $('#usernameTakenErrorMsg').hide();
+  $('#emailErrorMsg').hide();
+  $('#registrationCompleteMsg').hide();
+}
+
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+
+function validate_login(){
+  hideAllErrors();
+  var csrf_token = $.cookie('csrftoken');
+  console.log("Validating login!")
+
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrf_token);
+        }
+    }
+});
+
+$.ajax({
+    url : "/login/",
+    type : "POST",
+    data: "username="+ document.getElementById("username").value +"&password=" + document.getElementById("password").value,
+
+    success: function(data){
+      if (data['result'] == 'invalid'){
+        $('#loginErrorMsg').show();
+      }
+      else if (data['result'] == 'disabled'){
+        $('#disabledErrorMsg').show();
+      }
+      else if (data['result'] == 'success'){
+        window.location.replace("/game_menu/");
+      }
+
+    }
+    
+  });
+}//end validate login
+</script>
 
 <div class="container" style= "position: relative; min-height: 90%;">
 <nav class="navbar navbar-default">
@@ -35,15 +87,33 @@
               <li><a href="contact.html">Contact</a></li>
               {% endblock navbar %}
             </ul>
+            {% if user.is_authenticated %}
             <ul class="navbar-form navbar-right">
+                <form id="loginFormNav" method="POST" action="/logout/" novalidate="novalidate">{% csrf_token %}
+                    <div class="form-group">
+                        <p  style= "margin: 5px 0;"> Logged in as: {{user.username}} </p>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-default" action="/logout/">Sign Out</button>  
+                </form>
+            </ul>
+
+            {% else %}
+            {% block navbar-login %}
+            <ul class="navbar-form navbar-right">
+                <form id="loginFormNav" method="POST" action="javascript:validate_login()" novalidate="novalidate">{% csrf_token %}
                 <div class="form-group">
-                        <input type="text" class="form-control" name="username" placeholder="Username">
+                        <input type="text" class="form-control" name="username" id="username" placeholder="Username">
                     </div>
                     <div class="form-group">
-                        <input type="text" class="form-control" name="password" placeholder="Password">
+                        <input type="password" class="form-control" name="password" id ="password" placeholder="Password">
                     </div>
                     <button type="submit" class="btn btn-default">Sign In</button>  
+                </form>
             </ul>
+            {% endblock navbar-login %}
+            {% endif %}
+
           </div><!--/.nav-collapse -->
         </div><!--/.container-fluid -->
       </nav>
