@@ -1,0 +1,38 @@
+{% extends "crowdsource_site/base.html" %}
+
+
+{% block navbar %}
+	<li><a href="/">Home</a></li>
+    <li class="active"><a href="about">About</a></li>
+    <li><a href="/contact">Contact</a></li>
+{% endblock navbar %}
+
+
+{% block content %}
+
+
+<div class="container">
+  <h1 id="page-title">About Think Again!</h1>
+      <p id="tagline">Think Again is a project at the University of Massachusetts Dartmouth led by Dr. Lance Fiondella of the ECE department and Dr. Firas Khatib of the CIS department</p>
+</div>
+
+
+<div class="container-fluid">
+ <div class="row">  
+ 	<div class="col-sm-2">
+ 	</div>
+ 		
+ 	<div class="col-sm-4">
+      <h2>Getting started</h2>
+      <p>Register a new account and start playing! <a href="/">Get started here</a>.</p>
+   </div>
+
+   <div class="col-sm-4">
+   	<h2>Contact us</h2>
+      <p>Have comments, suggestions or questions? <a href="/contact">Get in touch!</a></p>   
+      </div>
+</div>
+</div>
+
+
+{% endblock content %}
