@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Think Again!</title>
+</head>
+ 
+<body onload="init()">
+<div>
+<h1>Think Again problem selector</h1>
+</div>
+<p>
+Place definition of problem in the "problems" folder in drop box (as .txt file).
+</p>
+<p>
+First line of txt file is the number of atoms in the puzzle (not number of clauses).
+Followed by clauses on a new line where the atoms are separated by commas. The last clause will be the negated conclusion
+</p>
+<p>
+Contents of problem2.txt is as follows:<br>
+4<br>
+1,2 	<br>
+-3,4<br>
+</p>
+
+<select id="selectMenu">
+</select>
+<p></p>
+<a href="index_game.html"><button type="submit" onclick="run_game()">Play game</button>
+
+ 
+<script type="text/javascript" language="JavaScript"><!--
+var problem_list;
+var data;
+function init() {
+problem_list = httpGet("./cgi-bin/get_problem_files.py");
+//document.getElementById("p1").innerHTML = text;
+console.log(problem_list);
+populate_dropdown();
+}
+
+
+function populate_dropdown(){
+data = JSON.parse(problem_list);
+var list = document.getElementById('selectMenu')
+for (k in data){
+    console.log(data[k]);
+    if (data.hasOwnProperty(k)){
+            list.innerHTML = '<option value="'+k+'">'+k+'</option>' + list.innerHTML
+    }
+        
+    
+}
+}
+
+function run_game(){
+    var list = document.getElementById('selectMenu');
+    
+    sessionStorage.setItem("filename",data[list.value]);
+}
+
+
+function httpGet(theUrl)
+{
+    var xmlHttp = null;
+
+    xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", theUrl, false );
+    xmlHttp.send( null );
+    return xmlHttp.responseText;
+}
+//--></script>
+
+
+ 
+</body>
+ 
+
+</html>

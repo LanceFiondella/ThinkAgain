@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title></title>
+<script src="https://code.createjs.com/createjs-2014.12.12.min.js"></script>
+</head>
+ 
+<body onload="init()">
+ 
+<canvas id="canvas" style="background-color:white;"></canvas>
+ 
+</body>
+ 
+<script src="scripts/game.js"></script>
+</html>

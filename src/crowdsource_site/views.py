@@ -84,7 +84,7 @@ def game(request):
 
 def game_menu(request):
 	context = {}
-	template = "game/index.html"
+	template = "/static/game/index.html"
 	return render(request, template, context)
 
 def get_problem_files(request):

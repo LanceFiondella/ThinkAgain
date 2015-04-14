@@ -14,7 +14,7 @@ urlpatterns = [
     url(r'^register/', 'crowdsource_site.views.register', name='register'),
     url(r'^game/','crowdsource_site.views.game',name='game'),
     url(r'^game_menu/','crowdsource_site.views.game_menu',name='game_menu'),
-    url(r'^get_problem_files/','crowdsource_site.views.get_problem_files',name='get_problem_files'),
+    url(r'^./cgi-bin/get_problem_files.py','crowdsource_site.views.get_problem_files',name='get_problem_files'),
     url(r'^generate_problem/','crowdsource_site.views.generate_problem',name='generate_problem'),
     # url(r'^blog/', include('blog.urls')),
 
