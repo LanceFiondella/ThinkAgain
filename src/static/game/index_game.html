@@ -8,8 +8,9 @@
 	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 	<script src="https://code.createjs.com/createjs-2014.12.12.min.js"></script>
 	<script src="http://visjs.org/dist/vis.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 	<link type="text/css" rel="stylesheet" href="http://visjs.org/dist/vis.css">
-	<script src="templates/game/scripts/graph.js"></script>
+	<script src="scripts/graph.js"></script>
 	<script src="scripts/PieceManager.js"></script>
 	<script src="scripts/ClausePiece.js"></script>
 	<script src="scripts/ComboBox.js"></script>
@@ -51,7 +52,7 @@
 		var check = 0;
 		var next_value,i;
 		//var data = JSON.parse(problem_list);
-		problem_list = httpGet("./cgi-bin/get_problem_files.py");
+		problem_list = httpGet("/cgi-bin/get_problem_files.py");
 		var data = JSON.parse(problem_list);
 		var arr = Object.keys(data);
 		var array = arr.reverse();

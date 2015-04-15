@@ -25,14 +25,14 @@ Contents of problem2.txt is as follows:<br>
 <select id="selectMenu">
 </select>
 <p></p>
-<a href="/static/game/index_game.html"><button type="submit" onclick="run_game()">Play game</button>
+<a href="/game/"><button type="submit" onclick="run_game()">Play game</button>
 
  
 <script type="text/javascript" language="JavaScript"><!--
 var problem_list;
 var data;
 function init() {
-problem_list = httpGet("/get_problem_files/");
+problem_list = httpGet("/cgi-bin/get_problem_files.py/");
 //document.getElementById("p1").innerHTML = text;
 console.log(problem_list);
 populate_dropdown();

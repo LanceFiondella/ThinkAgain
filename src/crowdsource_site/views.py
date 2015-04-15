@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.template import RequestContext
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -76,17 +76,24 @@ def register(request):
 		return render(request, "crowdsource_site/index.html", {})
 
 def game(request):
-	#context = {}
-	#template = "static/game/index_game.html"
-	#return render(request, template, context)
-	return HttpResponse("static/game/index_game.html")
+	context = {}
+	template = "game/game_template.html"
+
+	if request.user.is_authenticated():
+		return HttpResponseRedirect("/static/game/index_game.html")
+	else:
+		return HttpResponse("Error: You are not logged in. Please go to main page and login to play")
 
 
 def game_menu(request):
 	context = {}
-	template = "/static/game/index.html"
-	return render(request, template, context)
+	template = "game/menu_template.html"
 
+	if request.user.is_authenticated():
+		return render(request, template, context)
+	else:
+		return HttpResponse("Error: You are not logged in. Please go to main page and login to play")
+	
 def get_problem_files(request):
 	#Temp function to get problem files (replaces cgi script get_problem_files.py)
 	dict_of_files = {}
@@ -99,23 +106,22 @@ def get_problem_files(request):
 
 def generate_problem(request):
 	#Temp function to parse the problem file name sent
-	
-	response_data = {}
-	game_filename = request.POST['filename']
-	piece_list = {}
-
+	context = RequestContext(request)
 	data = {}
+	if request.method == 'POST':
+		response_data = {}
+		game_filename = request.POST['filename']
+		piece_list = {}
 
-	#problem_file = open("./problems/problem1.txt")
-	problem_file = open(os.path.join(BASE_DIR, 'static','game','problems',game_filename))
-	total_atoms = problem_file.next()
-	for i,line in enumerate(problem_file):
-	    #Return only lines with text
-	    if line.rstrip():
-	        piece_list[str(i)] = line.strip()
+		problem_file = open(os.path.join(BASE_DIR, 'static','game','problems',game_filename))
+		total_atoms = problem_file.next()
+		for i,line in enumerate(problem_file):
+		    #Return only lines with text
+		    if line.rstrip():
+		        piece_list[str(i)] = line.strip()
 
-	#Hard coded for a particular problem CHANGE ASAP!
-	data["total_atoms"] = total_atoms.rstrip()
-	data["piece_list"] = piece_list
+		#Hard coded for a particular problem CHANGE ASAP!
+		data["total_atoms"] = total_atoms.rstrip()
+		data["piece_list"] = piece_list
 	return HttpResponse(json.dumps(data), content_type = "application/json")
 
