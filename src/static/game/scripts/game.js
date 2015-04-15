@@ -277,9 +277,24 @@ function httpGet(theUrl)
     return xmlHttp.responseText;
 }
 
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
 function httpPOST(theUrl){
     console.log(sessionStorage.getItem("filename"));
     var response;
+    var csrf_token = $.cookie('csrftoken');
+    console.log("Sending Ajax!")
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrf_token);
+                }
+            }
+        });
+
     $.ajax({
   type: 'POST',
   url: theUrl,
