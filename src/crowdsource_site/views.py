@@ -58,7 +58,7 @@ def register(request):
 	context = RequestContext(request)
 
 	if request.method == 'POST':
-
+		
 		response_data = {}
 		username = request.POST['username']
 		password = request.POST['password']
@@ -69,9 +69,12 @@ def register(request):
 		elif User.objects.filter(email=email).exists():
 			response_data['result'] = 'emailFail'
 		else:
-			user = User.objects.create_user(username,email,password,{first_name: request.POST['firstName'],last_name: request.POST['lastName']})
+			user = User.objects.create_user(username,email,password)
+			user.first_name = request.POST['firstName']
+			user.last_name = request.POST['lastName']
+			user.save()
 			response_data['result'] = 'success'
-		
+		print response_data
 		return HttpResponse(json.dumps(response_data), content_type = "application/json")
 	else:
 		return render(request, "crowdsource_site/index.html", {})
