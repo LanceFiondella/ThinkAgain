@@ -7,6 +7,7 @@ from django.http import HttpResponse,HttpResponseRedirect
 import json
 import os
 
+#test comment
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 def home(request):
 	context = {}
