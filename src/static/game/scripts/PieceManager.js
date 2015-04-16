@@ -19,7 +19,7 @@ var PieceManager = {
         this.getMatchingPiecesPositions(cp);
 		
 		
-		var piece_num_text = new createjs.Text(cp.piece_num, "40px Arial","black");
+		var piece_num_text = new createjs.Text(cp.piece_num, "30px Arial","red");
 		piece_num_text.x = 20;
 		cp.addChild(piece_num_text);
 		this._piece_list.push(cp);
@@ -76,7 +76,7 @@ var PieceManager = {
 		createjs.Tween.get(cp,{loop:true}).to({scaleX: 0.7, scaleY: 0.7},500).to({scaleX: 1.1, scaleY: 1.1},500).to({scaleX: 1, scaleY: 1},500);
 		cp.piece_num = this._total_pieces;
 		this.conclusion_piece_number = this._total_pieces;
-		var piece_num_text = new createjs.Text(cp.piece_num, "40px Arial","black");
+		var piece_num_text = new createjs.Text(cp.piece_num, "30px Arial","red");
 		cp.x = cp.homeX = this.nPosX;
 		cp.y = cp.homeY = this.nPosY;
 		this.nextPiecePosition();

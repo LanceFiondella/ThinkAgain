@@ -77,35 +77,32 @@ function ClausePiece(st_list) {
 	});
 	//Generating individual atoms and adding it to the piece
 	for (var i = 0; i< p.keys.length; i++){
-		var atom = new createjs.Shape();
-		atom.graphics.setStrokeStyle(10);
-		
-		//Generating atom color
-		var atom_color = colors[Math.abs(p.keys[i])];
-		
-		//If atom is positive fill the block and no border
-		if (p.keys[i] > 0){
-			atom.graphics.beginFill(atom_color);
-		}
-		//If atom is negative draw border no fill
-		else if(p.keys[i] < 0){
-			atom.graphics.beginStroke(atom_color);
-		}
-		
-		//Define hit area (Pieces with border only do not have hit areas in the middle)
-		hit = new createjs.Shape();
-		hit.graphics.beginFill("#000").rect(PIECE_W*i, 0, PIECE_W, PIECE_H);
-		atom.hitArea = hit;
-		
-		//Draw atom
-		atom.graphics.drawRoundRect((PIECE_W)*i, 0, PIECE_W-2*BORDER_THICKNESS, PIECE_H-2*BORDER_THICKNESS,20);
-		
-		//Define other properties of the atom
-		atom.key = p.keys[i];
-		atom.setBounds(PIECE_W*i, 0, PIECE_W-2*BORDER_THICKNESS, PIECE_H-2*BORDER_THICKNESS);
-		p.addChild(atom);
-	}
-	
+			var atom = new createjs.Shape();
+			atom.graphics.setStrokeStyle(3);
+			//Generating atom color
+			var atom_color = colors[Math.abs(p.keys[i])];
+			var piece_letter_text;									
+			//If atom is positive fill the block and no border
+			if (p.keys[i] > 0){
+				var chr = String.fromCharCode(96 + Math.abs(p.keys[i]));
+				piece_letter_text = new createjs.Text(chr, "50px Arial","black");
+				atom.graphics.beginFill("white");
+				atom.graphics.beginStroke("black");
+			}
+			//If atom is negative draw border no fill
+			else if(p.keys[i] < 0){
+				var chr = String.fromCharCode(96 + Math.abs(p.keys[i]));
+				piece_letter_text = new createjs.Text(chr, "50px Arial","white");
+				atom.graphics.beginFill("black");	
+				atom.graphics.beginStroke("white");
+				}
+			//Draw atom
+			atom.graphics.drawRoundRect(80*i, 0, 80-2*BORDER_THICKNESS, 80-2*BORDER_THICKNESS,20);
+			piece_letter_text.x = 80*i + 40;
+			piece_letter_text.y = 20;
+			p.addChild(atom);
+			p.addChild(piece_letter_text);
+			}
 	return p;
 	
 }
