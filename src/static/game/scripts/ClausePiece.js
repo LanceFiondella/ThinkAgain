@@ -82,9 +82,9 @@ function ClausePiece(st_list) {
 			//Generating atom color
 			var atom_color = colors[Math.abs(p.keys[i])];
 			var piece_letter_text;									
-			//var chr = String.fromCharCode(96 + Math.abs(p.keys[i]));
+			var chr = String.fromCharCode(96 + Math.abs(p.keys[i]));
 			//var chr = String.fromCharCode(0x4E00 + Math.abs(p.keys[i]));
-			var chr = String.fromCharCode(0x0904 + Math.abs(p.keys[i]));
+			//var chr = String.fromCharCode(0x0904 + Math.abs(p.keys[i]));
 			//var chr = String.fromCharCode(0x0400 + Math.abs(p.keys[i]));
 			//If atom is positive fill the block and no border
 			if (p.keys[i] > 0){
