@@ -82,23 +82,25 @@ function ClausePiece(st_list) {
 			//Generating atom color
 			var atom_color = colors[Math.abs(p.keys[i])];
 			var piece_letter_text;									
+			//var chr = String.fromCharCode(96 + Math.abs(p.keys[i]));
+			//var chr = String.fromCharCode(0x4E00 + Math.abs(p.keys[i]));
+			var chr = String.fromCharCode(0x0904 + Math.abs(p.keys[i]));
+			//var chr = String.fromCharCode(0x0400 + Math.abs(p.keys[i]));
 			//If atom is positive fill the block and no border
 			if (p.keys[i] > 0){
-				var chr = String.fromCharCode(96 + Math.abs(p.keys[i]));
-				piece_letter_text = new createjs.Text(chr, "50px Arial","black");
+				piece_letter_text = new createjs.Text(chr, "bold 50px Arial","black");
 				atom.graphics.beginFill("white");
 				atom.graphics.beginStroke("black");
 			}
 			//If atom is negative draw border no fill
 			else if(p.keys[i] < 0){
-				var chr = String.fromCharCode(96 + Math.abs(p.keys[i]));
-				piece_letter_text = new createjs.Text(chr, "50px Arial","white");
+				piece_letter_text = new createjs.Text(chr, "bold 50px Arial","white");
 				atom.graphics.beginFill("black");	
 				atom.graphics.beginStroke("white");
 				}
 			//Draw atom
 			atom.graphics.drawRoundRect(80*i, 0, 80-2*BORDER_THICKNESS, 80-2*BORDER_THICKNESS,20);
-			piece_letter_text.x = 80*i + 40;
+			piece_letter_text.x = 80*i + 25;
 			piece_letter_text.y = 20;
 			p.addChild(atom);
 			p.addChild(piece_letter_text);
