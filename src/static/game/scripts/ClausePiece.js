@@ -16,7 +16,7 @@ function ClausePiece(st_list) {
 
 	//Behaviour on clicking piece
 	p.on("mousedown", function(evt){
-
+		resetBoard();
 		evt.stopPropagation();
 		play_area.setChildIndex(evt.currentTarget,play_area.getNumChildren() - 1);
 		var global = play_area.localToGlobal(evt.currentTarget.x, evt.currentTarget.y);
@@ -24,12 +24,8 @@ function ClausePiece(st_list) {
 		
 		if(!alpha_locked){
 			tweenMatchingPieces(evt.currentTarget);
-			
+			evt.currentTarget.alpha = 1;
 		}
-			
-		
-		//Adding the piece to combobox on click
-		//cb.addPiece(ClausePieceShape(evt.currentTarget.keys,evt.currentTarget.piece_num));
 	
     });
 	
@@ -38,32 +34,32 @@ function ClausePiece(st_list) {
 			var local = play_area.globalToLocal(evt.stageX + evt.currentTarget.offset.x, evt.stageY + evt.currentTarget.offset.y);
             evt.currentTarget.x = local.x;
             evt.currentTarget.y = local.y;
-
-            console.log("Moving  !!");
-
-            for(var i = 0;i < pm._piece_list.length;i++){
-    			if(pieceCollision(evt.currentTarget,pm._piece_list[i]) && (evt.currentTarget.piece_num != pm._piece_list[i].piece_num)){
-					console.log("Collision detected on Move! : " + p.piece_num + "[" + p.keys+ " collided with " + i + "[" + pm._piece_list[i].keys + pieceCollision(evt.currentTarget,pm._piece_list[i]));
-					//If 2 pieces collide solve them
-    				cb.addPiece(ClausePieceShape(pm._piece_list[i].keys, pm._piece_list[i].piece_num));
+			
+			
+            //console.log("Moving  !!");
+			var pl_length = pm._piece_list.length
+            for(var i = 0;i < pl_length;i++){
+				if(zim.hitTestBounds(evt.currentTarget, pm._piece_list[i])&& (evt.currentTarget.piece_num != pm._piece_list[i].piece_num)){
+					cb.addPiece(ClausePieceShape(pm._piece_list[i].keys, pm._piece_list[i].piece_num));
     				cb.addPiece(ClausePieceShape(evt.currentTarget.keys,evt.currentTarget.piece_num));
-				}
+				}				
     		}
-
-    
      });
     
     //Check for collision for mouse up
     
     p.on("pressup",function(evt){
-    		
-    		for(var i = 0;i < pm._piece_list.length;i++){
+    		var pl_length = pm._piece_list.length;
+    		for(var i = 0;i < pl_length;i++){
+				
+				
     			if(pieceCollision(evt.currentTarget, pm._piece_list[i]) && (evt.currentTarget.piece_num != pm._piece_list[i].piece_num)){
-					console.log("Collision detected! : " + p.piece_num + "[" + p.keys+ " collided with " + i + "[" + pm._piece_list[i].keys + pieceCollision(evt.currentTarget,pm._piece_list[i]));
+					
 					//If 2 pieces collide solve them
     				solvePieces(p,pm._piece_list[i], true);
-    				cb.removePiece(ClausePieceShape(pm._piece_list[i].keys, pm._piece_list[i].piece_num));
-    				cb.removePiece(ClausePieceShape(evt.currentTarget.keys,evt.currentTarget.piece_num));
+
+					
+					play_area.removeChild(cb.piece_board);
 				}
     		}
 			createjs.Tween.get(evt.currentTarget).to({x: evt.currentTarget.homeX, y: evt.currentTarget.homeY}, 1000, createjs.Ease.elasticOut);
@@ -73,10 +69,18 @@ function ClausePiece(st_list) {
     
     //On double clicking
     p.on("dblclick",function(evt){
-                           
+		resetBoard();
+		if(!alpha_locked){
+			tweenMatchingPieces(evt.currentTarget);
+			evt.currentTarget.alpha = 1;
+		}
+		replaceWithSolvedPieces(evt.currentTarget);
 	});
+	
+	
 	//Generating individual atoms and adding it to the piece
-	for (var i = 0; i< p.keys.length; i++){
+	var pkeys_length = p.keys.length;
+	for (var i = 0; i< pkeys_length; i++){
 			var atom = new createjs.Shape();
 			atom.graphics.setStrokeStyle(3);
 			//Generating atom color
@@ -100,13 +104,40 @@ function ClausePiece(st_list) {
 				}
 			//Draw atom
 			atom.graphics.drawRoundRect(80*i, 0, 80-2*BORDER_THICKNESS, 80-2*BORDER_THICKNESS,20);
+			atom.setBounds(80*i, 0, 80-2*BORDER_THICKNESS, 80-2*BORDER_THICKNESS);
 			piece_letter_text.x = 80*i + 25;
 			piece_letter_text.y = 20;
 			p.addChild(atom);
 			p.addChild(piece_letter_text);
 			}
-	return p;
+	//Settings piece bounds for zim collision		
+	//p.setBounds(0,0,p.height,p.width);
 	
+	//console.log(p.getBounds());
+	p.height = p.getBounds().height;
+	p.width = p.getBounds().width;
+	//console.log(p.height + " " + p.width)
+	return p;
+}
+
+
+function replaceWithSolvedPieces(selectedPiece){
+	allPieces = pm.getAllPieces();
+	window.addedSolvedPieces = [];
+    for(k in selectedPiece.matching){
+        if (selectedPiece.matching[k]){
+            allPieces[k].visible = false;
+            cp = ClausePieceShape(solveValues(selectedPiece,allPieces[k]) , allPieces[k].piece_num);
+            cp.x = allPieces[k].x;
+            cp.y = allPieces[k].y;
+            play_area.addChild(cp);
+            createjs.Tween.get(cp).to({alpha:0}).to({alpha:1}, 1000, createjs.Ease.bounceOut);
+            addedSolvedPieces.push(cp);
+
+
+        }
+        
+    }
 }
 
 
@@ -116,51 +147,59 @@ function ClausePieceShape(st_list,piece_num){
 	
 	//Settings properties of the peice
 	p.keys = st_list;
-	//p.regX = (p.keys.length*100)/2;
-	//p.regY = 50;
 	p.height = PIECE_H;
 	p.width = PIECE_W*p.keys.length;
 	p.orgX = -(p.keys.length*100)/2; 
 	p.orgY = -50;
+	p.regX = (p.keys.length*100)/2;
+	p.regY = 50;
 	p.piece_num = piece_num;
     
-    
 	//Generating individual atoms and adding it to the piece
-	for (var i = 0; i< p.keys.length; i++){
+	var pkeys_length = p.keys.length;
+	for (var i = 0; i< pkeys_length; i++){
 		var atom = new createjs.Shape();
-		atom.graphics.setStrokeStyle(10);
+		atom.graphics.setStrokeStyle(2);
 		
 		//Generating atom color
 		var atom_color = colors[Math.abs(p.keys[i])];
-		
-		//If atom is positive fill the block and no border
-		if (p.keys[i] > 0){
-			
-			atom.graphics.beginFill(atom_color);
-		}
-		//If atom is negative draw border no fill
-		else if(p.keys[i] < 0){
-			
-			atom.graphics.beginStroke(atom_color);
-		}
+		var piece_letter_text;									
+			var chr = String.fromCharCode(96 + Math.abs(p.keys[i]));
+			//var chr = String.fromCharCode(0x4E00 + Math.abs(p.keys[i]));
+			//var chr = String.fromCharCode(0x0904 + Math.abs(p.keys[i]));
+			//var chr = String.fromCharCode(0x0400 + Math.abs(p.keys[i]));
+			//If atom is positive fill the block and no border
+			if (p.keys[i] > 0){
+				piece_letter_text = new createjs.Text(chr, "bold 50px Arial","black");
+				atom.graphics.beginFill("white");
+				atom.graphics.beginStroke("black");
+			}
+			//If atom is negative draw border no fill
+			else if(p.keys[i] < 0){
+				piece_letter_text = new createjs.Text(chr, "bold 50px Arial","white");
+				atom.graphics.beginFill("black");	
+				atom.graphics.beginStroke("white");
+				}
 		
 		//Draw atom
+		
 		atom.graphics.drawRoundRect(80*i, 0, 80-2*BORDER_THICKNESS, 80-2*BORDER_THICKNESS,20);
 		p.addChild(atom);
+		piece_letter_text.x = 80*i + 25;
+			piece_letter_text.y = 20;
+		p.addChild(piece_letter_text);
 	}
 	
-	var piece_num_text = new createjs.Text(piece_num, "40px Arial","black");
+	var piece_num_text = new createjs.Text(piece_num, "40px Arial","red");
 	piece_num_text.x = 20;
 	p.addChild(piece_num_text);
 	
 	return p;
-    
-    
-    
 }
 
 
 function tweenMatchingPieces(selectedPiece){
+	//Sets alpha of matching pieces to 1, everything else is 0.3
     allPieces = pm.getAllPieces();
     for(k in selectedPiece.matching){
         if (selectedPiece.matching[k]){
@@ -171,70 +210,75 @@ function tweenMatchingPieces(selectedPiece){
         }
         
     }
-    
-    /*
-	allPieces = pm.getAllPieces();
-	for(var i = 0; i<allPieces.length; i++){
-		//createjs.Tween.get(pm._piece_list[i]).to({alpha: 0.5});
-		allPieces[i].alpha = 0.3;
-	}
-	resultPieces = pm.getMatchingPieces(selectedPiece);
-	selectedPiece.alpha = 1.0;
-	
-	for (var i=0;i<resultPieces.length;i++){
-		//createjs.Tween.get(resultPieces[i]).to({alpha: 1.0});
-		resultPieces[i].alpha = 1.0;
-	}
-    */
+
 }
 
-
-
-
-
-
 function pieceCollision(p1,p2){
-	
-	/*
-	if((p1.x - (p2.x + (p2.width*play_area.scaleX))) >= 0 ||
-	((p1.x + (p1.width*play_area.scaleX)) - p2.x) <= 0||
-	(p1.y - (p2.y + (p2.height*play_area.scaleY)))>= 0 ||
-	((p1.y + (p1.height*play_area.scaleY)) - p2.y)<= 0)*/
-	if((p1.x+p1.orgX - (p2.x+p2.orgX + (p2.width*play_area.scaleX))) >= 0 ||
-	((p1.x+p1.orgX + (p1.width*play_area.scaleX)) - (p2.x+p2.orgX)) <= 0||
-	(p1.y-p1.orgY - (p2.y-p2.orgY + (p2.height*play_area.scaleY)))>= 0 ||
-	((p1.y-p1.orgY + (p1.height*play_area.scaleY)) - (p2.y-p1.orgY))<= 0)
+	//Detects collision of 2 pieces
+	if((p1.x+p1.orgX - (p2.x+p2.orgX + (p2.width))) >= 0 ||
+	((p1.x+p1.orgX + (p1.width)) - (p2.x+p2.orgX)) <= 0||
+	(p1.y-p1.orgY - (p2.y-p2.orgY + (p2.height)))>= 0 ||
+	((p1.y-p1.orgY + (p1.height)) - (p2.y-p1.orgY))<= 0)
 		{
 			
 			return false;
 		}
 	else{
-		//console.log(p1.x+ " " + (p1.x+p1.orgX));
 		return true;
 	}
 }
 
 function arraysEqual(a, b) {
+	//Checks if two arrays are equal in value
   if (a === b) return true;
   if (a == null || b == null) return false;
   if (a.length != b.length) return false;
 
-  // If you don't care about the order of the elements inside
-  // the array, you should sort both arrays here.
-
-  for (var i = 0; i < a.length; ++i) {
+	var a_length = a.length
+  for (var i = 0; i < a_length ; ++i) {
     if (a[i] !== b[i]) return false;
   }
   return true;
 }
 
-//function clearComboBox() {
-//	alert.window("combobox cleared.... :)");
-//}
+
+function solveValues(p1,p2){
+//This function ONLY solves the two pieces and returns an array for the new piece. 
+//Should be used to solve not display
+ 		var num_negations = 0;
+        var p1_keys = p1.keys.slice();
+        var p2_keys = p2.keys.slice();
+		
+		var p1_keys_length = p1_keys.length;
+		var p2_keys_length = p2_keys.length;
+        for(var i = 0; i < p1_keys_length; i++){
+			for(var j = 0; j < p2_keys_length; j++){
+                if(p1_keys[i] == -1*p2_keys[j]){
+                    delete p1_keys[i];
+                    delete p2_keys[j];
+                    num_negations++;
+                    
+                }
+                else if(p1_keys[i] == p2_keys[j]){
+                    delete p1_keys[i];
+                    
+                }
+            
+            }
+        }
+        
+        var new_keys = [];
+        if(num_negations == 1){
+            new_keys = p1_keys.concat(p2_keys).filter(Number);
+        }
+        
+        return new_keys;
+}
 
 
 function solvePieces(p1,p2, addToSolution){
-    var num_negations = 0;
+	//Solves 2 pieces together and adds it to the board
+	  var num_negations = 0;
     var p1_keys = p1.keys.slice();
     var p2_keys = p2.keys.slice();
     
@@ -266,8 +310,8 @@ function solvePieces(p1,p2, addToSolution){
             for (var i =0; i< pm._piece_list.length; i++){
                 if(arraysEqual(new_keys,pm._piece_list[i].keys)){
                     console.log("Duplicate piece!!!");
-                    //Flash the piece
-                    createjs.Tween.get(pm._piece_list[i]).to({alpha:0}).wait(250).to({alpha:1}).wait(250).to({alpha:0}).wait(250).to({alpha:1}).wait(250).to({alpha:0}).wait(250).to({alpha:1}).wait(250).to({alpha:0}).wait(250).to({alpha:1});
+    //Flashing the piece
+                    createjs.Tween.get(pm._piece_list[i]).to({alpha:0}).wait(250).to({alpha:1}).wait(250).to({alpha:0}).wait(250).to({alpha:1}).wait(250).to({alpha:0}).wait(250).to({alpha:1}).wait(250).to({alpha:0}).wait(250).to({alpha:0.3});
                     add_piece = false;
                     p1.matching[p2.piece_num] = false;
                     p2.matching[p1.piece_num] = false;
@@ -316,11 +360,6 @@ function solvePieces(p1,p2, addToSolution){
                 
                 
                 //**************************End of graph code
-                
-                
-                
-                
-                
                 
             }
         

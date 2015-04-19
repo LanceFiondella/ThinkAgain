@@ -3,24 +3,29 @@ var piece_combine_box;
 
 //This global variable indicates whether a lock has been activated in the  combo box. The on click method of ClausePiece will check for this variable and combobox lock will set it
 var alpha_locked = false;
-var ComboBox = {
-	position_1:{x:0, y:0},
-	position_2:{x:0, y:0},
-	position_3:{x:0, y:0},
+
+
+function ComboBox() {
+	this.position_1 = {x:0, y:0};
+	this.position_2 = {x:0, y:0};
+	this.position_3 = {x:0, y:0};
 	
-	piece_1:null,
-	piece_2:null,
-	piece_3:null,
+	this.piece_1 = null;
+	this.piece_2 = null;
+	this.piece_3 = null;
+	this.piece_board = null;
 	
-	pos1_locked:false,
-	pos2_locked:false,
+	this.pos1_locked = false;
+	this.pos2_locked = false;
 	
-	curr_pos:1,
-	arrow:null,
-    lock1_container:null,
-    lock2_container:null,
+	this.curr_pos = 1;
+	this.arrow = null;
+    this.lock1_container = null;
+    this.lock2_container = null;
     
-	initialize:function(){
+}
+
+	ComboBox.prototype.initialize = function(){
 		
 		
 		piece_combine_box = new createjs.Container();
@@ -74,16 +79,11 @@ var ComboBox = {
         this.addCombineButton();
         
 		play_area_frame.addChild(piece_combine_box);
-        
-        
-        
-        
-		
-	},
+}
     
 	
     
-    addCombineButton:function(){
+    ComboBox.prototype.addCombineButton = function(){
         var button = new createjs.Container();
 		button.name = "combine";
 
@@ -107,18 +107,13 @@ var ComboBox = {
             //createjs.Tween.get(evt.currentTarget).to({x:evt.currentTarget.x+5,y:evt.currentTarget.y+5}).wait(100).to({x:evt.currentTarget.x-5,y:evt.currentTarget.y-5})
             
         });
-        
-        
-        
-        
-			piece_combine_box.addChild(button);
-            
-        
-    },
+		piece_combine_box.addChild(button);
+
+    }
     
    
 	
-    addLocks:function(){
+    ComboBox.prototype.addLocks = function(){
         var lock_image = new createjs.Bitmap("images/lock.png");
         lock_image.scaleX = lock_image.scaleY= 0.07;
         
@@ -206,10 +201,10 @@ var ComboBox = {
         piece_combine_box.addChild(this.lock1_container);
         piece_combine_box.addChild(this.lock2_container);
         
-    },
+    }
     
     
-    addArrow:function(){
+    ComboBox.prototype.addArrow = function(){
         this.arrow = new createjs.Shape();
         this.arrow.graphics.beginStroke("black");
         this.arrow.graphics.beginFill("red");
@@ -217,10 +212,10 @@ var ComboBox = {
         this.arrow.x = 40+150;
         this.arrow.y = 0.165*stage.canvas.height;
         piece_combine_box.addChild(this.arrow);
-    },
+    }
     
     
-	addButton:function(){
+	ComboBox.prototype.addButton = function(){
 		var button = new createjs.Container();
 		button.name = "open_panel";
 
@@ -256,15 +251,18 @@ var ComboBox = {
         
         button_bkg.shadow = new createjs.Shadow("#000000", 5, 5, 10);
 			stage.addChild(button)
-	},
+	}
     
-    solvePieces:function(p1,p2){
+    ComboBox.prototype.solvePieces = function(p1,p2){
         
         var num_negations = 0;
         var p1_keys = p1.keys.slice();
         var p2_keys = p2.keys.slice();
-        for(var i = 0; i < p1_keys.length; i++){
-			for(var j = 0; j < p2_keys.length; j++){
+		
+		var p1_keys_length = p1_keys.length;
+		var p2_keys_length = p2_keys.length;
+        for(var i = 0; i < p1_keys_length; i++){
+			for(var j = 0; j < p2_keys_length; j++){
                 if(p1_keys[i] == -1*p2_keys[j]){
                     delete p1_keys[i];
                     delete p2_keys[j];
@@ -289,26 +287,35 @@ var ComboBox = {
             resultPiece.x = this.position_3.x;
             resultPiece.y = this.position_3.y;
             
-            resultPiece.scaleX = resultPiece.scaleY = 0.8;
+            resultPiece.scaleX = resultPiece.scaleY = 1.0;
             
             if(this.piece_3 || new_keys.length == 0){
 				piece_combine_box.removeChild(this.piece_3);
+				
+				//Add a copy of this piece on the board
+				play_area.removeChild(this.piece_board);
 			}
             this.piece_3 = resultPiece;
-            if(new_keys.length != 0){
+			//Setting properties of result piece
+			this.piece_board = pm.showPiece(this.piece_3.keys,this.piece_3.piece_num);
+			//console.log(this.piece_board.x + " " + this.piece_board.y);
+			
+			if(new_keys.length != 0){
 				this.piece_3.name = "resultPiece";
                 piece_combine_box.addChild(this.piece_3);
+				play_area.addChild(this.piece_board);
             }
         }
-        else if(num_negations == 0){
+        else {
             piece_combine_box.removeChild(this.piece_3);
+			play_area.removeChild(this.piece_board);
             
         }
         
         
-    },
+    }
 
-	addPiece:function(piece){
+	ComboBox.prototype.addPiece = function(piece){
         piece.scaleX = piece.scaleY = 0.8;
         
 		if(this.curr_pos==1 && !this.lock1_container.lock){
@@ -352,89 +359,4 @@ var ComboBox = {
 			
             this.solvePieces(this.piece_1,this.piece_2);
 		}
-	},
-	removePiece:function(piece){
-        piece.scaleX = piece.scaleY = 0.8;
-        
-		if(this.curr_pos==1) {
-			
-			piece.x = this.position_1.x;
-			piece.y = this.position_1.y;
-			if(this.piece_1){
-				piece_combine_box.removeChild(this.piece_1);
-			}
-			this.piece_1 = piece;
-			this.piece_1.name = "Piece1";
-			piece_combine_box.removeChild(this.piece_1);
-			this.curr_pos = 2;
-            //this.arrow.x = this.position_2.x + 150;
-		}
-		else if(this.curr_pos==2 ) {
-			
-			piece.x = this.position_2.x;
-			piece.y = this.position_2.y;
-			if(this.piece_2){
-				piece_combine_box.removeChild(this.piece_2);
-			}
-			this.piece_2 = piece;
-			this.piece_2.name = "Piece2";
-			piece_combine_box.removeChild(this.piece_2);
-			this.curr_pos = 1;
-            //this.arrow.x = this.position_1.x + 150;
-		}
-		if(this.piece_1 && this.piece_2){
-			this.removesolvePieces(this.piece_1,this.piece_2);
-		}
-	},
-removesolvePieces:function(p1,p2){
-        
-        var num_negations = 0;
-        var p1_keys = p1.keys.slice();
-        var p2_keys = p2.keys.slice();
-        for(var i = 0; i < p1_keys.length; i++){
-			for(var j = 0; j < p2_keys.length; j++){
-                if(p1_keys[i] == -1*p2_keys[j]){
-                    delete p1_keys[i];
-                    delete p2_keys[j];
-                    num_negations++;
-                    
-                }
-                else if(p1_keys[i] == p2_keys[j]){
-                    delete p1_keys[i];
-                    
-                }
-            
-            }
-        }
-        
-        if(num_negations == 1){
-            
-            
-            var new_keys = p1_keys.concat(p2_keys).filter(Number);
-            new_keys.sort();
-            
-            resultPiece = ClausePieceShape(new_keys);
-            resultPiece.x = this.position_3.x;
-            resultPiece.y = this.position_3.y;
-            
-            resultPiece.scaleX = resultPiece.scaleY = 0.8;
-            
-            if(this.piece_3 || new_keys.length == 0){
-				piece_combine_box.removeChild(this.piece_3);
-			}
-            this.piece_3 = resultPiece;
-            if(new_keys.length != 0){
-				this.piece_3.name = "resultPiece";
-                piece_combine_box.removeChild(this.piece_3);
-            }
-        }
-        else if(num_negations == 0){
-            piece_combine_box.removeChild(this.piece_3);
-            
-        }
-        
-        
-    },
-    
-
-}
+	}
