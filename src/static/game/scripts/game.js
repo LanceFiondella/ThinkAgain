@@ -6,10 +6,11 @@ var play_area, side_bar;
 var play_area_border;
 var play_area_frame;
 //var piece_list = [];
-var pm = Object.create(PieceManager);
+//var pm = Object.create(PieceManager);
+var pm = new PieceManager();
 var total_atoms;
 var colors;
-var cb = Object.create(ComboBox);
+var cb = new ComboBox();
 
 
 createjs.Sound.registerSound("./sounds/bubble.wav","bubble",4);
@@ -21,14 +22,13 @@ function init() {
 	stage.canvas.width = window.innerWidth;
 	stage.canvas.height = window.innerHeight;
 	
+	window.addEventListener('resize', resize, false);   
 	createjs.Touch.enable(stage);
 	
 	//Container defining the frame of the play area (All game play/scaling is done inside here) 
 	play_area_frame = new createjs.Container();
 	play_area_frame.setBounds(0,0, stage.canvas.width, stage.canvas.height);
-	
-	
-	
+
 	
 	//Container where actual game is played
     play_area = new createjs.Container();
@@ -37,7 +37,7 @@ function init() {
 	
 	//Zooming of play area
 	canvas.addEventListener("mousewheel", MouseWheelHandler, false);
-	canvas.addEventListener("DOMMouseScroll", MouseWheelHandler, false);
+	//canvas.addEventListener("DOMMouseScroll", MouseWheelHandler, false);
 	//canvas.addEventListener("mousedown", MouseDownHandler,false);
 	
 	//Defines the background of play_area
@@ -53,12 +53,8 @@ function init() {
 	//Panning of play area
 	play_area_border.on("mousedown", function(evt){
 					window.offset = {x:play_area.x-evt.stageX, y:play_area.y-evt.stageY};
-					allPieces = pm.getAllPieces();
-	for(var i = 0; i<allPieces.length; i++){
-		
-		allPieces[i].alpha = 1.0;
-	}
-	
+					
+					resetBoard();
 	});
 	
 	play_area_border.on("pressmove", function(evt){
@@ -83,70 +79,17 @@ function init() {
 	var mask = new createjs.Shape();
 	mask.graphics.beginFill("#f00").drawRect(0,0,stage.canvas.width, stage.canvas.height);
 	play_area.mask = mask;	
-	
-	
-	
-	
+
 	//Separate function to make pieces
 	generatePieces();
 	
 	
 	play_area_frame.addChild(play_area);
-
+	stage.addChild(play_area_frame);
 	//Initializing combobox
-	
-	
-	
-    stage.addChild(play_area_frame);
-	//stage.addChild(side_bar);
-	cb.initialize();
-//	
-//	addZoomButtons();
-	
-	
+  	cb.initialize();
     startGame();
-	//stage.update();
-}
 
-
-function addZoomButtons(){
-    var zoom_in = new createjs.Container();
-		zoom_in.name = "zoom_in";
-
-		var zoom_in_bkg = new createjs.Shape();
-		zoom_in_bkg.graphics.beginFill("red").drawCircle(0,0,20);
-		var zoom_in_lbl = new createjs.Text("+", "bold 40px Ariel", "#FFFFFF");
-		zoom_in_lbl.textAlign = "center";
-		zoom_in_lbl.textBaseline = "middle";
-		zoom_in_lbl.x = 0;
-		zoom_in_lbl.y = 0;
-		zoom_in.addChild(zoom_in_bkg,zoom_in_lbl);
-        zoom_in.x = stage.canvas.width-50;
-		zoom_in.y = 50;
-		
-		zoom_in.on("click", function(evt){});
-        play_area_frame.addChild(zoom_in);
-    
-    
-    var zoom_out = new createjs.Container();
-		zoom_out.name = "zoom_out";
-
-		var zoom_out_bkg = new createjs.Shape();
-		zoom_out_bkg.graphics.beginFill("red").drawCircle(0,0,20);
-		var zoom_out_lbl = new createjs.Text("-", "bold 40px Ariel", "#FFFFFF");
-		zoom_out_lbl.textAlign = "center";
-		zoom_out_lbl.textBaseline = "middle";
-		zoom_out_lbl.x = 0;
-		zoom_out_lbl.y = 0;
-		zoom_out.addChild(zoom_out_bkg,zoom_out_lbl);
-        zoom_out.x = stage.canvas.width-50;
-		zoom_out.y = 100;
-		
-		zoom_out.on("click", function(evt){});
-        play_area_frame.addChild(zoom_out);
-    
-    
-    
 }
 
 
@@ -154,7 +97,12 @@ function sortNumber(a,b) {
     return a - b;
 }
 
-
+function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;  
+            
+           stage.update();
+}
 
 function generateColors(colors){
 	colors =  colors+1;
@@ -170,31 +118,29 @@ function generateColors(colors){
 }
 
 function generatePieces(){
-	
-	
-	//play_area = pm.displayAllPieces(play_area);
+	//Calling generate problem from the django server
 	var result = httpPOST("/generate_problem/");
-	//data = JSON.parse(result);
+
+	//Handles the data, converts into array of integers
     data = result;
 	total_atoms = parseInt(data.total_atoms,10);             
 	colors = generateColors(total_atoms);
-
-	
 	var piece_list = data.piece_list;
-	
-	//console.log(piece_list);
 	piece_nums = []
 	for (k in piece_list){
 		if (piece_list.hasOwnProperty(k))
 			
 			piece_nums.push(parseInt(k,10));
 	}
+
 	//Sorting the pieces by piece number (by its keys)
 	piece_nums.sort(sortNumber);
 	console.log(piece_nums);
 	
 	//Adding peices to the play area (if the piece is last in the list, it is negated conclusion)
-	for (i=0; i<piece_nums.length;i++){
+	
+	var piece_nums_length = piece_nums.length;
+	for (i=0; i<piece_nums_length;i++){
 		k = piece_nums[i];
 		piece_val = piece_list[k];
 		
@@ -224,30 +170,21 @@ function generatePieces(){
 
 
 function MouseWheelHandler(e){
-/*
-localPoint = play_area.globalToLocal(stage.mouseX, stage.mouseY);
-play_area.regX = localPoint.x;
-play_area.regY = localPoint.y;
-*/
-
-if(Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)))>0)
+	if(Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)))>0)
         zoom=.025;
     else
         zoom= -0.025;
 play_area.scaleX += zoom;
 play_area.scaleY += zoom;
-//console.log("scale = " + play_area.scaleX);
+
 }
-
-
-
-
 
 
 function currentKeyNegIn(piece,key){
     var i;
     var result = false;
-    for (i=0;i<piece.keys.length;i++){
+	var piece_keys_length =piece.keys.length;
+    for (i=0;i<piece_keys_length;i++){
         if( piece.keys[i] == (-1*key) ){
             //Global variable to keep track of current Negation piece
             currNegPos = i;
@@ -260,10 +197,10 @@ function currentKeyNegIn(piece,key){
 
 
 function startGame() {
+	
     createjs.Ticker.setFPS(60);
     createjs.Ticker.addEventListener("tick", function(e){
-		
-    stage.update();
+	stage.update();
     });
 }
 
@@ -307,4 +244,27 @@ function httpPOST(theUrl){
 });
     console.log(response);    
     return response;
+}
+
+
+function resetBoard(){
+	//Actions to perform when want to reset the board to its original state
+
+	allPieces = pm.getAllPieces();
+					var allpieces_length = allPieces.length;
+	for(var i = 0; i<allpieces_length; i++){
+		
+		allPieces[i].alpha = 1.0;
+		allPieces[i].visible = true;
+
+	}
+
+	if (typeof addedSolvedPieces !== 'undefined'){
+    	var addedSolvedPIeces_length = addedSolvedPieces.length;
+	for(var i = 0; i<addedSolvedPIeces_length;i++){
+		play_area.removeChild(addedSolvedPieces[i]);
+		}
+	}
+
+
 }
