@@ -39,7 +39,7 @@ function ClausePiece(st_list) {
             //console.log("Moving  !!");
 			var pl_length = pm._piece_list.length
             for(var i = 0;i < pl_length;i++){
-				if(zim.hitTestBounds(evt.currentTarget, pm._piece_list[i])&& (evt.currentTarget.piece_num != pm._piece_list[i].piece_num)){
+				if(pieceCollision(evt.currentTarget, pm._piece_list[i])&& (evt.currentTarget.piece_num != pm._piece_list[i].piece_num)){
 					cb.addPiece(ClausePieceShape(pm._piece_list[i].keys, pm._piece_list[i].piece_num));
     				cb.addPiece(ClausePieceShape(evt.currentTarget.keys,evt.currentTarget.piece_num));
 				}				
