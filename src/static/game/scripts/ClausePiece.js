@@ -114,8 +114,10 @@ function ClausePiece(st_list) {
 	//p.setBounds(0,0,p.height,p.width);
 	
 	//console.log(p.getBounds());
+	if(p.getBounds() != null){
 	p.height = p.getBounds().height;
 	p.width = p.getBounds().width;
+	}
 	//console.log(p.height + " " + p.width)
 	return p;
 }
