@@ -12,11 +12,11 @@
 	<script src="http://visjs.org/dist/vis.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 	<link type="text/css" rel="stylesheet" href="http://visjs.org/dist/vis.css">
-	<script src="scripts/graph.js"></script>
 	<script src="scripts/PieceManager.js"></script>
 	<script src="scripts/ClausePiece.js"></script>
 	<script src="scripts/ComboBox.js"></script>
 	<script src="scripts/game.js"></script>
+	<script src="scripts/graph.js"></script>
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 	<script>
@@ -25,19 +25,38 @@
 		$("#slide").click(function(){
 			$("#nav").fadeIn(500);
 			$("#slide").hide();
+			$("#bin").hide();
+			$("#save").hide();
 		});
 
 		$("#nav").click(function(){
 			$("#nav").fadeOut(400);
 			$("#slide").show(450);
+			$("#bin").show(450);
+		});
+		
+		$("#bin").click(function(){
+			//alert(pm._total_pieces);
+			pm.popPiece();
+
+			
+			
 		});
 
+		$("#save").click(function(){
+			//Save time stamp and game state
+			game_state.elapsed_seconds = track_time;
+			console.log(game_state);
+
+		});
 	});
 	/*Escape Key fade out*/
 	$(document).keyup(function(e) {
 		if (e.keyCode == 27) {
 			$("#nav").fadeOut(400); 
 			$("#slide").show(450);
+			$("#bin").show(450);
+			$("#save").show(450);
 		}
 	});
 
@@ -45,6 +64,8 @@
 		if(e.ctrlKey)
 			$("#nav").fadeIn(500);
 		$("#slide").hide();
+		$("#bin").hide();
+		$("#save").hide();
 	});
 
 	function Next_Problem(){
@@ -90,7 +111,30 @@
 		top: 5%;
 		z-index: 1000;
 	}
-
+	.menu-button{
+		width: 2.5%;
+		height: auto;
+		position: fixed;
+		right: 1%;
+		top: 5%;
+		z-index: 1000;
+	}
+	.garbage{
+		width: 2.5%;
+		height: auto;
+		position: fixed;
+		right: 1%;
+		top: 12%;
+		z-index: 1000;
+	}
+	#save {
+		width: 2.5%;
+		height: auto;
+		position: fixed;
+		right: 1%;
+		top: 19%;
+		z-index: 1000;
+	}
 	/*Main Navbar*/
 	.main-nav{
 		display: none;
@@ -186,6 +230,12 @@
 
 	<div class="menu-button">
 		<a href="#" class="menu-nav" id="slide" ><img src="images/menu_nav.png" alt="Instructions" height="100%" width="100%" /></a>	
+	</div>
+	<div class="garbage">
+		<a href="#" class="bin-button" id="bin"><img src="images/bin.png" alt="bin" height="100%" width="100%" /></a>
+	</div>
+	<div class="save">
+		<a href="#" class="save-button" id="save"><img src="images/save.png" alt="save" height="100%" width="100%" /></a>
 	</div>
 	<div id="overlay">
 		<div id="message">

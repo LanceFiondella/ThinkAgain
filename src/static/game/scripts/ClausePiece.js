@@ -1,17 +1,11 @@
-function ClausePiece(st_list) {
+function ClausePiece(st_list, piece_num) {
 	//p is the container that holds the peices and properties associated
-	var p = new createjs.Container();
+	var p = ClausePieceShape(st_list, piece_num);
 	
 	//Settings properties of the peice
-	p.keys = st_list;
+	//p.keys = st_list;
     p.matching = {};
-	p.regX = (p.keys.length*100)/2;
-	p.regY = 50;
-	p.height = PIECE_H;
-	p.width = PIECE_W*p.keys.length;
-	p.orgX = -(p.keys.length*100)/2; 
-	p.orgY = -50;
-	
+
 	//Setting mouse interaction with the whole piece
 
 	//Behaviour on clicking piece
@@ -34,15 +28,26 @@ function ClausePiece(st_list) {
 			var local = play_area.globalToLocal(evt.stageX + evt.currentTarget.offset.x, evt.stageY + evt.currentTarget.offset.y);
             evt.currentTarget.x = local.x;
             evt.currentTarget.y = local.y;
-			
-			
-            //console.log("Moving  !!");
+
 			var pl_length = pm._piece_list.length
             for(var i = 0;i < pl_length;i++){
-				if(pieceCollision(evt.currentTarget, pm._piece_list[i])&& (evt.currentTarget.piece_num != pm._piece_list[i].piece_num)){
-					cb.addPiece(ClausePieceShape(pm._piece_list[i].keys, pm._piece_list[i].piece_num));
-    				cb.addPiece(ClausePieceShape(evt.currentTarget.keys,evt.currentTarget.piece_num));
-				}				
+
+				if(pieceCollision(evt.currentTarget, pm._piece_list[i])&& (evt.currentTarget.piece_num != pm._piece_list[i].piece_num) && pm._piece_list[i].matching[evt.currentTarget.piece_num]){
+					
+					var result_val = [];
+					if (temp_piece != null) play_area.removeChild(temp_piece);
+					result_val = solveValues(pm._piece_list[i], evt.currentTarget);
+					//console.log("Solve values : " + result_val);
+					if (result_val.length > 0){
+							
+							temp_piece = pm.showPiece(result_val,pm._total_pieces);
+							play_area.addChild(temp_piece);
+					}
+					//cb.addPiece(ClausePieceShape(pm._piece_list[i].keys, pm._piece_list[i].piece_num));
+    				//cb.addPiece(ClausePieceShape(evt.currentTarget.keys,evt.currentTarget.piece_num));
+				}
+
+
     		}
      });
     
@@ -50,19 +55,16 @@ function ClausePiece(st_list) {
     
     p.on("pressup",function(evt){
     		var pl_length = pm._piece_list.length;
+    		if (temp_piece != null) play_area.removeChild(temp_piece);
     		for(var i = 0;i < pl_length;i++){
-				
-				
-    			if(pieceCollision(evt.currentTarget, pm._piece_list[i]) && (evt.currentTarget.piece_num != pm._piece_list[i].piece_num)){
+				if(pieceCollision(evt.currentTarget, pm._piece_list[i]) && (evt.currentTarget.piece_num != pm._piece_list[i].piece_num)){
 					
 					//If 2 pieces collide solve them
     				solvePieces(p,pm._piece_list[i], true);
-
 					
-					play_area.removeChild(cb.piece_board);
 				}
     		}
-			createjs.Tween.get(evt.currentTarget).to({x: evt.currentTarget.homeX, y: evt.currentTarget.homeY}, 1000, createjs.Ease.elasticOut);
+			createjs.Tween.get(evt.currentTarget).to({x: evt.currentTarget.homeX, y: evt.currentTarget.homeY}, 500, createjs.Ease.elasticOut);
 			
     });
     
@@ -77,59 +79,19 @@ function ClausePiece(st_list) {
 		replaceWithSolvedPieces(evt.currentTarget);
 	});
 	
-	
-	//Generating individual atoms and adding it to the piece
-	var pkeys_length = p.keys.length;
-	for (var i = 0; i< pkeys_length; i++){
-			var atom = new createjs.Shape();
-			atom.graphics.setStrokeStyle(3);
-			//Generating atom color
-			var atom_color = colors[Math.abs(p.keys[i])];
-			var piece_letter_text;									
-			var chr = String.fromCharCode(96 + Math.abs(p.keys[i]));
-			//var chr = String.fromCharCode(0x4E00 + Math.abs(p.keys[i]));
-			//var chr = String.fromCharCode(0x0904 + Math.abs(p.keys[i]));
-			//var chr = String.fromCharCode(0x0400 + Math.abs(p.keys[i]));
-			//If atom is positive fill the block and no border
-			if (p.keys[i] > 0){
-				piece_letter_text = new createjs.Text(chr, "bold 50px Arial","black");
-				atom.graphics.beginFill("white");
-				atom.graphics.beginStroke("black");
-			}
-			//If atom is negative draw border no fill
-			else if(p.keys[i] < 0){
-				piece_letter_text = new createjs.Text(chr, "bold 50px Arial","white");
-				atom.graphics.beginFill("black");	
-				atom.graphics.beginStroke("white");
-				}
-			//Draw atom
-			atom.graphics.drawRoundRect(80*i, 0, 80-2*BORDER_THICKNESS, 80-2*BORDER_THICKNESS,20);
-			atom.setBounds(80*i, 0, 80-2*BORDER_THICKNESS, 80-2*BORDER_THICKNESS);
-			piece_letter_text.x = 80*i + 25;
-			piece_letter_text.y = 20;
-			p.addChild(atom);
-			p.addChild(piece_letter_text);
-			}
-	//Settings piece bounds for zim collision		
-	//p.setBounds(0,0,p.height,p.width);
-	
-	//console.log(p.getBounds());
-	if(p.getBounds() != null){
-	p.height = p.getBounds().height;
-	p.width = p.getBounds().width;
-	}
 	//console.log(p.height + " " + p.width)
 	return p;
 }
 
 
 function replaceWithSolvedPieces(selectedPiece){
+	// Replaces all the pieces that can be solved with the selectedPiece with the resultant piece
 	allPieces = pm.getAllPieces();
 	window.addedSolvedPieces = [];
     for(k in selectedPiece.matching){
         if (selectedPiece.matching[k]){
             allPieces[k].visible = false;
-            cp = ClausePieceShape(solveValues(selectedPiece,allPieces[k]) , allPieces[k].piece_num);
+            cp = SolvedPiece(solveValues(selectedPiece,allPieces[k]) , allPieces[k].piece_num, selectedPiece, allPieces[k]);
             cp.x = allPieces[k].x;
             cp.y = allPieces[k].y;
             play_area.addChild(cp);
@@ -142,19 +104,43 @@ function replaceWithSolvedPieces(selectedPiece){
     }
 }
 
+function SolvedPiece(st_list, piece_num, parent1, parent2){
+	//This function is used in replaceWithSolvedPieces. Replaces a piece on the board. Has only one property, on click add itself to the game board
+	var p = ClausePieceShape(st_list, piece_num);
+	p.parent1 = parent1;
+	p.parent2 = parent2;
+
+	p.on("click", function(evt){
+				new_piece = pm.addPiece(evt.currentTarget.keys);
+				p.parent1.matching[p.parent2.piece_num] = false;
+                p.parent2.matching[p.parent1.piece_num] = false;
+                pm._num_steps++;
+                
+                
+                item = {};
+                item ["piece_1"] = p.parent1.piece_num;
+                item ["piece_2"] = p.parent2.piece_num;
+                item ["piece_3"] = new_piece.piece_num;
+                game_state.saved_steps.push(item);
+                res.push(p.parent1.piece_num+","+p.parent2.piece_num+","+new_piece.piece_num);
+
+
+	});
+
+	return p;
+}
+
+
 
 function ClausePieceShape(st_list,piece_num){
+	//This function ONLY contstructs the visual of the piece. Properties of the piece are added by other functions
     //p is the container that holds the peices and properties associated
 	var p = new createjs.Container();
 	
 	//Settings properties of the peice
 	p.keys = st_list;
-	p.height = PIECE_H;
-	p.width = PIECE_W*p.keys.length;
-	p.orgX = -(p.keys.length*100)/2; 
-	p.orgY = -50;
-	p.regX = (p.keys.length*100)/2;
-	p.regY = 50;
+	
+	
 	p.piece_num = piece_num;
     
 	//Generating individual atoms and adding it to the piece
@@ -170,6 +156,8 @@ function ClausePieceShape(st_list,piece_num){
 			//var chr = String.fromCharCode(0x4E00 + Math.abs(p.keys[i]));
 			//var chr = String.fromCharCode(0x0904 + Math.abs(p.keys[i]));
 			//var chr = String.fromCharCode(0x0400 + Math.abs(p.keys[i]));
+			//var chr = String.fromCharCode(0x0C91 + Math.abs(p.keys[i]));
+			
 			//If atom is positive fill the block and no border
 			if (p.keys[i] > 0){
 				piece_letter_text = new createjs.Text(chr, "bold 50px Arial","black");
@@ -186,16 +174,30 @@ function ClausePieceShape(st_list,piece_num){
 		//Draw atom
 		
 		atom.graphics.drawRoundRect(80*i, 0, 80-2*BORDER_THICKNESS, 80-2*BORDER_THICKNESS,20);
+		atom.setBounds(80*i, 0, 80-2*BORDER_THICKNESS, 80-2*BORDER_THICKNESS);
 		p.addChild(atom);
+		
 		piece_letter_text.x = 80*i + 25;
-			piece_letter_text.y = 20;
+		piece_letter_text.y = 20;
 		p.addChild(piece_letter_text);
+
 	}
 	
 	var piece_num_text = new createjs.Text(piece_num, "40px Arial","red");
 	piece_num_text.x = 20;
 	p.addChild(piece_num_text);
-	
+	if(p.getBounds() != null){
+			p.height = p.getBounds().height;
+			p.width = p.getBounds().width;
+			//console.log(p.width + " " + p.height);
+			p.regX = p.width/2;
+			p.regY = p.height/2;
+
+			p.orgX = -(p.width)/2; 
+			p.orgY = -(p.height/2);
+	}
+
+
 	return p;
 }
 
@@ -226,6 +228,7 @@ function pieceCollision(p1,p2){
 			return false;
 		}
 	else{
+
 		return true;
 	}
 }
@@ -272,6 +275,7 @@ function solveValues(p1,p2){
         var new_keys = [];
         if(num_negations == 1){
             new_keys = p1_keys.concat(p2_keys).filter(Number);
+            new_keys.sort();
         }
         
         return new_keys;
@@ -334,7 +338,13 @@ function solvePieces(p1,p2, addToSolution){
                 pm._num_steps++;
                 new_piece = pm.addPiece(new_keys);
                 
-                
+                item = {};
+                item ["piece_1"] = p1.piece_num;
+                item ["piece_2"] = p2.piece_num;
+                item ["piece_3"] = new_piece.piece_num;
+                game_state.saved_steps.push(item);
+                res.push(p1.piece_num+","+p2.piece_num+","+new_piece.piece_num);
+
                 //Add node and links to graph. 
                 //**************************Following code is only for graph
                 var parent_node1 = {id: p1.piece_num, label: p1.piece_num.toString()};

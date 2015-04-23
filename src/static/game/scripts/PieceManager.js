@@ -12,24 +12,26 @@ function PieceManager(){
 
 
 	PieceManager.prototype.addPiece = function(st_list){
-		cp = ClausePiece(st_list);
+		cp = ClausePiece(st_list, this._total_pieces);
 		cp.x = cp.homeX = this.nPosX;
 		cp.y = cp.homeY = this.nPosY;
 		this.nextPiecePosition();
-		console.log("In add Piece : " + this.nPosX + " " + this.nPosY)
-		cp.piece_num = this._total_pieces;
+		//console.log("In add Piece : " + this.nPosX + " " + this.nPosY)
+		//cp.piece_num = this._total_pieces;
         this.getMatchingPiecesPositions(cp);
 		
-		
+		/*
 		var piece_num_text = new createjs.Text(cp.piece_num, "30px Arial","red");
 		piece_num_text.x = 20;
 		cp.addChild(piece_num_text);
+		*/
+
 		this._piece_list.push(cp);
 		this._total_pieces++;
 		
 		cp.scaleX = 0.2;
 		cp.scaleY = 0.2;
-		
+		cp.cache(cp.getBounds().x,cp.getBounds().y,cp.width,cp.height);
 		play_area.addChild(cp);
 		
 		
@@ -53,8 +55,8 @@ function PieceManager(){
 	
 	PieceManager.prototype.showPiece = function(st_list, piece_num){
 		cp = ClausePieceShape(st_list, piece_num);
-		cp.regX = (cp.keys.length*100)/2;
-		cp.regY = 50;
+		//cp.regX = (cp.keys.length*100)/2;
+		//cp.regY = 50;
 		cp.x = this.nPosX;
 		cp.y = this.nPosY;
 		//console.log(this.nPosX + " " + this.nPosY)
@@ -87,7 +89,7 @@ function PieceManager(){
 	PieceManager.prototype.setConclusion =  function(st_list){
 		this._conclusion = st_list;
 		cp = ClausePiece(st_list);
-		//createjs.Tween.get(cp,{loop:true}).to({scaleX: 0.7, scaleY: 0.7},500).to({scaleX: 1.1, scaleY: 1.1},500).to({scaleX: 1, scaleY: 1},500);
+		createjs.Tween.get(cp,{loop:true}).to({scaleX: 0.7, scaleY: 0.7},500).to({scaleX: 1.1, scaleY: 1.1},500).to({scaleX: 1, scaleY: 1},500);
 		cp.piece_num = this._total_pieces;
 		this.conclusion_piece_number = this._total_pieces;
 		var piece_num_text = new createjs.Text(cp.piece_num, "30px Arial","red");
@@ -101,6 +103,7 @@ function PieceManager(){
 		cp.addChild(piece_num_text);
 		this._piece_list.push(cp);
 		this._total_pieces++;
+		cp.cache(cp.getBounds().x,cp.getBounds().y,cp.width,cp.height);
 		return cp;
 	};
 	
@@ -194,6 +197,44 @@ function PieceManager(){
 	};
 
 
+	PieceManager.prototype.popPiece = function(){
+			//cp = pm._piece_list.splice(piece_num,1)[0];
+			cp = pm._piece_list.pop();
+			pm._total_pieces--;
+			play_area.removeChild(cp);
+			
+			var res1 = res[res.length-1].split(',');
+			console.log(res1);
+			
+			pm._piece_list[parseInt(res1[0])].matching[parseInt(res1[1])] = true;
+			pm._piece_list[parseInt(res1[1])].matching[parseInt(res1[0])] = true;
+
+
+			var this_piece_list_length = this._piece_list.length;
+			for(var i =0;i<this_piece_list_length;i++){
+					delete this._piece_list[i].matching[cp.piece_num];
+
+
+			}
+
+			if (pm.currentRow == 9){
+			
+			
+			pm.nPosX = pm.nPosX - 320;
+			
+			pm.nPosY = pm.nPosY - 120;
+			pm.currentRow = 0;
+			pm.currentColumn--;
+		}
+		else{
+			pm.currentRow--;
+			pm.nPosY = pm.nPosY - 120;
+			
+		}
+			res.pop();
+			game_state.saved_steps.pop();
+
+	};
 	
 
 	

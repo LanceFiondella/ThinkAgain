@@ -1,6 +1,7 @@
 const PIECE_H = 100;
 const PIECE_W = 100;
 const BORDER_THICKNESS = 1;
+
 var stage;
 var play_area, side_bar;
 var play_area_border;
@@ -10,7 +11,25 @@ var play_area_frame;
 var pm = new PieceManager();
 var total_atoms;
 var colors;
-var cb = new ComboBox();
+//var cb = new ComboBox();
+
+//Text for timer
+var play_area_text;
+var track_time = 0.0;
+var test = [[1,2,3],[-1,3,4],[-4,5,-6]];
+var res = [];
+
+//Temporarily shows resulting piece
+var temp_piece = null;
+
+
+var game_state = {
+	saved_steps:[],
+	elapsed_seconds:0.0
+
+};
+
+//var saved_steps = []; 
 
 
 createjs.Sound.registerSound("./sounds/bubble.wav","bubble",4);
@@ -23,7 +42,7 @@ function init() {
 	stage.canvas.height = window.innerHeight;
 	
 	window.addEventListener('resize', resize, false);   
-	createjs.Touch.enable(stage);
+	createjs.Touch.enable(stage, [allowDefault = false]);
 	
 	//Container defining the frame of the play area (All game play/scaling is done inside here) 
 	play_area_frame = new createjs.Container();
@@ -53,26 +72,28 @@ function init() {
 	//Panning of play area
 	play_area_border.on("mousedown", function(evt){
 					window.offset = {x:play_area.x-evt.stageX, y:play_area.y-evt.stageY};
-					
+					window.initialClick = {x:evt.stageX, y:evt.stageY};
 					resetBoard();
 	});
 	
 	play_area_border.on("pressmove", function(evt){
+				//if (Math.abs(window.initialClick.y - evt.stageY)<15)
 					play_area.x = evt.stageX + window.offset.x;
+				//else if (Math.abs(window.initialClick.x - evt.stageX)<15)
 					play_area.y = evt.stageY + window.offset.y;
 					
 	}
 	
 );
 	//Scaling down the play area to show 10x10 pieces
-//	play_area.scaleX = play_area.scaleY = 0.55;
-	play_area.scaleX = 0.30;
-	play_area.scaleY = 0.30;
+	play_area.scaleX = play_area.scaleY = 0.55;
+
 
 	//This is temporary. Shows where the play area is. Add debugging text to it
-	var play_area_text = new createjs.Text("Play area", "20px Arial","black");
+	play_area_text = new createjs.Text("Play area", "20px Arial","black");
 	play_area_text.x = 20;
-//	play_area.addChild(play_area_text);
+
+	
 
 
 	//Mask the control area on the right
@@ -87,8 +108,22 @@ function init() {
 	play_area_frame.addChild(play_area);
 	stage.addChild(play_area_frame);
 	//Initializing combobox
-  	cb.initialize();
+  	//cb.initialize();
+
+  	stage.addChild(play_area_text);
+  	setInterval(function () {track_time++; 
+  							if (Math.trunc(track_time%60) < 10)
+  								play_area_text.text = Math.trunc(track_time/60) +":0"+ (Math.trunc(track_time%60));
+  							else
+  								play_area_text.text = Math.trunc(track_time/60) +":"+ (Math.trunc(track_time%60));
+  							 }, 1000);
     startGame();
+
+   for (t in test){
+   		console.log(test[t].toString());
+
+   } 
+   
 
 }
 
@@ -100,7 +135,8 @@ function sortNumber(a,b) {
 function resize() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;  
-            
+            play_area.width = play_area_frame.width = play_area_border.width = canvas.width;
+            play_area.height = play_area_frame.height = play_area_border.height = canvas.height;
            stage.update();
 }
 
@@ -174,6 +210,15 @@ function MouseWheelHandler(e){
         zoom=.025;
     else
         zoom= -0.025;
+
+
+var point = play_area.localToGlobal(stage.mouseX, stage.mouseY);
+//play_area.x=stage.mouseX ;
+//play_area.y=stage.mouseY ;
+
+play_area.regX=stage.mouseX ;
+play_area.regY=stage.mouseY ;
+
 play_area.scaleX += zoom;
 play_area.scaleY += zoom;
 
@@ -199,8 +244,9 @@ function currentKeyNegIn(piece,key){
 function startGame() {
 	
     createjs.Ticker.setFPS(60);
-    createjs.Ticker.addEventListener("tick", function(e){
-	stage.update();
+    createjs.Ticker.on("tick", function(e){
+	
+	stage.update(e);
     });
 }
 
