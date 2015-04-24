@@ -20,6 +20,9 @@ function ClausePiece(st_list, piece_num) {
 			tweenMatchingPieces(evt.currentTarget);
 			evt.currentTarget.alpha = 1;
 		}
+
+        //Single click to replace pieces with result.
+        replaceWithSolvedPieces(evt.currentTarget);
 	
     });
 	
@@ -111,18 +114,38 @@ function SolvedPiece(st_list, piece_num, parent1, parent2){
 	p.parent2 = parent2;
 
 	p.on("click", function(evt){
-				new_piece = pm.addPiece(evt.currentTarget.keys);
-				p.parent1.matching[p.parent2.piece_num] = false;
-                p.parent2.matching[p.parent1.piece_num] = false;
-                pm._num_steps++;
-                
-                
-                item = {};
-                item ["piece_1"] = p.parent1.piece_num;
-                item ["piece_2"] = p.parent2.piece_num;
-                item ["piece_3"] = new_piece.piece_num;
-                game_state.saved_steps.push(item);
-                res.push(p.parent1.piece_num+","+p.parent2.piece_num+","+new_piece.piece_num);
+                var add_piece = true;
+            for (var i =0; i< pm._piece_list.length; i++){
+                if(arraysEqual(st_list,pm._piece_list[i].keys)){
+                    console.log("Duplicate piece!!!");
+                //Flashing the piece
+                    createjs.Tween.get(pm._piece_list[i]).to({alpha:0}).wait(250).to({alpha:1}).wait(250).to({alpha:0}).wait(250).to({alpha:1}).wait(250).to({alpha:0}).wait(250).to({alpha:1}).wait(250).to({alpha:0}).wait(250).to({alpha:0.3});
+                    add_piece = false;
+                    p1.matching[p2.piece_num] = false;
+                    p2.matching[p1.piece_num] = false;
+                    break;
+                }
+            }
+
+
+                if (add_piece){
+        				new_piece = pm.addPiece(evt.currentTarget.keys);
+        				p.parent1.matching[p.parent2.piece_num] = false;
+                        p.parent2.matching[p.parent1.piece_num] = false;
+                        pm._num_steps++;
+                        
+                        
+                        item = {};
+                        item ["piece_1"] = p.parent1.piece_num;
+                        item ["piece_2"] = p.parent2.piece_num;
+                        item ["piece_3"] = new_piece.piece_num;
+                        game_state.saved_steps.push(item);
+                        res.push(p.parent1.piece_num+","+p.parent2.piece_num+","+new_piece.piece_num);
+                        p.parent2.visible = true;
+                        p.parent2.alpha = 0.3;
+                        p.visible = false;
+
+                }
 
 
 	});
@@ -157,6 +180,7 @@ function ClausePieceShape(st_list,piece_num){
 			//var chr = String.fromCharCode(0x0904 + Math.abs(p.keys[i]));
 			//var chr = String.fromCharCode(0x0400 + Math.abs(p.keys[i]));
 			//var chr = String.fromCharCode(0x0C91 + Math.abs(p.keys[i]));
+            //var chr = String.fromCharCode(0x03B0 + Math.abs(p.keys[i]));
 			
 			//If atom is positive fill the block and no border
 			if (p.keys[i] > 0){
