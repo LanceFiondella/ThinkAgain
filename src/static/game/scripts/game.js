@@ -86,7 +86,7 @@ function init() {
 	
 );
 	//Scaling down the play area to show 10x10 pieces
-	play_area.scaleX = play_area.scaleY = 0.55;
+	play_area.scaleX = play_area.scaleY = 0.6;
 
 
 	//This is temporary. Shows where the play area is. Add debugging text to it
@@ -212,12 +212,12 @@ function MouseWheelHandler(e){
         zoom= -0.025;
 
 
-var point = play_area.localToGlobal(stage.mouseX, stage.mouseY);
+//var point = play_area.localToGlobal(stage.mouseX, stage.mouseY);
 //play_area.x=stage.mouseX ;
 //play_area.y=stage.mouseY ;
 
-play_area.regX=stage.mouseX ;
-play_area.regY=stage.mouseY ;
+//play_area.regX=stage.mouseX ;
+//play_area.regY=stage.mouseY ;
 
 play_area.scaleX += zoom;
 play_area.scaleY += zoom;
