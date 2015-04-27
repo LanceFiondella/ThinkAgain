@@ -33,7 +33,8 @@ var game_state = {
 
 //Draws border around selected peice
 var selected_piece_border = new createjs.Shape();
-
+//This array stores the references to the animations/borders of newly added pieces
+var new_piece_borders = [];
 
 
 createjs.Sound.registerSound("./sounds/bubble.wav","bubble",4);

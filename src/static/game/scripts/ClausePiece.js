@@ -26,12 +26,12 @@ function ClausePiece(st_list, piece_num) {
         
         
         selected_piece_border.graphics.clear().setStrokeStyle(5).beginStroke("#ff0000").drawRect(evt.currentTarget.x+evt.currentTarget.orgX, evt.currentTarget.y+evt.currentTarget.orgY, evt.currentTarget.width, evt.currentTarget.height);
+        var npb_length = new_piece_borders.length;
+        for (var i =npb_length-1; i>=0; i--){
+            play_area.removeChild(new_piece_borders[i]);
+            delete new_piece_borders.pop();
 
-        
-        //selected_piece_border.graphics.redraw();
-
-      
-
+        }
         replaceWithSolvedPieces(evt.currentTarget);
 	
     });
@@ -116,6 +116,8 @@ function replaceWithSolvedPieces(selectedPiece){
                     createjs.Tween.get(cp).to({alpha:0}).to({alpha:1}, 500);
                     addedSolvedPieces.push(cp);
             }
+            else
+                allPieces[k].alpha = 0.3;
 
         }
         
@@ -136,8 +138,8 @@ function SolvedPiece(st_list, piece_num, parent1, parent2){
                 //Flashing the piece
                     //createjs.Tween.get(pm._piece_list[i]).to({alpha:0}).wait(250).to({alpha:1}).wait(250).to({alpha:0}).wait(250).to({alpha:1}).wait(250).to({alpha:0}).wait(250).to({alpha:1}).wait(250).to({alpha:0}).wait(250).to({alpha:0.3});
                     add_piece = false;
-                    p1.matching[p2.piece_num] = false;
-                    p2.matching[p1.piece_num] = false;
+                    parent1.matching[parent2.piece_num] = false;
+                    parent2.matching[parent1.piece_num] = false;
 
             }
 
@@ -159,6 +161,17 @@ function SolvedPiece(st_list, piece_num, parent1, parent2){
                         p.parent2.alpha = 0.3;
                         p.visible = false;
 
+                        np_border = new createjs.Shape();
+                        np_border.graphics.setStrokeStyle(5).beginStroke("green").drawRect(new_piece.x+new_piece.orgX, new_piece.y+new_piece.orgY, new_piece.width, new_piece.height)
+                        new_piece_borders.push(np_border);
+                        play_area.addChild(np_border);
+
+
+
+                        //Recalculate all solved pieces again. This is to remove repeated results from the board
+                        resetBoard();
+                        tweenMatchingPieces(parent1);
+                        replaceWithSolvedPieces(parent1);
                 }
 
 
