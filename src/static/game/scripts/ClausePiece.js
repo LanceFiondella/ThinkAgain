@@ -24,15 +24,29 @@ function ClausePiece(st_list, piece_num) {
         //Single click to replace pieces with result.
         createjs.Tween.get(evt.currentTarget).to({scaleX: 1.0, scaleY: 1.0}).to({scaleX: 0.75, scaleY: 0.75}, 250);
         
-        
-        selected_piece_border.graphics.clear().setStrokeStyle(5).beginStroke("#ff0000").drawRect(evt.currentTarget.x+evt.currentTarget.orgX, evt.currentTarget.y+evt.currentTarget.orgY, evt.currentTarget.width, evt.currentTarget.height);
+        //Adding red border around selected piece and resetting green borders from previous step
+        prev_parent = selected_piece_border.parent;
+        console.log(prev_parent);
+        if(prev_parent != null){
+            prev_parent.removeChild(selected_piece_border);
+            prev_parent.updateCache();
+        }
+
+        selected_piece_border.graphics.clear().setStrokeStyle(5).beginStroke("#ff0000").drawRect(0, 0, evt.currentTarget.width, evt.currentTarget.height);
+        evt.currentTarget.addChild(selected_piece_border);
+        evt.currentTarget.updateCache();
         var npb_length = new_piece_borders.length;
         for (var i =npb_length-1; i>=0; i--){
-            play_area.removeChild(new_piece_borders[i]);
+            //play_area.removeChild();
+            green_piece = new_piece_borders[i].parent
+            green_piece.removeChild(new_piece_borders[i]);
+            green_piece.updateCache();
             delete new_piece_borders.pop();
 
         }
         replaceWithSolvedPieces(evt.currentTarget);
+
+      
 	
     });
 	
@@ -97,10 +111,13 @@ function ClausePiece(st_list, piece_num) {
 }
 
 
+
+
+
 function replaceWithSolvedPieces(selectedPiece){
 	// Replaces all the pieces that can be solved with the selectedPiece with the resultant piece
 	allPieces = pm.getAllPieces();
-	window.addedSolvedPieces = [];
+	pm.addedSolvedPieces = [];
     
     for(k in selectedPiece.matching){
         if (selectedPiece.matching[k]){
@@ -114,7 +131,7 @@ function replaceWithSolvedPieces(selectedPiece){
                     cp.y = allPieces[k].y;
                     play_area.addChild(cp);
                     createjs.Tween.get(cp).to({alpha:0}).to({alpha:1}, 500);
-                    addedSolvedPieces.push(cp);
+                    pm.addedSolvedPieces.push(cp);
             }
             else
                 allPieces[k].alpha = 0.3;
@@ -161,22 +178,25 @@ function SolvedPiece(st_list, piece_num, parent1, parent2){
                         p.parent2.alpha = 0.3;
                         p.visible = false;
 
+
+                        //Adding a green border around a newly placed piece
                         np_border = new createjs.Shape();
-                        np_border.graphics.setStrokeStyle(5).beginStroke("green").drawRect(new_piece.x+new_piece.orgX, new_piece.y+new_piece.orgY, new_piece.width, new_piece.height)
+                        //np_border.graphics.setStrokeStyle(5).beginStroke("green").drawRect(new_piece.x+new_piece.orgX, new_piece.y+new_piece.orgY, new_piece.width-2, new_piece.height-2)
+                        np_border.graphics.setStrokeStyle(5).beginStroke("green").drawRect(0,0, new_piece.width-2, new_piece.height-2)
                         new_piece_borders.push(np_border);
-                        play_area.addChild(np_border);
-
-
-
+                        new_piece.addChild(np_border);
+                        new_piece.updateCache();
+                        
                         //Recalculate all solved pieces again. This is to remove repeated results from the board
                         resetBoard();
                         tweenMatchingPieces(parent1);
                         replaceWithSolvedPieces(parent1);
+                        
                 }
 
 
 	});
-
+    
 	return p;
 }
 

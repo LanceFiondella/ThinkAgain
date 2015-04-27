@@ -37,6 +37,10 @@ var selected_piece_border = new createjs.Shape();
 var new_piece_borders = [];
 
 
+
+
+
+
 createjs.Sound.registerSound("./sounds/bubble.wav","bubble",4);
 
 function init() {
@@ -124,8 +128,8 @@ function init() {
   							 }, 1000);
 
   	
-	play_area.addChild(selected_piece_border);
-    selected_piece_border.graphics.beginStroke("#ff0000").drawRect(0,0,0,0);
+	//play_area.addChild(selected_piece_border);
+    //selected_piece_border.graphics.beginStroke("#ff0000").drawRect(0,0,0,0);
 
     startGame();
 
@@ -206,6 +210,7 @@ function generatePieces(){
 		
 	}
 	
+	
 }
 
 
@@ -252,6 +257,8 @@ function startGame() {
 	
 	stage.update(e);
     });
+
+
 }
 
 function httpGet(theUrl)
@@ -311,10 +318,12 @@ function resetBoard(){
 
 	}
 
-	if (typeof addedSolvedPieces !== 'undefined'){
-    	var addedSolvedPIeces_length = addedSolvedPieces.length;
+	
+
+	if (typeof pm.addedSolvedPieces !== 'undefined'){
+    	var addedSolvedPIeces_length = pm.addedSolvedPieces.length;
 	for(var i = 0; i<addedSolvedPIeces_length;i++){
-		play_area.removeChild(addedSolvedPieces[i]);
+		play_area.removeChild(pm.addedSolvedPieces[i]);
 		}
 	}
 
