@@ -22,6 +22,16 @@ function ClausePiece(st_list, piece_num) {
 		}
 
         //Single click to replace pieces with result.
+        createjs.Tween.get(evt.currentTarget).to({scaleX: 1.0, scaleY: 1.0}).to({scaleX: 0.75, scaleY: 0.75}, 250);
+        
+        
+        selected_piece_border.graphics.clear().setStrokeStyle(5).beginStroke("#ff0000").drawRect(evt.currentTarget.x+evt.currentTarget.orgX, evt.currentTarget.y+evt.currentTarget.orgY, evt.currentTarget.width, evt.currentTarget.height);
+
+        
+        //selected_piece_border.graphics.redraw();
+
+      
+
         replaceWithSolvedPieces(evt.currentTarget);
 	
     });
@@ -91,16 +101,21 @@ function replaceWithSolvedPieces(selectedPiece){
 	// Replaces all the pieces that can be solved with the selectedPiece with the resultant piece
 	allPieces = pm.getAllPieces();
 	window.addedSolvedPieces = [];
+    
     for(k in selectedPiece.matching){
         if (selectedPiece.matching[k]){
-            allPieces[k].visible = false;
-            cp = SolvedPiece(solveValues(selectedPiece,allPieces[k]) , allPieces[k].piece_num, selectedPiece, allPieces[k]);
-            cp.x = allPieces[k].x;
-            cp.y = allPieces[k].y;
-            play_area.addChild(cp);
-            createjs.Tween.get(cp).to({alpha:0}).to({alpha:1}, 1000, createjs.Ease.bounceOut);
-            addedSolvedPieces.push(cp);
+            var new_keys = solveValues(selectedPiece,allPieces[k]);
+            
+            if (pm.checkPiece(new_keys) == false){
 
+                    allPieces[k].visible = false;
+                    cp = SolvedPiece(new_keys, allPieces[k].piece_num, selectedPiece, allPieces[k]);
+                    cp.x = allPieces[k].x;
+                    cp.y = allPieces[k].y;
+                    play_area.addChild(cp);
+                    createjs.Tween.get(cp).to({alpha:0}).to({alpha:1}, 500);
+                    addedSolvedPieces.push(cp);
+            }
 
         }
         
@@ -115,16 +130,15 @@ function SolvedPiece(st_list, piece_num, parent1, parent2){
 
 	p.on("click", function(evt){
                 var add_piece = true;
-            for (var i =0; i< pm._piece_list.length; i++){
-                if(arraysEqual(st_list,pm._piece_list[i].keys)){
-                    console.log("Duplicate piece!!!");
+            
+            if (pm.checkPiece(st_list)){
+                console.log("Duplicate piece!!!");
                 //Flashing the piece
-                    createjs.Tween.get(pm._piece_list[i]).to({alpha:0}).wait(250).to({alpha:1}).wait(250).to({alpha:0}).wait(250).to({alpha:1}).wait(250).to({alpha:0}).wait(250).to({alpha:1}).wait(250).to({alpha:0}).wait(250).to({alpha:0.3});
+                    //createjs.Tween.get(pm._piece_list[i]).to({alpha:0}).wait(250).to({alpha:1}).wait(250).to({alpha:0}).wait(250).to({alpha:1}).wait(250).to({alpha:0}).wait(250).to({alpha:1}).wait(250).to({alpha:0}).wait(250).to({alpha:0.3});
                     add_piece = false;
                     p1.matching[p2.piece_num] = false;
                     p2.matching[p1.piece_num] = false;
-                    break;
-                }
+
             }
 
 
@@ -337,23 +351,17 @@ function solvePieces(p1,p2, addToSolution){
             new_keys.sort();
             console.log("result keys = " + new_keys);
             var add_piece = true;
-            for (var i =0; i< pm._piece_list.length; i++){
-                if(arraysEqual(new_keys,pm._piece_list[i].keys)){
+          
+            if (pm.checkPiece(new_keys))
+            {
                     console.log("Duplicate piece!!!");
-    //Flashing the piece
-                    createjs.Tween.get(pm._piece_list[i]).to({alpha:0}).wait(250).to({alpha:1}).wait(250).to({alpha:0}).wait(250).to({alpha:1}).wait(250).to({alpha:0}).wait(250).to({alpha:1}).wait(250).to({alpha:0}).wait(250).to({alpha:0.3});
+                    //Flashing the piece
+                    //createjs.Tween.get(pm._piece_list[i]).to({alpha:0}).wait(250).to({alpha:1}).wait(250).to({alpha:0}).wait(250).to({alpha:1}).wait(250).to({alpha:0}).wait(250).to({alpha:1}).wait(250).to({alpha:0}).wait(250).to({alpha:0.3});
                     add_piece = false;
                     p1.matching[p2.piece_num] = false;
                     p2.matching[p1.piece_num] = false;
                     
-                    //Write failed graphviz statement
-                    /*
-                    document.getElementById("graphviz").innerHTML +=  "\"" + p1.piece_num.toString() +"(" + p1.keys.toString() +")\" -> "+ "\"Repeated : " + pm._piece_list[i].piece_num.toString() +"(" + pm._piece_list[i].keys.toString() +")\"" + " [label=\" \"];<br>";
-                    document.getElementById("graphviz").innerHTML +=  "\"" + p2.piece_num.toString() +"(" + p2.keys.toString() +")\" -> "+ "\"Repeated : " + pm._piece_list[i].piece_num.toString() +"(" + pm._piece_list[i].keys.toString() +")\"" + " [label=\" \"];<br>";
-                    */
-                    break;
-                }
-            
+
             }
             
             if (add_piece){

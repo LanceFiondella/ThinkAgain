@@ -31,6 +31,10 @@ var game_state = {
 
 //var saved_steps = []; 
 
+//Draws border around selected peice
+var selected_piece_border = new createjs.Shape();
+
+
 
 createjs.Sound.registerSound("./sounds/bubble.wav","bubble",4);
 
@@ -117,13 +121,12 @@ function init() {
   							else
   								play_area_text.text = Math.trunc(track_time/60) +":"+ (Math.trunc(track_time%60));
   							 }, 1000);
+
+  	
+	play_area.addChild(selected_piece_border);
+    selected_piece_border.graphics.beginStroke("#ff0000").drawRect(0,0,0,0);
+
     startGame();
-
-   for (t in test){
-   		console.log(test[t].toString());
-
-   } 
-   
 
 }
 
@@ -302,6 +305,8 @@ function resetBoard(){
 		
 		allPieces[i].alpha = 1.0;
 		allPieces[i].visible = true;
+		allPieces[i].scaleX = allPieces[i].scaleY = 1.0;
+
 
 	}
 

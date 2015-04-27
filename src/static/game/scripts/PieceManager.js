@@ -171,6 +171,7 @@ function PieceManager(){
 	};
 	
 	PieceManager.prototype.negationPresent = function(p1,p2){
+		//Checks if only one negation is present in piece 1 and piece 2
 		var result = false;
 		var num_negations = 0;
 		var p1_keys_length = p1.keys.length;
@@ -236,5 +237,20 @@ function PieceManager(){
 
 	};
 	
+
+	PieceManager.prototype.checkPiece = function(st_list){
+		//This function checks if the piece passed to this function exists in the _piece_list. Accepts an array of integers representing the piece
+		var result = false;
+		for (var i =0; i< this._piece_list.length; i++){
+                if(arraysEqual(st_list,this._piece_list[i].keys)){
+                	result = true;
+                	break;
+                }
+        }
+		return result;
+	}
+
+
+
 
 	
