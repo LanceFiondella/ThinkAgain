@@ -11,6 +11,7 @@ function ClausePiece(st_list, piece_num) {
 	//Behaviour on clicking piece
 	p.on("mousedown", function(evt){
 		resetBoard();
+        resetWidths();
 		evt.stopPropagation();
 		play_area.setChildIndex(evt.currentTarget,play_area.getNumChildren() - 1);
 		var global = play_area.localToGlobal(evt.currentTarget.x, evt.currentTarget.y);
@@ -26,7 +27,7 @@ function ClausePiece(st_list, piece_num) {
         
         //Adding red border around selected piece and resetting green borders from previous step
         prev_parent = selected_piece_border.parent;
-        console.log(prev_parent);
+        
         if(prev_parent != null){
             prev_parent.removeChild(selected_piece_border);
             prev_parent.updateCache();
@@ -93,6 +94,9 @@ function ClausePiece(st_list, piece_num) {
     		}
 			createjs.Tween.get(evt.currentTarget).to({x: evt.currentTarget.homeX, y: evt.currentTarget.homeY}, 500, createjs.Ease.elasticOut);
 			
+
+            //Experiment
+            
     });
     
     
@@ -127,10 +131,21 @@ function replaceWithSolvedPieces(selectedPiece){
 
                     allPieces[k].visible = false;
                     cp = SolvedPiece(new_keys, allPieces[k].piece_num, selectedPiece, allPieces[k]);
-                    cp.x = allPieces[k].x;
-                    cp.y = allPieces[k].y;
+                    
+
+                    //Experimental code may want to add it to a separate function
+                    allPieces[k].width = cp.width;
+                    
+                    //End experiment
+
+
+                    //cp.x = allPieces[k].homeX;
+                    cp.x = allPieces[k].homeX;
+                    cp.y = allPieces[k].homeY;
+
                     play_area.addChild(cp);
-                    createjs.Tween.get(cp).to({alpha:0}).to({alpha:1}, 500);
+                    //createjs.Tween.get(cp).to({alpha:0}).to({alpha:1}, 500);
+
                     pm.addedSolvedPieces.push(cp);
             }
             else
@@ -139,6 +154,7 @@ function replaceWithSolvedPieces(selectedPiece){
         }
         
     }
+    pm.adjustPieces();
 }
 
 function SolvedPiece(st_list, piece_num, parent1, parent2){
@@ -187,8 +203,14 @@ function SolvedPiece(st_list, piece_num, parent1, parent2){
                         new_piece.addChild(np_border);
                         new_piece.updateCache();
                         
+
+                        //Adjusting the widths of removed piece
+                        parent2.width = parent2.getBounds().width;
+
+
                         //Recalculate all solved pieces again. This is to remove repeated results from the board
                         resetBoard();
+                        //pm.adjustPieces();
                         tweenMatchingPieces(parent1);
                         replaceWithSolvedPieces(parent1);
                         

@@ -36,8 +36,8 @@ var selected_piece_border = new createjs.Shape();
 //This array stores the references to the animations/borders of newly added pieces
 var new_piece_borders = [];
 
-
-
+//Flag to detect drag
+var pressmove_flag = false;
 
 
 
@@ -82,7 +82,7 @@ function init() {
 	play_area_border.on("mousedown", function(evt){
 					window.offset = {x:play_area.x-evt.stageX, y:play_area.y-evt.stageY};
 					window.initialClick = {x:evt.stageX, y:evt.stageY};
-					resetBoard();
+					pressmove_flag = false;
 	});
 	
 	play_area_border.on("pressmove", function(evt){
@@ -91,9 +91,21 @@ function init() {
 				//else if (Math.abs(window.initialClick.x - evt.stageX)<15)
 					play_area.y = evt.stageY + window.offset.y;
 					
-	}
-	
-);
+					//Checks if the mouse has been dragged by 5 pixels
+					if(Math.abs(initialClick.x-evt.stageX) > 5 || Math.abs(initialClick.y-evt.stageY))
+						pressmove_flag = true;
+	});
+
+	play_area_border.on("pressup",function(evt){
+		
+			if(pressmove_flag == false){
+					resetWidths();
+					resetBoard();
+					pm.adjustPieces();
+				}
+	});
+
+
 	//Scaling down the play area to show 10x10 pieces
 	play_area.scaleX = play_area.scaleY = 0.6;
 
@@ -308,17 +320,14 @@ function resetBoard(){
 	//Actions to perform when want to reset the board to its original state
 
 	allPieces = pm.getAllPieces();
-					var allpieces_length = allPieces.length;
+	var allpieces_length = allPieces.length;
 	for(var i = 0; i<allpieces_length; i++){
 		
 		allPieces[i].alpha = 1.0;
 		allPieces[i].visible = true;
 		allPieces[i].scaleX = allPieces[i].scaleY = 1.0;
 
-
 	}
-
-	
 
 	if (typeof pm.addedSolvedPieces !== 'undefined'){
     	var addedSolvedPIeces_length = pm.addedSolvedPieces.length;
@@ -328,4 +337,18 @@ function resetBoard(){
 	}
 
 
+}
+
+function resetWidths(){
+//Experimental function called after clicking the board to reset the width of all pieces to their true values
+
+allPieces = pm.getAllPieces();
+					var allpieces_length = allPieces.length;
+	for(var i = 0; i<allpieces_length; i++){
+		//console.log(allPieces[i].width + " " + allPieces[i].getBounds().width);
+		allPieces[i].width = allPieces[i].getBounds().width;
+		//console.log(allPieces[i].width + " " + allPieces[i].getBounds().width);
+	}
+
+	//pm.adjustPieces();
 }

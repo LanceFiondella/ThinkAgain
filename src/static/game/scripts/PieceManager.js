@@ -10,7 +10,7 @@ function PieceManager(){
 	this.conclusion_piece_number=null;
 	//This array keeps track of the x position of the largest piece in each column
 	this.col_x_positions = new Array();
-	this.col_x_positions.push(0);
+	this.col_x_positions.push(160);
 
 	this.addedSolvedPieces = [];
 	};
@@ -268,10 +268,11 @@ function PieceManager(){
 				if (currCol == this.currentColumn && currRow == this.currentRow)
 						break;
 				else{	
-						var spacing = pm._piece_list[(currCol-1)*10+currRow].x + (pm._piece_list[(currCol-1)*10+currRow].width/2) + min_space + (pm._piece_list[currCol*10+currRow].width/2);
+						//var spacing = pm._piece_list[(currCol-1)*10+currRow].x + (pm._piece_list[(currCol-1)*10+currRow].width/2) + min_space + (pm._piece_list[currCol*10+currRow].width/2);
+						var spacing = this.col_x_positions[currCol-1] + (pm._piece_list[(currCol-1)*10+currRow].width/2) + min_space + (pm._piece_list[currCol*10+currRow].width/2);
 					 	if (spacing > biggest_spacing){
 					 		biggest_spacing = spacing;
-					 		console.log("Biggest spacing = " + biggest_spacing);
+					 		//console.log("Biggest spacing = " + biggest_spacing);
 					 		//this.col_x_positions[currCol] = spacing;
 					 	}
 					}
@@ -280,18 +281,23 @@ function PieceManager(){
 			}
 
 			
-			console.log(this.col_x_positions);
+			//console.log(this.col_x_positions);
 			for(var i =10; i< this._total_pieces; i++)
 				{
 					//console.log("Col x pos " + this.col_x_positions[Math.floor(i/10)]);
 					//pm._piece_list[i].x = pm._piece_list[i].homeX = this.col_x_positions[Math.floor(i/10)];
-					pm._piece_list[i].homeX = this.col_x_positions[Math.floor(i/10)];
-					createjs.Tween.get(pm._piece_list[i]).to({x: pm._piece_list[i].homeX, y: pm._piece_list[i].homeY}, 500, createjs.Ease.elasticOut);
+					this._piece_list[i].homeX = this.col_x_positions[Math.floor(i/10)];
+					createjs.Tween.get(this._piece_list[i]).to({x: this._piece_list[i].homeX, y: this._piece_list[i].homeY}, 500, createjs.Ease.elasticOut);
 
 				}
 
-				
+			for(var i=0; i< this.addedSolvedPieces.length; i++){
+				if(this.addedSolvedPieces[i].piece_num>9){
+				this.addedSolvedPieces[i].homeX = this.col_x_positions[Math.floor(this.addedSolvedPieces[i].piece_num/10)];
+				createjs.Tween.get(this.addedSolvedPieces[i]).to({x: this.addedSolvedPieces[i].homeX, y: this.addedSolvedPieces[i].homeY}, 500, createjs.Ease.elasticOut);
+			}
 
+			}
 		};
 
 
