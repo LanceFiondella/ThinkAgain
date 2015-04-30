@@ -42,6 +42,7 @@ var pressmove_flag = false;
 
 
 createjs.Sound.registerSound("./sounds/bubble.wav","bubble",4);
+createjs.Sound.registerSound("./sounds/cheer.mp3","cheer",4);
 
 function init() {
 	//Canvas contains the whole game use other containers to manipulate game
