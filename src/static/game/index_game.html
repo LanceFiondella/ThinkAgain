@@ -9,7 +9,6 @@
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 	<script src="https://code.createjs.com/createjs-2014.12.12.min.js"></script>
-	<script src="http://visjs.org/dist/vis.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 	
 	<script src="scripts/PieceManager.js"></script>
@@ -132,7 +131,7 @@
 				next_value = keys[i+1];
 			}
 		}
-		alert(data[next_value]);
+		//alert(data[next_value]);
 		sessionStorage.setItem("filename",data[next_value]);
 
 		window.location = "index_game.html";
@@ -251,7 +250,7 @@
 		height: 100%;
 		text-align: center;
 		z-index: 1000;
-		background: rgba(0, 0, 0, 0.8);
+		background: rgba(0, 0, 0, 0.95);
 		-webkit-transition: opacity 400ms ease-in;
    		-moz-transition: opacity 400ms ease-in;
    		transition: opacity 400ms ease-in;
@@ -354,7 +353,7 @@
 		<h3 id="steps_text"></h3>
 		<h3 id="time_text"></h3>
 		<p id="instruction">To Play Next Level Press Next</p>
-		<button class="btn btn-danger" id="button" value="Cancel" onclick="location.href='index.html'; return false;">Menu</button>
+		<button class="btn btn-danger" id="button" value="Cancel" onclick="location.href='/game_menu/'; return false;">Menu</button>
 		<button class="btn btn-warning" id="button" value="Play Again" onclick="location.reload(true); return false;">Play Again</button>
 		<a type="submit" class="btn btn-primary" id="button" value="Next" onclick="Next_Problem()">Next</a>
 		</div>
@@ -362,7 +361,7 @@
 
 	<div id="pause-overlay">
 		<div id="pause-menu">
-			<button class="btn btn-danger" id="button" value="Cancel" onclick="unpause()">Unpause</button>
+			<button class="btn btn-danger" id="button" value="Cancel" onclick="unpause()">Resume</button>
 
 		</div>
 	</div>
