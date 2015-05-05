@@ -16,8 +16,10 @@ var colors;
 //Text for timer
 var play_area_text;
 var track_time = 0.0;
-var test = [[1,2,3],[-1,3,4],[-4,5,-6]];
+var timerId;
 var res = [];
+
+
 
 //Temporarily shows resulting piece
 var temp_piece = null;
@@ -46,6 +48,7 @@ createjs.Sound.registerSound("./sounds/cheer.mp3","cheer",4);
 
 function init() {
 	//Canvas contains the whole game use other containers to manipulate game
+	console.log(sessionStorage.getItem("username"));
     stage = new createjs.Stage("canvas");
 	
 	stage.canvas.width = window.innerWidth;
@@ -133,7 +136,7 @@ function init() {
   	//cb.initialize();
 
   	stage.addChild(play_area_text);
-  	setInterval(function () {track_time++; 
+  	timerId = setInterval(function () {track_time++; 
   							if (Math.trunc(track_time%60) < 10)
   								play_area_text.text = Math.trunc(track_time/60) +":0"+ (Math.trunc(track_time%60));
   							else

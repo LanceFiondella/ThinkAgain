@@ -49,11 +49,8 @@ function PieceManager(){
 			
 			//Check if new piece satisfies conclusion
 			if (cp.keys.length == 0){
+				this.verifyWin();
 				
-				//alert("You win!");
-				el = document.getElementById("overlay");
-				el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
-				createjs.Sound.play("cheer");
 			}
 		
 			
@@ -61,6 +58,45 @@ function PieceManager(){
 		this.adjustPieces();
 		return cp;
 		
+	};
+
+
+	PieceManager.prototype.verifyWin = function(){
+
+
+				el = document.getElementById("overlay");
+				el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
+
+				//Stop timer
+				clearInterval(timerId);
+
+				//Add time and steps to win window
+				document.getElementById("steps_text").innerHTML = "Total Pieces : " + pm._total_pieces;
+				document.getElementById("time_text").innerHTML = "Time : " + track_time + " seconds";
+				createjs.Sound.play("cheer");
+
+				//Send win data 
+				var csrf_token = $.cookie('csrftoken');
+			    console.log("Sending Result ajax!")
+			        $.ajaxSetup({
+			            beforeSend: function(xhr, settings) {
+			                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+			                    xhr.setRequestHeader("X-CSRFToken", csrf_token);
+			                }
+			            }
+			        });
+
+			    $.ajax({
+			  type: 'POST',
+			  url: '/save_solution/',
+			  data: "problem_name=" + sessionStorage.getItem("filename")+"&username="+ sessionStorage.getItem("username")+"&total_pieces=" + pm._total_pieces+ "&total_time=" + track_time,
+			  success: function(data){
+			        response = data;
+			    },
+			  dataType: "json",
+			  async:false
+			});
+
 	};
 	
 	PieceManager.prototype.showPiece = function(st_list, piece_num){

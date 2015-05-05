@@ -11,7 +11,7 @@
 	<script src="https://code.createjs.com/createjs-2014.12.12.min.js"></script>
 	<script src="http://visjs.org/dist/vis.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
-	<link type="text/css" rel="stylesheet" href="http://visjs.org/dist/vis.css">
+	
 	<script src="scripts/PieceManager.js"></script>
 	<script src="scripts/ClausePiece.js"></script>
 	<script src="scripts/ComboBox.js"></script>
@@ -37,11 +37,33 @@
 		
 		$("#bin").click(function(){
 			//alert(pm._total_pieces);
-			pm.popPiece();
-
-			
-			
+			pm.popPiece();	
 		});
+
+		$("#zoom_in").click(function(){
+			zoom = 0.075;
+			play_area.scaleX += zoom;
+			play_area.scaleY += zoom;
+
+		});
+
+		$("#zoom_out").click(function(){
+			zoom = -0.075;
+			play_area.scaleX += zoom;
+			play_area.scaleY += zoom;
+
+		});
+
+		$("#pause").click(function(){
+			//Stop timer
+			clearInterval(timerId);
+			el = document.getElementById("pause-overlay");
+			el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
+
+
+
+		});
+
 
 		$("#save").click(function(){
 			//Save time stamp and game state
@@ -68,6 +90,17 @@
 		$("#save").hide();
 	});
 
+	function unpause(){
+		timerId = setInterval(function () {track_time++; 
+  							if (Math.trunc(track_time%60) < 10)
+  								play_area_text.text = Math.trunc(track_time/60) +":0"+ (Math.trunc(track_time%60));
+  							else
+  								play_area_text.text = Math.trunc(track_time/60) +":"+ (Math.trunc(track_time%60));
+  							 }, 1000);
+		el = document.getElementById("pause-overlay");
+			el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
+	}
+
 	function Next_Problem(){
 		var filename = sessionStorage.getItem('filename');
 		var file = filename.split(".");
@@ -76,17 +109,30 @@
 		var next_value,i;
 		//var data = JSON.parse(problem_list);
 		problem_list = httpGet("/cgi-bin/get_problem_files.py");
+		
 		var data = JSON.parse(problem_list);
-		var arr = Object.keys(data);
-		var array = arr.reverse();
+		var keys = [];
+		for(var k in data){
+    	if(data.hasOwnProperty(k)){
+        	keys.push(k);
+    	}
+		}
 
-		for(i=0;i<array.length;i++)
+		keys.sort();
+
+		
+		//var arr = Object.keys(data);
+		//var array = arr;
+		
+
+		for(i=0;i<keys.length;i++)
 		{
-			if(file[0] == array[i])
+			if(file[0] == keys[i])
 			{
-				next_value = array[i+1];
+				next_value = keys[i+1];
 			}
 		}
+		alert(data[next_value]);
 		sessionStorage.setItem("filename",data[next_value]);
 
 		window.location = "index_game.html";
@@ -103,14 +149,7 @@
 		background-color: #CCC;
 	}
 	
-	.menu-button{
-		width: 2.5%;
-		height: 5%;
-		position: fixed;
-		right: 1%;
-		top: 5%;
-		z-index: 1000;
-	}
+
 	.menu-button{
 		width: 2.5%;
 		height: auto;
@@ -127,6 +166,30 @@
 		top: 12%;
 		z-index: 1000;
 	}
+	.zoom_in {
+		width: 2.5%;
+		height: auto;
+		position: fixed;
+		right: 1%;
+		top: 26%;
+		z-index: 1000;
+	}
+	.zoom_out {
+		width: 2.5%;
+		height: auto;
+		position: fixed;
+		right: 1%;
+		top: 32%;
+		z-index: 1000;
+	}
+	.pause {
+		width: 2.5%;
+		height: auto;
+		position: fixed;
+		right: 1%;
+		top: 39%;
+		z-index: 1000;
+	}
 	#save {
 		width: 2.5%;
 		height: auto;
@@ -135,6 +198,7 @@
 		top: 19%;
 		z-index: 1000;
 	}
+	
 	/*Main Navbar*/
 	.main-nav{
 		display: none;
@@ -177,6 +241,44 @@
 		width: 100%;
 		height: 100%;
 	}
+	/*Pause Screen*/
+	#pause-overlay{
+		visibility: hidden;
+		position: absolute;
+		left: 0;
+		right: 0;
+		width: 100%;
+		height: 100%;
+		text-align: center;
+		z-index: 1000;
+		background: rgba(0, 0, 0, 0.8);
+		-webkit-transition: opacity 400ms ease-in;
+   		-moz-transition: opacity 400ms ease-in;
+   		transition: opacity 400ms ease-in;
+	}
+
+	#pause-overlay div{position: absolute;
+		top: 20%;
+		left: 38%;
+		width: 300px;
+		margin: 100px auto;
+		background-size: 40px 40px;
+    background-image: linear-gradient(135deg, rgba(255, 255, 255, .05) 25%, transparent 25%,
+                        transparent 50%, rgba(255, 255, 255, .05) 50%, rgba(255, 255, 255, .05) 75%,
+                        transparent 75%, transparent);                                      
+     box-shadow: 1px 1px 10px rgba(255,255,255,.4);
+     border: 1px solid;
+     color: #fff;
+     padding: 15px;
+     position: fixed;
+ 	 background-color: #61b832;
+     border-color: #55a12c;
+     text-shadow: 0 1px 0 rgba(0,0,0,.5);
+     animation: animate-bg 5s linear infinite;
+     border-radius: 5px;}
+
+
+
 	/*Message*/
 	#overlay{
 		visibility: hidden;
@@ -219,7 +321,7 @@
 	</style>
 </head>
 
-<body onload="init(); graphInit();">
+<body onload="init(); ">
 	<nav class="main-nav" id="nav">
 		<h3>Menu</h3>
 		<a href="">Problem Page</a>
@@ -237,15 +339,34 @@
 	<div class="save">
 		<a href="#" class="save-button" id="save"><img src="images/save.png" alt="save" height="100%" width="100%" /></a>
 	</div>
+	<div class="zoom_in">
+		<a href="#" class="zoom-in-button" id="zoom_in"><img src="images/zoom_in.png" alt="zoom_in" height="100%" width="100%" /></a>
+	</div>
+	<div class="zoom_out">
+		<a href="#" class="zoom-out-button" id="zoom_out"><img src="images/zoom_out.png" alt="zoom_out" height="100%" width="100%" /></a>
+	</div>
+	<div class="pause">
+		<a href="#" class="pause-button" id="pause"><img src="images/pause.png" alt="pause" height="100%" width="100%" /></a>
+	</div>
 	<div id="overlay">
 		<div id="message">
-		<h3>Congrats, You did it !!!</h3>
-		<p>To Play Next Level Press Next</p>
+		<h3 >Puzzle Complete!</h3>
+		<h3 id="steps_text"></h3>
+		<h3 id="time_text"></h3>
+		<p id="instruction">To Play Next Level Press Next</p>
 		<button class="btn btn-danger" id="button" value="Cancel" onclick="location.href='index.html'; return false;">Menu</button>
 		<button class="btn btn-warning" id="button" value="Play Again" onclick="location.reload(true); return false;">Play Again</button>
 		<a type="submit" class="btn btn-primary" id="button" value="Next" onclick="Next_Problem()">Next</a>
 		</div>
 	</div>
+
+	<div id="pause-overlay">
+		<div id="pause-menu">
+			<button class="btn btn-danger" id="button" value="Cancel" onclick="unpause()">Unpause</button>
+
+		</div>
+	</div>
+
 	<div id="game_div">
 		<canvas id="canvas"></canvas>
 	</div>

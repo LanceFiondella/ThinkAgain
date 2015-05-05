@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'^game_menu/','crowdsource_site.views.game_menu',name='game_menu'),
     url(r'^cgi-bin/get_problem_files\.py/','crowdsource_site.views.get_problem_files',name='get_problem_files'),
     url(r'^generate_problem/','crowdsource_site.views.generate_problem',name='generate_problem'),
+    url(r'^save_solution/','crowdsource_site.views.save_solution',name='save_solution'),
     # url(r'^blog/', include('blog.urls')),
 
     

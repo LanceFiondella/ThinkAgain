@@ -3,8 +3,10 @@ from django.template import RequestContext
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.http import HttpResponse,HttpResponseRedirect
+from crowdsource_site.models import Problem,Solution
 import json
 import os
+import datetime
 
 #test comment
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -129,3 +131,22 @@ def generate_problem(request):
 		data["piece_list"] = piece_list
 	return HttpResponse(json.dumps(data), content_type = "application/json")
 
+def save_solution(request):
+	#Saves the solution of the problem at the end of solving it
+	context = RequestContext(request)
+	data = {}
+	if request.method == 'POST':
+		print request.POST
+		problem_name = request.POST['problem_name'][:-4]
+		username = request.POST['username']
+		total_pieces = int(request.POST['total_pieces'])
+		total_time = int(request.POST['total_time'])
+		
+		user = User.objects.filter(username=username)
+		print user
+		problem = Problem.objects.filter(name=problem_name)
+		print problem
+
+		solution = Solution(username=user[0],problem=problem[0],total_pieces=total_pieces,time_taken=total_time)
+		solution.save()
+	return HttpResponse(json.dumps(data), content_type = "application/json")

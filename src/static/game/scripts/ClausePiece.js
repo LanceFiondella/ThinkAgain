@@ -237,6 +237,16 @@ function ClausePieceShape(st_list,piece_num){
     
 	//Generating individual atoms and adding it to the piece
 	var pkeys_length = p.keys.length;
+    if (pkeys_length == 0){
+        var star_image = new createjs.Bitmap("images/star.jpg");
+        star_image.scaleX = star_image.scaleY = 0.3;
+                //console.log(star_image);
+                p.addChild(star_image);
+                //p.cache(p.getBounds().x,p.getBounds().y,p.width,p.height);
+
+    }
+
+
 	for (var i = 0; i< pkeys_length; i++){
 		var atom = new createjs.Shape();
 		atom.graphics.setStrokeStyle(2);
