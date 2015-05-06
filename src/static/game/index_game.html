@@ -14,6 +14,7 @@
 	<script src="scripts/PieceManager.js"></script>
 	<script src="scripts/ClausePiece.js"></script>
 	<script src="scripts/ComboBox.js"></script>
+	<script src="scripts/tutorial.js"></script>
 	<script src="scripts/game.js"></script>
 	
 <!-- Latest compiled and minified CSS -->
@@ -26,12 +27,19 @@
 			$("#slide").hide();
 			$("#bin").hide();
 			$("#save").hide();
+			$("#zoom_in").hide();
+			$("#zoom_out").hide();
+			$("#pause").hide();
 		});
 
 		$("#nav").click(function(){
 			$("#nav").fadeOut(400);
 			$("#slide").show(450);
 			$("#bin").show(450);
+			$("#save").show(450);
+			$("#zoom_in").show(450);
+			$("#zoom_out").show(450);
+			$("#pause").show(450);
 		});
 		
 		$("#bin").click(function(){
@@ -78,6 +86,9 @@
 			$("#slide").show(450);
 			$("#bin").show(450);
 			$("#save").show(450);
+			$("#zoom_in").show(450);
+			$("#zoom_out").show(450);
+			$("#pause").show(450);
 		}
 	});
 
@@ -87,14 +98,17 @@
 		$("#slide").hide();
 		$("#bin").hide();
 		$("#save").hide();
+		$("#zoom_in").hide();
+		$("#zoom_out").hide();
+		$("#pause").hide();
 	});
 
 	function unpause(){
 		timerId = setInterval(function () {track_time++; 
   							if (Math.trunc(track_time%60) < 10)
-  								play_area_text.text = Math.trunc(track_time/60) +":0"+ (Math.trunc(track_time%60));
+  								play_area_text.text = "Time : " +  Math.trunc(track_time/60) +":0"+ (Math.trunc(track_time%60));
   							else
-  								play_area_text.text = Math.trunc(track_time/60) +":"+ (Math.trunc(track_time%60));
+  								play_area_text.text = "Time : " + Math.trunc(track_time/60) +":"+ (Math.trunc(track_time%60));
   							 }, 1000);
 		el = document.getElementById("pause-overlay");
 			el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
@@ -371,6 +385,10 @@
 	</div>
 
 	
+	
+
+
+
 
 	<!-- <!iframe src="./game.html" frameborder="0"  height="100%" width="100%"> -->
 </body>

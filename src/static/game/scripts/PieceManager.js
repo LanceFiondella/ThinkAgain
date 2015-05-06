@@ -1,5 +1,6 @@
 //Piece manager handles all the pieces on the play area. Addition, removal etc.
 function PieceManager(){
+	this._initial_length=0;
 	this._piece_list=[];
 	this._total_pieces=0;
 	this._num_steps=0;
@@ -243,6 +244,8 @@ function PieceManager(){
 
 	PieceManager.prototype.popPiece = function(){
 			//cp = pm._piece_list.splice(piece_num,1)[0];
+
+		if(pm._total_pieces > pm._initial_length){
 			cp = pm._piece_list.pop();
 			pm._total_pieces--;
 			play_area.removeChild(cp);
@@ -265,15 +268,17 @@ function PieceManager(){
 				this.nPosX = 320*(this.currentColumn +1) - 160;
 				this.nPosY = 120*(this.currentRow + 1) + 50;
 				
-		}
-		else{
-			this.currentRow--;
-			this.nPosY = 120*(this.currentRow + 1) + 50;
-			
-		}
-			res.pop();
-			game_state.saved_steps.pop();
-			this.adjustPieces();
+			}
+			else{
+				this.currentRow--;
+				this.nPosY = 120*(this.currentRow + 1) + 50;
+				
+			}
+				res.pop();
+				game_state.saved_steps.pop();
+				this.adjustPieces();
+
+			}
 
 	};
 	

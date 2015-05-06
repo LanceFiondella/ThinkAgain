@@ -115,8 +115,9 @@ function init() {
 
 
 	//This is temporary. Shows where the play area is. Add debugging text to it
-	play_area_text = new createjs.Text("Play area", "20px Arial","black");
+	play_area_text = new createjs.Text("Time - 0:00", "20px Arial","black");
 	play_area_text.x = 20;
+	play_area_text.y = 20;
 
 	
 
@@ -135,21 +136,33 @@ function init() {
 	//Initializing combobox
   	//cb.initialize();
 
+  	//Adding a timer to stage
   	stage.addChild(play_area_text);
   	timerId = setInterval(function () {track_time++; 
   							if (Math.trunc(track_time%60) < 10)
-  								play_area_text.text = Math.trunc(track_time/60) +":0"+ (Math.trunc(track_time%60));
+  								play_area_text.text = "Time : " +  Math.trunc(track_time/60) +":0"+ (Math.trunc(track_time%60));
   							else
-  								play_area_text.text = Math.trunc(track_time/60) +":"+ (Math.trunc(track_time%60));
+  								play_area_text.text = "Time : " + Math.trunc(track_time/60) +":"+ (Math.trunc(track_time%60));
   							 }, 1000);
 
-  	
+
+  	//Adding level name to stage
+  	var level_name_text = new createjs.Text("Level : " +sessionStorage.getItem('filename').split(".")[0], "20px Arial","black")
+  	level_name_text.x = 200;
+  	level_name_text.y = 20;
+  	stage.addChild(level_name_text);
 	//play_area.addChild(selected_piece_border);
     //selected_piece_border.graphics.beginStroke("#ff0000").drawRect(0,0,0,0);
+
+
+    runTutorial();
 
     startGame();
 
 }
+
+
+
 
 
 function sortNumber(a,b) {
@@ -193,7 +206,7 @@ function generatePieces(){
 			piece_nums.push(parseInt(k,10));
 	}
 
-	//Sorting the pieces by piece number (by its keys)
+	//Sorting each piece internally (by its keys)
 	piece_nums.sort(sortNumber);
 	console.log(piece_nums);
 	
@@ -225,7 +238,9 @@ function generatePieces(){
 		}
 		
 	}
-	
+
+	//Setting initial length of the problem (Used in undo function)
+	pm._initial_length = piece_nums_length;
 	
 }
 
