@@ -380,11 +380,31 @@
 		</div>
 	</div>
 
+	
+
+
 	<div id="game_div">
 		<canvas id="canvas"></canvas>
 	</div>
 
-	
+	<div id="tutorial-overlay" class="modal-dialog" style="visibility:hidden;">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h4 class="modal-title" id="myModalLabel">Tutorial</h4>
+          </div>
+          <div class="modal-body">
+              <div class="row">
+                  <div class="col-xs-8">
+                    <p id="instruction-text"> This is where the instructions get placed!  I want to see if the line gets wrapped ..........................................................................................</p>
+                </div>
+                  <div class="col-xs-4">  
+                    <button onclick = "nextStep();" class="btn btn-info btn-block">Next</button>
+                    <button onclick = "prevStep();" class="btn btn-info btn-block">Previous</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+	</div>
 	
 
 
