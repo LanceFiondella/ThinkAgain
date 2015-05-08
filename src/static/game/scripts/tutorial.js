@@ -3,10 +3,14 @@ instructions_tut1 = ["Welcome to Think Again! We will now guide you step by step
 				"<br>(At any point if you would like to go back to the previous instruction, click 'Previous')",
 				"First, let's look at the game area. On the top left is the timer, which keeps track of how much time you spend on this level."+
 				"<br> Next to the timer is the name of the level.<br>On the right hand side of the window is the control panel. <br> To move this tutorial window click on the red bar above and drag.",
-				" The white space all around is the 'Play Area'. You can reposition all the pieces by clicking and dragging the white background." +
+				" The whole window is the 'Play Area'. You can reposition all the pieces on the board by clicking and dragging the background." +
 				"<br> Try it now! Once you are finished dragging, click next. ",
 				"You can also make the pieces bigger or smaller by using the scroll wheel of your mouse or click the zoom in and zoom out buttons on the control panel. ",
-				"Next, let's combine pieces. Click on Piece 0. <br> Did you notice how the other pieces change? <br> Essentially, the Pieces 1 and 2 morph into the result of combining with Piece 0" +
+				"Let's look at the pieces. Each piece consists of atoms. In this puzzle Piece 0 and Piece 2 contains only 1 atom. On the other hand, Piece 1 has 2 atoms. " +
+				"<br> An atom usually has a symbol and a color. For example Piece 0 has a black 'a' on a white background. Each atom usually has an opposite piece (or negation) somewhere on the board. The white 'a' on a black background in Piece 2 is the negation of the atom in Piece 0",  
+				"<br> Rules for combining pieces : <br>		1) You may only combine pieces that have opposite atoms. <br>	2)  Pieces being combined can have ONLY ONE PAIR of opposite atoms (Pieces with multiple opposing atoms will not combine) "+
+				"<br> With these rules, we can figure out that by combining Piece 0 and Piece 1, the 'a' pieces get eliminated and all we are left with is a white 'b'. To make the gameplay easier, tools are provided to help you identify valid combinations and also the result of combining those pieces. " ,
+				"Let's combine pieces. Click on Piece 0. <br> Did you notice how the other pieces change after you clicked it? <br> Essentially, the Pieces 1 and 2 morph into the result of combining with Piece 0" +
 				"<br> It gives us a 'preview' of what we'll get if those pieces are combined. ",
 
 				"Notice after clicking Piece 0, Piece 2 fades a little. This means no result it produced by combining 0 and 2.<br> Now make sure you have clicked Piece 0 and then click on Piece 1",
