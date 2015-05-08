@@ -6,16 +6,16 @@ instructions_tut1 = ["Welcome to Think Again! We will now guide you step by step
 				" The whole window is the 'Play Area'. You can reposition all the pieces on the board by clicking and dragging the background." +
 				"<br> Try it now! Once you are finished dragging, click next. ",
 				"You can also make the pieces bigger or smaller by using the scroll wheel of your mouse or click the zoom in and zoom out buttons on the control panel. ",
-				"Let's look at the pieces. Each piece consists of atoms. In this puzzle Piece 0 and Piece 2 contains only 1 atom. On the other hand, Piece 1 has 2 atoms. " +
-				"<br> An atom usually has a symbol and a color. For example Piece 0 has a black 'a' on a white background. Each atom usually has an opposite piece (or negation) somewhere on the board. The white 'a' on a black background in Piece 2 is the negation of the atom in Piece 0",  
-				"<br> Rules for combining pieces : <br>		1) You may only combine pieces that have opposite atoms. <br>	2)  Pieces being combined can have ONLY ONE PAIR of opposite atoms (Pieces with multiple opposing atoms will not combine) "+
-				"<br> With these rules, we can figure out that by combining Piece 0 and Piece 1, the 'a' pieces get eliminated and all we are left with is a white 'b'. To make the gameplay easier, tools are provided to help you identify valid combinations and also the result of combining those pieces. " ,
+				"Let's look at the pieces. Each piece consists of atoms. In this puzzle Piece 0 and Piece 2 contains only one atom. On the other hand, Piece 1 has two atoms. " +
+				"<br><br> An atom usually has a symbol and a color. For example, Piece 0 has a black 'a' on a white background. Each atom usually has an opposite piece (or negation) somewhere on the board. The white 'a' on a black background in Piece 1 is the negation of the atom in Piece 0",  
+				"Rules for combining pieces : <br>		1) You may only combine pieces that have opposite atoms. <br>	2)  Pieces being combined can have ONLY ONE PAIR of opposite atoms (Pieces with multiple opposing atoms will not combine) "+
+				"<br><br> With these rules, we can figure out that by combining Piece 0 and Piece 1, the 'a' atoms get eliminated and all we are left with is a white 'b'. To make the gameplay easier, tools are provided to help you identify valid combinations and also the result of combining those pieces. " ,
 				"Let's combine pieces. Click on Piece 0. <br> Did you notice how the other pieces change after you clicked it? <br> Essentially, the Pieces 1 and 2 morph into the result of combining with Piece 0" +
-				"<br> It gives us a 'preview' of what we'll get if those pieces are combined. ",
+				"<br> It gives us a 'preview' of what we'll get if those pieces are combined. CLick Next",
 
 				"Notice after clicking Piece 0, Piece 2 fades a little. This means no result it produced by combining 0 and 2.<br> Now make sure you have clicked Piece 0 and then click on Piece 1",
 				"Congratulations! You just made your first piece! <br> The idea here is by combining pieces, the 'opposites' (or negated parts) get eliminated and whatever is left over gets added to the board."+
-				"<br>After you are done adding pieces, reset the board by clicking the background",
+				"<br>After you are done adding the piece, click the background to make the pieces look normal again.",
 				"If you've been following the tutorial, you'll see Pieces 2 and 3 are negated. Click on either one of them. "+
 				"<br> Do you see a star? This means you found the null clause! Click on the star to win this level!"
 				];
@@ -23,10 +23,10 @@ instructions_tut1 = ["Welcome to Think Again! We will now guide you step by step
 
 instructions_tut2 = ["Now we can solve a much bigger problem! <br> But before you do that, we need to explain a few things ",
 					"Why is that one piece growing and shrinking? <br> The pulsating piece is the most important part of the level." + 
-					"You MUST use that piece at least once in your solution. It does not matter at which point you use it.",
-					"If you add a piece to the board and then change your mind. Click on the garbage can on the right to 'undo'" +
+					" You MUST use that piece at least once in your solution. It does not matter at which point you use it.",
+					"If you add a piece to the board and then change your mind. Click on the garbage can on the right to 'undo' that combination" +
 					"<br>The floppy disk icon saves the current state of your game (Save does not currently function)",
-					"And finally, the pause button on the right stops the timer and pauses the game. <br> That's it! You are now on your own. Try to solve this puzzle before you move on to get a hang of the gameplay" +
+					"And finally, the pause button on the right stops the timer and pauses the game. <br> That's it! You are now on your own. Try to solve this puzzle to get a hang of the gameplay." +
 					"<br> After solving this puzzle please solve the next level called '3-Beginner' atleast 3 times. You can continue playing the 4th and 5th levels if you like (No one has solved the 5th level yet)" +
 					"<br> If you find any issues that prevent you from playing, please email me at vshekar@umassd.edu <br> Happy Thinking! <br> (If you need a hint click next)",
 					"To solve this puzzle start by clicking the last piece (Piece 11). Produce a piece by combining it with Piece 3. Use only the new pieces you make to produce more single pieces"
