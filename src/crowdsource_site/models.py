@@ -20,7 +20,7 @@ class Solution(models.Model):
 	timestamp = models.DateTimeField(auto_now_add=True, auto_now=False)
 	total_pieces = models.IntegerField()
 	time_taken = models.BigIntegerField()
-
+	solution = models.TextField()
 	def __unicode__(self):
 		return self.username.username + " , " + self.problem.name + " : " + self.timestamp.strftime("%m/%d/%Y %H:%M")
 

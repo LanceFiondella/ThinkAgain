@@ -141,12 +141,15 @@ def save_solution(request):
 		username = request.POST['username']
 		total_pieces = int(request.POST['total_pieces'])
 		total_time = int(request.POST['total_time'])
-		
+		solution = request.POST['solution']
+
 		user = User.objects.filter(username=username)
 		print user
 		problem = Problem.objects.filter(name=problem_name)
 		print problem
 
-		solution = Solution(username=user[0],problem=problem[0],total_pieces=total_pieces,time_taken=total_time)
+		print solution
+
+		solution = Solution(username=user[0],problem=problem[0],total_pieces=total_pieces,time_taken=total_time,solution=solution)
 		solution.save()
 	return HttpResponse(json.dumps(data), content_type = "application/json")
