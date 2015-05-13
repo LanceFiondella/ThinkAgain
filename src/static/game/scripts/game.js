@@ -248,11 +248,11 @@ function generatePieces(){
 
 function MouseWheelHandler(e){
 	if(Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)))>0)
-        zoom=.025;
+        zoom_val=.025;
     else
-        zoom= -0.025;
+        zoom_val= -0.025;
 
-zoom(zoom);
+zoom(zoom_val);
 
 }
 
