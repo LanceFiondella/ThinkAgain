@@ -19,7 +19,8 @@ var track_time = 0.0;
 var timerId;
 var res = [];
 
-
+//Scrollwheel timeout for rearrangePieces() in mousewheelhandler
+var scrollWheelTimer = null;
 
 //Temporarily shows resulting piece
 var temp_piece = null;
@@ -93,10 +94,10 @@ function init() {
 				//if (Math.abs(window.initialClick.y - evt.stageY)<15)
 					play_area.x = evt.stageX + window.offset.x;
 				//else if (Math.abs(window.initialClick.x - evt.stageX)<15)
-					play_area.y = evt.stageY + window.offset.y;
+					//play_area.y = evt.stageY + window.offset.y;
 					
 					//Checks if the mouse has been dragged by 5 pixels
-					if(Math.abs(initialClick.x-evt.stageX) > 5 || Math.abs(initialClick.y-evt.stageY))
+					if(Math.abs(initialClick.x-evt.stageX) > 5 || Math.abs(initialClick.y-evt.stageY)>5)
 						pressmove_flag = true;
 	});
 
@@ -112,7 +113,7 @@ function init() {
 
 	//Scaling down the play area to show 10x10 pieces
 	play_area.scaleX = play_area.scaleY = 0.6;
-
+	play_area.y = 30;
 
 	//This is temporary. Shows where the play area is. Add debugging text to it
 	play_area_text = new createjs.Text("Time - 0:00", "20px Arial","black");
@@ -262,6 +263,27 @@ function MouseWheelHandler(e){
 play_area.scaleX += zoom;
 play_area.scaleY += zoom;
 
+
+if(scrollWheelTimer!=null){
+	clearTimeout(scrollWheelTimer);
+}
+
+scrollWheelTimer = setTimeout(function(){adjustRowLength();},200);
+
+}
+
+function adjustRowLength(){
+	console.log("adjust timer executed!")
+	num_rows = Math.floor((window.innerHeight-10)/((pm._piece_list[0].height+50)*play_area.scaleY));
+	console.log(num_rows);
+	pm.column_length = num_rows;
+
+	pm.rearrangePieces();
+	resetWidths();
+	resetBoard();
+	pm.adjustPieces();
+
+	//pm.adjustPieces();
 }
 
 
@@ -330,7 +352,7 @@ function httpPOST(theUrl){
   dataType: "json",
   async:false
 });
-    console.log(response);    
+    //console.log(response);    
     return response;
 }
 

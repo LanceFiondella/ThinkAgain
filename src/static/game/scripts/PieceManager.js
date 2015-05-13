@@ -5,7 +5,7 @@ function PieceManager(){
 	this._total_pieces=0;
 	this._num_steps=0;
 	this.nPosX=160;
-	this.nPosY=160;
+	this.nPosY=78;
 	this.currentColumn=0;
 	this.currentRow=0;
 	this.conclusion_piece_number=null;
@@ -160,7 +160,7 @@ function PieceManager(){
 	PieceManager.prototype.nextPiecePosition =  function(){
 		if (this.currentRow == this.column_length-1){
 			this.nPosX = 320*(this.currentColumn +1) + 160;
-			this.nPosY = 160;
+			this.nPosY = 78;
 			this.currentRow = 0;
 			this.currentColumn++;
 			this.col_x_positions.push(0);
@@ -168,7 +168,8 @@ function PieceManager(){
 		}
 		else{
 			this.currentRow++;
-			this.nPosY = 120*(this.currentRow + 1) + 50;
+			//this.nPosY = 120*(this.currentRow + 1) + 50;
+			this.nPosY += 78 + 50;
 		}
 	};
 	
@@ -308,12 +309,12 @@ function PieceManager(){
 		var biggest_spacing = 0;
 		for(var currCol = 1; currCol <= this.currentColumn; currCol++){
 			biggest_spacing = 0;
-			for(var currRow =0; currRow < 10; currRow++){
+			for(var currRow =0; currRow < this.column_length; currRow++){
 				if (currCol == this.currentColumn && currRow == this.currentRow)
 						break;
 				else{	
 						//var spacing = pm._piece_list[(currCol-1)*10+currRow].x + (pm._piece_list[(currCol-1)*10+currRow].width/2) + min_space + (pm._piece_list[currCol*10+currRow].width/2);
-						var spacing = this.col_x_positions[currCol-1] + (pm._piece_list[(currCol-1)*10+currRow].width/2) + min_space + (pm._piece_list[currCol*10+currRow].width/2);
+						var spacing = this.col_x_positions[currCol-1] + (pm._piece_list[(currCol-1)*this.column_length+currRow].width/2) + min_space + (pm._piece_list[currCol*this.column_length+currRow].width/2);
 					 	if (spacing > biggest_spacing){
 					 		biggest_spacing = spacing;
 					 		//console.log("Biggest spacing = " + biggest_spacing);
@@ -326,18 +327,18 @@ function PieceManager(){
 
 			
 			//console.log(this.col_x_positions);
-			for(var i =10; i< this._total_pieces; i++)
+			for(var i =this.column_length; i< this._total_pieces; i++)
 				{
 					//console.log("Col x pos " + this.col_x_positions[Math.floor(i/10)]);
 					//pm._piece_list[i].x = pm._piece_list[i].homeX = this.col_x_positions[Math.floor(i/10)];
-					this._piece_list[i].homeX = this.col_x_positions[Math.floor(i/10)];
+					this._piece_list[i].homeX = this.col_x_positions[Math.floor(i/this.column_length)];
 					createjs.Tween.get(this._piece_list[i]).to({x: this._piece_list[i].homeX, y: this._piece_list[i].homeY}, 500, createjs.Ease.elasticOut);
 
 				}
 
 			for(var i=0; i< this.addedSolvedPieces.length; i++){
-				if(this.addedSolvedPieces[i].piece_num>9){
-				this.addedSolvedPieces[i].homeX = this.col_x_positions[Math.floor(this.addedSolvedPieces[i].piece_num/10)];
+				if(this.addedSolvedPieces[i].piece_num>this.column_length-1){
+				this.addedSolvedPieces[i].homeX = this.col_x_positions[Math.floor(this.addedSolvedPieces[i].piece_num/this.column_length)];
 				createjs.Tween.get(this.addedSolvedPieces[i]).to({x: this.addedSolvedPieces[i].homeX, y: this.addedSolvedPieces[i].homeY}, 500, createjs.Ease.elasticOut);
 			}
 
@@ -345,9 +346,20 @@ function PieceManager(){
 		};
 
 
-	
+	PieceManager.prototype.rearrangePieces = function(){
+		//Experimental function to redraw all the rows and columns after zooming. This is to dynamically adjust the number of pieces per column (number of rows)
+		this.nPosX=160;
+		this.nPosY=78;
+		this.currentColumn=0;
+	this.currentRow=0;
+
+		for(var i = 0; i<this._total_pieces;i++){
+			this._piece_list[i].x = this._piece_list[i].homeX = this.nPosX;
+			this._piece_list[i].y = this._piece_list[i].homeY = this.nPosY;
+			this.nextPiecePosition();
+
+		}
 
 
 
-
-	
+	}
