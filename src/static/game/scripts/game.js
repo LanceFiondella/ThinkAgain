@@ -48,7 +48,7 @@ createjs.Sound.registerSound("./sounds/cheer.mp3","cheer",4);
 
 function init() {
 	//Canvas contains the whole game use other containers to manipulate game
-	console.log(sessionStorage.getItem("username"));
+	//console.log(sessionStorage.getItem("username"));
     stage = new createjs.Stage("canvas");
 	
 	stage.canvas.width = window.innerWidth;
@@ -184,7 +184,7 @@ function generateColors(colors){
     if (colors < 1) colors = 1; // defaults to one color - avoid divide by zero
 	for(var i = 0;i <colors;i++){
 		color_list.push("hsl(" + Math.floor(i * (360 / colors) % 360) + ","+ Math.floor(Math.random()*(80-20+1)+20) + "%,"+ Math.floor(Math.random()*(80-20+1)+20) + "%)");
-		console.log("ColorNum = " + i + "   " + color_list[i]);
+		//console.log("ColorNum = " + i + "   " + color_list[i]);
 	}
 	
     return color_list;
@@ -208,7 +208,7 @@ function generatePieces(){
 
 	//Sorting each piece internally (by its keys)
 	piece_nums.sort(sortNumber);
-	console.log(piece_nums);
+	//console.log(piece_nums);
 	
 	//Adding peices to the play area (if the piece is last in the list, it is negated conclusion)
 	
@@ -308,10 +308,10 @@ function csrfSafeMethod(method) {
 }
 
 function httpPOST(theUrl){
-    console.log(sessionStorage.getItem("filename"));
+    //console.log(sessionStorage.getItem("filename"));
     var response;
     var csrf_token = $.cookie('csrftoken');
-    console.log("Sending Ajax!")
+    //console.log("Sending Ajax!")
         $.ajaxSetup({
             beforeSend: function(xhr, settings) {
                 if (!csrfSafeMethod(settings.type) && !this.crossDomain) {

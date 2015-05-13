@@ -14,6 +14,9 @@ function PieceManager(){
 	this.col_x_positions.push(160);
 
 	this.addedSolvedPieces = [];
+
+	//Current length of a column
+	this.column_length = 10;
 	};
 
 
@@ -155,13 +158,13 @@ function PieceManager(){
 	};
 	
 	PieceManager.prototype.nextPiecePosition =  function(){
-		if (this.currentRow == 9){
+		if (this.currentRow == this.column_length-1){
 			this.nPosX = 320*(this.currentColumn +1) + 160;
 			this.nPosY = 160;
 			this.currentRow = 0;
 			this.currentColumn++;
 			this.col_x_positions.push(0);
-			console.log("Col_x_pos = " + this.col_x_positions);
+			//console.log("Col_x_pos = " + this.col_x_positions);
 		}
 		else{
 			this.currentRow++;
