@@ -252,24 +252,17 @@ function MouseWheelHandler(e){
     else
         zoom= -0.025;
 
+zoom(zoom);
 
-//var point = play_area.localToGlobal(stage.mouseX, stage.mouseY);
-//play_area.x=stage.mouseX ;
-//play_area.y=stage.mouseY ;
+}
 
-//play_area.regX=stage.mouseX ;
-//play_area.regY=stage.mouseY ;
-
-play_area.scaleX += zoom;
-play_area.scaleY += zoom;
-
-
+function zoom(value){
+play_area.scaleX += value;
+play_area.scaleY += value;
 if(scrollWheelTimer!=null){
 	clearTimeout(scrollWheelTimer);
 }
-
 scrollWheelTimer = setTimeout(function(){adjustRowLength();},200);
-
 }
 
 function adjustRowLength(){

@@ -47,19 +47,9 @@
 			pm.popPiece();	
 		});
 
-		$("#zoom_in").click(function(){
-			zoom = 0.075;
-			play_area.scaleX += zoom;
-			play_area.scaleY += zoom;
-			adjustRowLength();
-		});
+		$("#zoom_in").click(function(){zoom(0.075);});
 
-		$("#zoom_out").click(function(){
-			zoom = -0.075;
-			play_area.scaleX += zoom;
-			play_area.scaleY += zoom;
-			adjustRowLength();
-		});
+		$("#zoom_out").click(function(){zoom(-0.075);});
 
 		$("#pause").click(function(){
 			//Stop timer
