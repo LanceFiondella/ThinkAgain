@@ -93,7 +93,7 @@ function PieceManager(){
 			    $.ajax({
 			  type: 'POST',
 			  url: '/save_solution/',
-			  data: "problem_name=" + sessionStorage.getItem("filename")+"&username="+ sessionStorage.getItem("username")+"&total_pieces=" + pm._total_pieces+ "&total_time=" + track_time,
+			  data: "problem_name=" + sessionStorage.getItem("filename")+"&username="+ sessionStorage.getItem("username")+"&total_pieces=" + pm._total_pieces+ "&total_time=" + track_time + "&solution=" + JSON.stringify(game_state.saved_steps),
 			  success: function(data){
 			        response = data;
 			    },

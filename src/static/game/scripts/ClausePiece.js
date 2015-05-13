@@ -184,11 +184,24 @@ function SolvedPiece(st_list, piece_num, parent1, parent2){
                         pm._num_steps++;
                         
                         
-                        item = {};
-                        item ["piece_1"] = p.parent1.piece_num;
-                        item ["piece_2"] = p.parent2.piece_num;
-                        item ["piece_3"] = new_piece.piece_num;
-                        game_state.saved_steps.push(item);
+                       p1_json = {};
+                        p1_json.pn = p.parent1.piece_num;
+                        p1_json.pk = p.parent1.keys;
+
+                        p2_json = {};
+                        p2_json.pn = p.parent2.piece_num;
+                        p2_json.pk = p.parent2.keys;
+
+                        parents = {};
+                        parents ["p1"] = p1_json;
+                        parents ["p2"] = p2_json;
+
+                        step = {};
+                        step ["pn"] = new_piece.piece_num;
+                        step ["pk"] = new_piece.keys;
+                        step ["parents"] = parents;
+
+                        game_state.saved_steps.push(step);
                         res.push(p.parent1.piece_num+","+p.parent2.piece_num+","+new_piece.piece_num);
                         p.parent2.visible = true;
                         p.parent2.alpha = 0.3;
@@ -435,11 +448,27 @@ function solvePieces(p1,p2, addToSolution){
                 pm._num_steps++;
                 new_piece = pm.addPiece(new_keys);
                 
-                item = {};
-                item ["piece_1"] = p1.piece_num;
-                item ["piece_2"] = p2.piece_num;
-                item ["piece_3"] = new_piece.piece_num;
-                game_state.saved_steps.push(item);
+                        
+                        p1_json = {};
+                        p1_json.pn = p.parent1.piece_num;
+                        p1_json.pk = p.parent1.keys;
+
+                        p2_json = {};
+                        p2_json.pn = p.parent2.piece_num;
+                        p2_json.pk = p.parent2.keys;
+
+                        parents = {};
+                        parents ["p1"] = p1_json;
+                        parents ["p2"] = p2_json;
+
+                        step = {};
+                        step ["pn"] = new_piece.piece_num;
+                        step ["pk"] = new_piece.keys;
+                        step ["parents"] = parents;
+
+
+                        game_state.saved_steps.push(step);
+                
                 res.push(p1.piece_num+","+p2.piece_num+","+new_piece.piece_num);
 
                 //Add node and links to graph. 
