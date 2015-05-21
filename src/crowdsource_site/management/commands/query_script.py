@@ -11,5 +11,8 @@ class Command(BaseCommand):
 		problem = Problem.objects.filter(name="3-Beginner")[0]
 		for usr in User.objects.all():
 			res = Solution.objects.filter(username=usr,problem=problem)
-			if len(res)>0:
-				print str(res[0]) + "  Steps : " + str(res[0].total_pieces) + " 	Time : " + str(res[0].time_taken)
+			if len(res)>=3:
+				print str(usr.first_name)
+				print  "1" + "," + str(res[0].total_pieces) + "," + str(res[0].time_taken)
+				print  "2" + "," + str(res[1].total_pieces) + "," + str(res[1].time_taken)
+				print  "3" + "," + str(res[2].total_pieces) + "," + str(res[2].time_taken)
