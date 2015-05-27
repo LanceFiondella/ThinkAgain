@@ -2,7 +2,7 @@
 var piece_combine_box;
 
 //This global variable indicates whether a lock has been activated in the  combo box. The on click method of ClausePiece will check for this variable and combobox lock will set it
-var alpha_locked = false;
+
 
 
 function ComboBox() {

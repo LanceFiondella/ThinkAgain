@@ -24,3 +24,12 @@ class Solution(models.Model):
 	def __unicode__(self):
 		return self.username.username + " , " + self.problem.name + " : " + self.timestamp.strftime("%m/%d/%Y %H:%M")
 
+
+class IncompleteSolution(models.Model):
+	username = models.ForeignKey(User)
+	problem = models.ForeignKey(Problem)
+	#Boolean value to check if the game has been abandoned
+	abandoned = models.BooleanField(default = False)
+	total_pieces = models.IntegerField()
+	time_taken = models.BigIntegerField()
+	solution = models.TextField()

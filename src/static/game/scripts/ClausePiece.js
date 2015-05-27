@@ -53,10 +53,13 @@ function ClausePiece(st_list, piece_num) {
 	
 	//On dragging
 	p.on("pressmove", function(evt){
+        /*
 			var local = play_area.globalToLocal(evt.stageX + evt.currentTarget.offset.x, evt.stageY + evt.currentTarget.offset.y);
             evt.currentTarget.x = local.x;
             evt.currentTarget.y = local.y;
 
+
+            
 			var pl_length = pm._piece_list.length
             for(var i = 0;i < pl_length;i++){
 
@@ -76,12 +79,13 @@ function ClausePiece(st_list, piece_num) {
 				}
 
 
-    		}
+    		}*/
      });
     
     //Check for collision for mouse up
     
     p.on("pressup",function(evt){
+        /*
     		var pl_length = pm._piece_list.length;
     		if (temp_piece != null) play_area.removeChild(temp_piece);
     		for(var i = 0;i < pl_length;i++){
@@ -92,10 +96,9 @@ function ClausePiece(st_list, piece_num) {
 					
 				}
     		}
-			createjs.Tween.get(evt.currentTarget).to({x: evt.currentTarget.homeX, y: evt.currentTarget.homeY}, 500, createjs.Ease.elasticOut);
-			
 
-            //Experiment
+            */
+			createjs.Tween.get(evt.currentTarget).to({x: evt.currentTarget.homeX, y: evt.currentTarget.homeY}, 500, createjs.Ease.elasticOut);
             
     });
     
@@ -114,14 +117,12 @@ function ClausePiece(st_list, piece_num) {
 	return p;
 }
 
-
-
-
-
 function replaceWithSolvedPieces(selectedPiece){
 	// Replaces all the pieces that can be solved with the selectedPiece with the resultant piece
 	allPieces = pm.getAllPieces();
 	pm.addedSolvedPieces = [];
+    be.resetResultBox();
+    temp_piece_list = [];
     
     for(k in selectedPiece.matching){
         if (selectedPiece.matching[k]){
@@ -144,16 +145,30 @@ function replaceWithSolvedPieces(selectedPiece){
                     cp.y = allPieces[k].homeY;
 
                     play_area.addChild(cp);
-                    //createjs.Tween.get(cp).to({alpha:0}).to({alpha:1}, 500);
+                    
+                    //Adding the same piece to branch explorer : Experiment
+                    cp2 = ClausePieceShape(new_keys, allPieces[k].piece_num);
+    
+                    cp2.scaleY = cp2.scaleX = 0.5;                    
+                    //cp2.x = 100;
+                    //cp2.y = 50*pm.addedSolvedPieces.length;
+
+                    //be.resultBox.addChild(cp2);
+                    //be.resultBox.results.push(cp2);
+                    temp_piece_list.push(cp2);
+
+                    //End experiment
 
                     pm.addedSolvedPieces.push(cp);
             }
             else
-                allPieces[k].alpha = 0.3;
+                allPieces[k].alpha = 0.0;
 
         }
         
     }
+
+    be.addFirstColumn(temp_piece_list,pm.getAllPieceValues());
     pm.adjustPieces();
 }
 
@@ -199,6 +214,7 @@ function SolvedPiece(st_list, piece_num, parent1, parent2){
                         step = {};
                         step ["pn"] = new_piece.piece_num;
                         step ["pk"] = new_piece.keys;
+                        step["t"] = track_time;
                         step ["parents"] = parents;
 
                         game_state.saved_steps.push(step);
@@ -216,6 +232,7 @@ function SolvedPiece(st_list, piece_num, parent1, parent2){
                         new_piece.addChild(np_border);
                         new_piece.updateCache();
                         
+
 
                         //Adjusting the widths of removed piece
                         parent2.width = parent2.getBounds().width;
@@ -326,7 +343,7 @@ function tweenMatchingPieces(selectedPiece){
             allPieces[k].alpha = 1.0;
         }
         else{
-            allPieces[k].alpha = 0.3;
+            allPieces[k].alpha = 0.0;
         }
         
     }

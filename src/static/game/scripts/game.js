@@ -12,12 +12,14 @@ var pm = new PieceManager();
 var total_atoms;
 var colors;
 //var cb = new ComboBox();
-
+var be = new BranchExplorer();
 //Text for timer
 var play_area_text;
 var track_time = 0.0;
 var timerId;
 var res = [];
+
+var alpha_locked = false;
 
 //Scrollwheel timeout for rearrangePieces() in mousewheelhandler
 var scrollWheelTimer = null;
@@ -136,6 +138,8 @@ function init() {
 	stage.addChild(play_area_frame);
 	//Initializing combobox
   	//cb.initialize();
+
+  	be.initialize();
 
   	//Adding a timer to stage
   	stage.addChild(play_area_text);
