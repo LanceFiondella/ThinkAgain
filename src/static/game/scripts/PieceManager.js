@@ -51,11 +51,7 @@ function PieceManager(){
 			createjs.Tween.get(cp).to({scaleX: 0.2, scaleY: 0.2}).to({scaleX: 1, scaleY: 1}, 250);
 			createjs.Sound.play("bubble");
 			
-			//Check if new piece satisfies conclusion
-			if (cp.keys.length == 0){
-				this.verifyWin();
-				
-			}
+			
 		
 			
 		this.nextPiecePosition();

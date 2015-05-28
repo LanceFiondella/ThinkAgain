@@ -244,9 +244,54 @@ function generatePieces(){
 		
 	}
 
+	//Pull saved pieces from the server and add them to the board
+	var result = getSavedGame();
+	console.log(result);
+	if (result.steps){
+	game_state.saved_steps = $.parseJSON(result.steps);
+	track_time = game_state.saved_steps[game_state.saved_steps.length-1].t;
+	}
+	
+
+	console.log(game_state.saved_steps);
+	
+	for (var i=0;i<game_state.saved_steps.length;i++) {
+		pm.addPiece(game_state.saved_steps[i].pk);
+	}
+	
+	
+	
+	
+
 	//Setting initial length of the problem (Used in undo function)
 	pm._initial_length = piece_nums_length;
 	
+}
+
+
+function getSavedGame(){
+	var response;
+	var csrf_token = $.cookie('csrftoken');
+    console.log("Getting saved game ajax!")
+    $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrf_token);
+                           }
+                        }
+                    });
+
+                $.ajax({
+              type: 'POST',
+              url: '/get_saved_game/',
+              data: "problem_name=" + sessionStorage.getItem("filename")+"&username="+ sessionStorage.getItem("username"),
+              success: function(data){
+                    response = data;
+                },
+              dataType: "json",
+              async:false
+            });
+    return response;
 }
 
 

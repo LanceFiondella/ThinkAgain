@@ -4,6 +4,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.http import HttpResponse,HttpResponseRedirect
 from crowdsource_site.models import Problem,Solution
+from django.core.exceptions import ObjectDoesNotExist
 import json
 import os
 import datetime
@@ -151,5 +152,81 @@ def save_solution(request):
 		print solution
 
 		solution = Solution(username=user[0],problem=problem[0],total_pieces=total_pieces,time_taken=total_time,solution=solution)
+		solution.complete = True
 		solution.save()
+		
+	return HttpResponse(json.dumps(data), content_type = "application/json")
+
+def save_step(request):
+	#Saves the solution of the problem at each step
+	context = RequestContext(request)
+	data = {}
+	if request.method == 'POST':
+		print request.POST
+		problem_name = request.POST['problem_name'][:-4]
+		username = request.POST['username']
+		total_pieces = int(request.POST['total_pieces'])
+		total_time = int(request.POST['total_time'])
+		solution = request.POST['solution']
+
+		user = User.objects.get(username=username)
+		print user
+		problem = Problem.objects.get(name=problem_name)
+		print problem
+
+		try:
+			incompSolution = Solution.objects.get(username=user,problem=problem,abandoned=False,complete=False)
+			incompSolution.solution += "," + solution
+		except ObjectDoesNotExist:
+			incompSolution = Solution(username=user,problem=problem,total_pieces=total_pieces,time_taken=total_time,solution=solution)
+			print "Solution did not exist! Creating new"
+		
+		
+		incompSolution.total_pieces=total_pieces
+		incompSolution.time_taken=total_time
+		incompSolution.save()
+
+
+	return HttpResponse(json.dumps(data), content_type = "application/json")
+
+def abandon_game(request):
+	#Abandon game
+	context = RequestContext(request)
+	data = {}
+	if request.method == 'POST':
+		print request.POST
+		problem_name = request.POST['problem_name'][:-4]
+		username = request.POST['username']
+
+		user = User.objects.get(username=username)
+		print user
+		problem = Problem.objects.get(name=problem_name)
+		print problem
+		try:
+			incompSolution = Solution.objects.get(username=user,problem=problem,abandoned=False,complete=False)
+			incompSolution.abandoned = True
+			incompSolution.save()
+		except ObjectDoesNotExist:
+			print "Saved game not found!"
+	return HttpResponse(json.dumps(data), content_type = "application/json")
+
+
+def get_saved_game(request):
+	#Retrieve saved game
+	context = RequestContext(request)
+	data = {}
+	if request.method == 'POST':
+		print request.POST
+		problem_name = request.POST['problem_name'][:-4]
+		username = request.POST['username']
+
+		user = User.objects.get(username=username)
+		print user
+		problem = Problem.objects.get(name=problem_name)
+		print problem
+		try:
+			incompSolution = Solution.objects.get(username=user,problem=problem,abandoned=False,complete=False)
+			data["steps"] = "[" + incompSolution.solution + "]"
+		except ObjectDoesNotExist:
+			print "Saved game not found!"
 	return HttpResponse(json.dumps(data), content_type = "application/json")

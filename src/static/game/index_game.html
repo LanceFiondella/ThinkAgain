@@ -64,8 +64,10 @@
 
 		$("#save").click(function(){
 			//Save time stamp and game state
-			game_state.elapsed_seconds = track_time;
-			console.log(game_state);
+			//game_state.elapsed_seconds = track_time;
+			//console.log(game_state);
+			abandonGame();
+			location.reload();
 
 		});
 	});
@@ -340,7 +342,7 @@
 		<a href="#" class="bin-button" id="bin"><img src="images/bin.png" alt="bin" height="100%" width="100%" /></a>
 	</div>
 	<div class="save">
-		<a href="#" class="save-button" id="save"><img src="images/save.png" alt="save" height="100%" width="100%" /></a>
+		<a href="#" class="save-button" id="save"><img src="images/Close.png" alt="save" height="100%" width="100%" /></a>
 	</div>
 	<div class="zoom_in">
 		<a href="#" class="zoom-in-button" id="zoom_in"><img src="images/zoom_in.png" alt="zoom_in" height="100%" width="100%" /></a>

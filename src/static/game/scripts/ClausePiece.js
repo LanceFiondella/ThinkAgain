@@ -199,7 +199,7 @@ function SolvedPiece(st_list, piece_num, parent1, parent2){
                         pm._num_steps++;
                         
                         
-                       p1_json = {};
+                        p1_json = {};
                         p1_json.pn = p.parent1.piece_num;
                         p1_json.pk = p.parent1.keys;
 
@@ -218,6 +218,10 @@ function SolvedPiece(st_list, piece_num, parent1, parent2){
                         step ["parents"] = parents;
 
                         game_state.saved_steps.push(step);
+
+                        //Sending step data to server
+                        sendStep(step);
+
                         res.push(p.parent1.piece_num+","+p.parent2.piece_num+","+new_piece.piece_num);
                         p.parent2.visible = true;
                         p.parent2.alpha = 0.3;
@@ -243,6 +247,11 @@ function SolvedPiece(st_list, piece_num, parent1, parent2){
                         //pm.adjustPieces();
                         tweenMatchingPieces(parent1);
                         replaceWithSolvedPieces(parent1);
+                        //Check if new piece satisfies conclusion
+                        if (new_piece.keys.length == 0){
+                            pm.verifyWin();
+                
+                            }
                         
                 }
 
@@ -252,6 +261,56 @@ function SolvedPiece(st_list, piece_num, parent1, parent2){
 	return p;
 }
 
+function sendStep(step){
+
+    var csrf_token = $.cookie('csrftoken');
+                console.log("Sending Step ajax!")
+                    $.ajaxSetup({
+                        beforeSend: function(xhr, settings) {
+                            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                                xhr.setRequestHeader("X-CSRFToken", csrf_token);
+                            }
+                        }
+                    });
+
+                $.ajax({
+              type: 'POST',
+              url: '/save_step/',
+              data: "problem_name=" + sessionStorage.getItem("filename")+"&username="+ sessionStorage.getItem("username")+"&total_pieces=" + pm._total_pieces+ "&total_time=" + track_time + "&solution=" + JSON.stringify(step),
+              success: function(data){
+                    response = data;
+                },
+              dataType: "json",
+              async:true
+            });
+
+}
+
+
+function abandonGame(){
+
+    var csrf_token = $.cookie('csrftoken');
+                console.log("Sending Step ajax!")
+                    $.ajaxSetup({
+                        beforeSend: function(xhr, settings) {
+                            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                                xhr.setRequestHeader("X-CSRFToken", csrf_token);
+                            }
+                        }
+                    });
+
+                $.ajax({
+              type: 'POST',
+              url: '/abandon_game/',
+              data: "problem_name=" + sessionStorage.getItem("filename")+"&username="+ sessionStorage.getItem("username"),
+              success: function(data){
+                    response = data;
+                },
+              dataType: "json",
+              async:true
+            });
+
+}
 
 
 function ClausePieceShape(st_list,piece_num){
