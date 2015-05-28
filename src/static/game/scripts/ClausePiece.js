@@ -220,6 +220,7 @@ function SolvedPiece(st_list, piece_num, parent1, parent2){
                         game_state.saved_steps.push(step);
 
                         //Sending step data to server
+
                         sendStep(step);
 
                         res.push(p.parent1.piece_num+","+p.parent2.piece_num+","+new_piece.piece_num);
@@ -263,6 +264,7 @@ function SolvedPiece(st_list, piece_num, parent1, parent2){
 
 function sendStep(step){
 
+    //Sends steps to the server
     var csrf_token = $.cookie('csrftoken');
                 console.log("Sending Step ajax!")
                     $.ajaxSetup({

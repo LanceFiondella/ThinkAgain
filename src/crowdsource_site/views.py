@@ -132,47 +132,24 @@ def generate_problem(request):
 		data["piece_list"] = piece_list
 	return HttpResponse(json.dumps(data), content_type = "application/json")
 
-def save_solution(request):
-	#Saves the solution of the problem at the end of solving it
-	context = RequestContext(request)
-	data = {}
-	if request.method == 'POST':
-		print request.POST
-		problem_name = request.POST['problem_name'][:-4]
-		username = request.POST['username']
-		total_pieces = int(request.POST['total_pieces'])
-		total_time = int(request.POST['total_time'])
-		solution = request.POST['solution']
-
-		user = User.objects.filter(username=username)
-		print user
-		problem = Problem.objects.filter(name=problem_name)
-		print problem
-
-		print solution
-
-		solution = Solution(username=user[0],problem=problem[0],total_pieces=total_pieces,time_taken=total_time,solution=solution)
-		solution.complete = True
-		solution.save()
-		
-	return HttpResponse(json.dumps(data), content_type = "application/json")
-
 def save_step(request):
 	#Saves the solution of the problem at each step
 	context = RequestContext(request)
 	data = {}
 	if request.method == 'POST':
-		print request.POST
+		#print request.POST
 		problem_name = request.POST['problem_name'][:-4]
 		username = request.POST['username']
 		total_pieces = int(request.POST['total_pieces'])
 		total_time = int(request.POST['total_time'])
 		solution = request.POST['solution']
-
 		user = User.objects.get(username=username)
-		print user
 		problem = Problem.objects.get(name=problem_name)
-		print problem
+		
+		data = json.loads(solution)
+		print "Printing data"
+		print len(data["pk"])
+		
 
 		try:
 			incompSolution = Solution.objects.get(username=user,problem=problem,abandoned=False,complete=False)
@@ -180,13 +157,12 @@ def save_step(request):
 		except ObjectDoesNotExist:
 			incompSolution = Solution(username=user,problem=problem,total_pieces=total_pieces,time_taken=total_time,solution=solution)
 			print "Solution did not exist! Creating new"
-		
-		
 		incompSolution.total_pieces=total_pieces
 		incompSolution.time_taken=total_time
+		if (len(data["pk"]) == 0):
+			incompSolution.complete = True
+
 		incompSolution.save()
-
-
 	return HttpResponse(json.dumps(data), content_type = "application/json")
 
 def abandon_game(request):
@@ -194,14 +170,14 @@ def abandon_game(request):
 	context = RequestContext(request)
 	data = {}
 	if request.method == 'POST':
-		print request.POST
+		#print request.POST
 		problem_name = request.POST['problem_name'][:-4]
 		username = request.POST['username']
 
 		user = User.objects.get(username=username)
-		print user
+		#print user
 		problem = Problem.objects.get(name=problem_name)
-		print problem
+		#print problem
 		try:
 			incompSolution = Solution.objects.get(username=user,problem=problem,abandoned=False,complete=False)
 			incompSolution.abandoned = True
@@ -216,17 +192,20 @@ def get_saved_game(request):
 	context = RequestContext(request)
 	data = {}
 	if request.method == 'POST':
-		print request.POST
+		#print request.POST
 		problem_name = request.POST['problem_name'][:-4]
 		username = request.POST['username']
 
 		user = User.objects.get(username=username)
-		print user
+		#print user
 		problem = Problem.objects.get(name=problem_name)
-		print problem
+		#print problem
 		try:
+			print "getting incompleteSolution"
 			incompSolution = Solution.objects.get(username=user,problem=problem,abandoned=False,complete=False)
+			print incompSolution.complete
 			data["steps"] = "[" + incompSolution.solution + "]"
+			#print data
 		except ObjectDoesNotExist:
 			print "Saved game not found!"
 	return HttpResponse(json.dumps(data), content_type = "application/json")

@@ -75,9 +75,10 @@ function PieceManager(){
 				document.getElementById("time_text").innerHTML = "Time : " + track_time + " seconds";
 				createjs.Sound.play("cheer");
 
+				/*
 				//Send win data 
 				var csrf_token = $.cookie('csrftoken');
-			    console.log("Sending Result ajax!")
+			    console.log("Sending Solution!")
 			        $.ajaxSetup({
 			            beforeSend: function(xhr, settings) {
 			                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
@@ -95,7 +96,7 @@ function PieceManager(){
 			    },
 			  dataType: "json",
 			  async:false
-			});
+			});*/
 
 	};
 	

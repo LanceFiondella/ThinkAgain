@@ -19,7 +19,6 @@ urlpatterns = [
     #Game related URLS
     url(r'^cgi-bin/get_problem_files\.py/','crowdsource_site.views.get_problem_files',name='get_problem_files'),
     url(r'^generate_problem/','crowdsource_site.views.generate_problem',name='generate_problem'),
-    url(r'^save_solution/','crowdsource_site.views.save_solution',name='save_solution'),
     url(r'^save_step/','crowdsource_site.views.save_step',name='save_step'),
     url(r'^abandon_game/','crowdsource_site.views.abandon_game',name='abandon_game'),
     url(r'^get_saved_game/','crowdsource_site.views.get_saved_game',name='get_saved_game'),
