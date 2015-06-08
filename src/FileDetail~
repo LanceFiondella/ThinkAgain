@@ -1,0 +1,12 @@
+Made changes in settings.py
+
+
+New Files added:
+
+backup file:
+	In folder SQLite3_backup SQLite3backup.bak - restore to get sqlite3 file
+	In folder Postgress_backup Postgresbackup- restore to get Postgres file
+
+database.json - json file created during dump - can load data from here while migrating from SQLite3 to Postgres
+
+db.sqlite3.backup - backup file for db.sqlite3 created before migration
