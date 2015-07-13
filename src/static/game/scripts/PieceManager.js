@@ -146,7 +146,7 @@ function PieceManager(){
 		this.getMatchingPiecesPositions(cp);
         
         
-		piece_num_text.x = 20;
+		piece_num_text.x = 20+50;
 		cp.addChild(piece_num_text);
 		this._piece_list.push(cp);
 		this._total_pieces++;

@@ -287,6 +287,7 @@ function getSavedGame(){
               data: "problem_name=" + sessionStorage.getItem("filename")+"&username="+ sessionStorage.getItem("username"),
               success: function(data){
                     response = data;
+                  //  alert("response= >"+response)
                 },
               dataType: "json",
               async:false

@@ -24,10 +24,12 @@ Notes for Prof. Khatib's Gamification class:
 
 </p>
 
-<p>
+
 Select a Level:
-</p>
 <select id="selectMenu">
+</select> <br/><br/>
+Select Style :
+<select id="language">
 </select>
 <p></p>
 <a href="/game/"><button type="submit" onclick="run_game()">Play game</button>
@@ -36,6 +38,8 @@ Select a Level:
 <script type="text/javascript" language="JavaScript"><!--
 var problem_list;
 var data;
+diff_languages = ["Numbers", "English", "Hindi", "Bengali", "Telegu", "Kannada", "Tamil", "Greek", "Symbols"];
+
 function init() {
 problem_list = httpGet("/cgi-bin/get_problem_files.py/");
 //document.getElementById("p1").innerHTML = text;
@@ -47,31 +51,38 @@ populate_dropdown();
 function populate_dropdown(){
 data = JSON.parse(problem_list);
 var keys = [];
-for(var k in data){
-    if(data.hasOwnProperty(k)){
-        keys.push(k);
-    }
-}
+	for(var k in data){
+	    if(data.hasOwnProperty(k)){
+		keys.push(k);
+	    }
+	}
 
-keys.sort();
+	keys.sort();
 
+	var list = document.getElementById('selectMenu')
+	for (k in keys){
+	    console.log(keys[k]);
+	    //if (data.hasOwnProperty(k)){
+		    list.innerHTML += '<option value="'+keys[k]+'">'+keys[k]+'</option>' 
+	    //}
+		
+	    
+	}
+//for the language dropdown
+	var language_dropdown = document.getElementById("language");
+	for(var x = 0;x<diff_languages.length;x++) {
+	language_dropdown.innerHTML += '<option value="'+[x]+'">'+diff_languages[x]+'</option>'
+	}
 
-var list = document.getElementById('selectMenu')
-for (k in keys){
-    console.log(keys[k]);
-    //if (data.hasOwnProperty(k)){
-            list.innerHTML += '<option value="'+keys[k]+'">'+keys[k]+'</option>' 
-    //}
-        
-    
-}
 }
 
 function run_game(){
     var list = document.getElementById('selectMenu');
-    
     sessionStorage.setItem("filename",data[list.value]);
+    //alert(data[list.value]);
     sessionStorage.setItem("username", '{{ user.username }}');
+    sessionStorage.setItem("language",document.getElementById('language').value);
+    
 }
 
 

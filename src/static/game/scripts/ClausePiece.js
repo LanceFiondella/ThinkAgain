@@ -1,3 +1,12 @@
+//SOURCE FOR UNICODES http://jrgraphix.net/r/Unicode/
+Hindi_unicode = ["0x0905","0x0906","0x0907","0x0908","0x0909","0x090A","0x090B","0x090C","0x090D","0x090E","0x090F","0x0910","0x0911","0x0912","0x0913","0x0914"];
+Bengali_unicode = ["0x0985","0x0986","0x0987","0x0988","0x0989","0x099A","0x098B","0x098C","0x098F","0x0990","0x0993","0x0994"];
+Telegu_unicode = ["0x0C05","0x0C06","0x0C07","0x0C08","0x0C09","0x0C0A","0x0C0B","0x0C0C","0x0C0E","0x0C0F","0x0C10","0x0C12","0x0C13","0x0C14"];
+Kannada_unicode = ["0x0C85", "0x0C86", "0x0C87", "0x0C88", "0x0C89", "0x0C8A", "0x0C8B", "0x0C8C", "0x0C8E", "0x0C8F", "0x0C90", "0x0C92", "0x0C93", "0x0C94"]; 
+Tamil_unicode = ["0x0B85","0x0B86","0x0B87","0x0B88","0x0B89",'0x0B8A',"0x0B8E","0x0B8F","0x0B90","0x0B92","0x0B93","0x0B94","0x0B83"];
+Greek_unicode = ["0x0391", "0x0392", "0x0393", "0x0394", "0x0395", "0x0396", "0x0397", "0x0398", "0x0399", "0x039A", "0x039B", "0x039C", "0x039D", "0x039E", "0x03A0", "0x03A1", "0x03A2", "0x03A3", "0x03A4", "0x03A5", "0x03A6", "0x03A7", "0x03A8", "0x03A9", "0x03AA", "0x03AB", "0x03AC", "0x03AD", "0x03AE", "0x03B0", "0x03B1", "0x03B2", "0x03B3", "0x03B4", "0x03B5", "0x03B6", "0x03B7", "0x03B8"];
+Symbols_unicode = ["0x2601", "0x2602", "0x2603", "0x2605", "0x2609", "0x260A", "0x260B", "0x260E", "0x2615", "0x2618", "0x2621", "0x2622", "0x2623", "0x2624", "0x2625", "0x2629", "0x262B", "0x262E", "0x262F", "0x263A", "0x2648", "0x264E", "0x2667", "0x2668", "0x267E", "0x2691", "0x269B", "0x269D", "0x26A1", "0x26C1", "0x1D01", "0x1D7A", "0x2042", "0x204B", "0x2728"];
+
 function ClausePiece(st_list, piece_num) {
 	//p is the container that holds the peices and properties associated
 	var p = ClausePieceShape(st_list, piece_num);
@@ -56,7 +65,6 @@ function ClausePiece(st_list, piece_num) {
         /*
 			var local = play_area.globalToLocal(evt.stageX + evt.currentTarget.offset.x, evt.stageY + evt.currentTarget.offset.y);
             evt.currentTarget.x = local.x;
-            evt.currentTarget.y = local.y;
 
 
             
@@ -346,6 +354,40 @@ function ClausePieceShape(st_list,piece_num){
 		var atom_color = colors[Math.abs(p.keys[i])];
 		var piece_letter_text;									
 			var chr = (Math.abs(p.keys[i]));
+           // alert(sessionStorage.language);
+            switch(sessionStorage.language){
+                case "0": //number 
+                    chr = chr;
+                    break;
+                case "1": //english
+                    chr = String.fromCharCode(97 + chr);    
+                    break;
+                case "2": //Hindi
+                    chr = String.fromCharCode(Hindi_unicode[chr]);
+                    break;
+                case "3": //bengali
+                    chr = String.fromCharCode(Bengali_unicode[chr]);
+                    break;
+                case "4": //telegu
+                    chr = String.fromCharCode(Telegu_unicode[chr]);
+                    break;
+                case "5": //kannada
+                    chr = String.fromCharCode(Kannada_unicode[chr]);
+                    break;
+                case "6": //tamil
+                    chr = String.fromCharCode(Tamil_unicode[chr]);
+                    break;
+                case "7": //greek
+                    chr = String.fromCharCode(Greek_unicode[chr]);
+                    break;
+                case "8": //symbols
+                    chr = String.fromCharCode(Symbols_unicode[chr]);
+                    break;
+
+            }
+
+          //  chr = String.fromCharCode(symbols_unicode[chr]);
+           // console.log("from char code "+String.fromCharCode(0x0B8A));
 			//var chr = String.fromCharCode(96 + Math.abs(p.keys[i]));
 			//var chr = String.fromCharCode(0x4E00 + Math.abs(p.keys[i]));
 			//var chr = String.fromCharCode(0x0904 + Math.abs(p.keys[i]));
@@ -354,32 +396,51 @@ function ClausePieceShape(st_list,piece_num){
             //var chr = String.fromCharCode(0x03B0 + Math.abs(p.keys[i]));
 			
 			//If atom is positive fill the block and no border
-			if (p.keys[i] > 0){
-				piece_letter_text = new createjs.Text(chr, "bold 50px Arial","black");
+/*			if (p.keys[i] > 0){
+				piece_letter_text = new createjs.Text(chr, "40px Arial","black");
 				atom.graphics.beginFill("white");
 				atom.graphics.beginStroke("black");
 			}
 			//If atom is negative draw border no fill
 			else if(p.keys[i] < 0){
-				piece_letter_text = new createjs.Text(chr, "bold 50px Arial","white");
+				piece_letter_text = new createjs.Text(chr, "40px Arial","white");
 				atom.graphics.beginFill("black");	
 				atom.graphics.beginStroke("white");
 				}
-		
+*/
+                if (p.keys[i] > 0){
+                piece_letter_text = new createjs.Text((chr), "bold 50px Arial","black");
+                atom.graphics.beginFill("white");
+                atom.graphics.beginStroke("black");
+            }
+            //If atom is negative draw border no fill
+            //If atom is negative draw border no fill
+                else if(p.keys[i] < 0 && sessionStorage.language== '0'){
+                    piece_letter_text = new createjs.Text((0-chr), "bold 50px Arial","white");
+                    atom.graphics.beginFill("black");   
+                    atom.graphics.beginStroke("white");
+                    }
+                else if(p.keys[i] < 0 &&  sessionStorage.language != '0'){
+                    piece_letter_text = new createjs.Text((chr), "bold 50px Arial","white");
+                    atom.graphics.beginFill("black");   
+                    atom.graphics.beginStroke("white");
+                    }                   
+            
+
 		//Draw atom
 		
-		atom.graphics.drawRoundRect(80*i, 0, 80-2*BORDER_THICKNESS, 80-2*BORDER_THICKNESS,20);
-		atom.setBounds(80*i, 0, 80-2*BORDER_THICKNESS, 80-2*BORDER_THICKNESS);
+		atom.graphics.drawRoundRect(105*i+50, 0, 105-2*BORDER_THICKNESS, 95-2*BORDER_THICKNESS,20);
+		atom.setBounds(105*i+50, 0, 105-2*BORDER_THICKNESS, 95-2*BORDER_THICKNESS);
 		p.addChild(atom);
 		
-		piece_letter_text.x = 80*i + 25;
+		piece_letter_text.x = 105*i + 25+50;
 		piece_letter_text.y = 20;
 		p.addChild(piece_letter_text);
 
 	}
 	
-	var piece_num_text = new createjs.Text(piece_num, "40px Arial","red");
-	piece_num_text.x = 20;
+	var piece_num_text = new createjs.Text(piece_num, "15px Arial","red");
+	piece_num_text.x = 20+50;
 	p.addChild(piece_num_text);
 	if(p.getBounds() != null){
 			p.height = p.getBounds().height;
