@@ -42,7 +42,7 @@ function ClausePiece(st_list, piece_num) {
             prev_parent.updateCache();
         }
 
-        selected_piece_border.graphics.clear().setStrokeStyle(5).beginStroke("#ff0000").drawRect(0, 0, evt.currentTarget.width, evt.currentTarget.height);
+        selected_piece_border.graphics.clear().setStrokeStyle(5).beginStroke("#ff0000").drawRect(50, 0, evt.currentTarget.width, evt.currentTarget.height);
         evt.currentTarget.addChild(selected_piece_border);
         evt.currentTarget.updateCache();
         var npb_length = new_piece_borders.length;
@@ -240,7 +240,7 @@ function SolvedPiece(st_list, piece_num, parent1, parent2){
                         //Adding a green border around a newly placed piece
                         np_border = new createjs.Shape();
                         //np_border.graphics.setStrokeStyle(5).beginStroke("green").drawRect(new_piece.x+new_piece.orgX, new_piece.y+new_piece.orgY, new_piece.width-2, new_piece.height-2)
-                        np_border.graphics.setStrokeStyle(5).beginStroke("green").drawRect(0,0, new_piece.width-2, new_piece.height-2)
+                        np_border.graphics.setStrokeStyle(5).beginStroke("green").drawRect(50,0, new_piece.width-2, new_piece.height-2)
                         new_piece_borders.push(np_border);
                         new_piece.addChild(np_border);
                         new_piece.updateCache();
