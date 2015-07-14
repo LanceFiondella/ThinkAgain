@@ -360,28 +360,28 @@ function ClausePieceShape(st_list,piece_num){
                     chr = chr;
                     break;
                 case "1": //english
-                    chr = String.fromCharCode(97 + chr);    
+                    chr = String.fromCharCode(96 + chr);    
                     break;
                 case "2": //Hindi
-                    chr = String.fromCharCode(Hindi_unicode[chr]);
+                    chr = String.fromCharCode(Hindi_unicode[chr-1]);
                     break;
                 case "3": //bengali
-                    chr = String.fromCharCode(Bengali_unicode[chr]);
+                    chr = String.fromCharCode(Bengali_unicode[chr-1]);
                     break;
                 case "4": //telegu
-                    chr = String.fromCharCode(Telegu_unicode[chr]);
+                    chr = String.fromCharCode(Telegu_unicode[chr-1]);
                     break;
                 case "5": //kannada
-                    chr = String.fromCharCode(Kannada_unicode[chr]);
+                    chr = String.fromCharCode(Kannada_unicode[chr-1]);
                     break;
                 case "6": //tamil
-                    chr = String.fromCharCode(Tamil_unicode[chr]);
+                    chr = String.fromCharCode(Tamil_unicode[chr-1]);
                     break;
                 case "7": //greek
-                    chr = String.fromCharCode(Greek_unicode[chr]);
+                    chr = String.fromCharCode(Greek_unicode[chr-1]);
                     break;
                 case "8": //symbols
-                    chr = String.fromCharCode(Symbols_unicode[chr]);
+                    chr = String.fromCharCode(Symbols_unicode[chr-1]);
                     break;
 
             }
