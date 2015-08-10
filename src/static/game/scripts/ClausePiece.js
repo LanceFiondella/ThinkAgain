@@ -8,6 +8,7 @@ Greek_unicode = ["0x0391", "0x0392", "0x0393", "0x0394", "0x0395", "0x0396", "0x
 Symbols_unicode = ["0x2601", "0x2602", "0x2603", "0x2605", "0x2609", "0x260A", "0x260B", "0x260E", "0x2615", "0x2618", "0x2621", "0x2622", "0x2623", "0x2624", "0x2625", "0x2629", "0x262B", "0x262E", "0x262F", "0x263A", "0x2648", "0x264E", "0x2667", "0x2668", "0x267E", "0x2691", "0x269B", "0x269D", "0x26A1", "0x26C1", "0x1D01", "0x1D7A", "0x2042", "0x204B", "0x2728"];
 
 function ClausePiece(st_list, piece_num) {
+    console.log("ClausePiece function");
 	//p is the container that holds the peices and properties associated
 	var p = ClausePieceShape(st_list, piece_num);
 	
@@ -126,6 +127,8 @@ function ClausePiece(st_list, piece_num) {
 }
 
 function replaceWithSolvedPieces(selectedPiece){
+
+    console.log("replaceWithSolvedPieces function");
 	// Replaces all the pieces that can be solved with the selectedPiece with the resultant piece
 	allPieces = pm.getAllPieces();
 	pm.addedSolvedPieces = [];
@@ -181,6 +184,7 @@ function replaceWithSolvedPieces(selectedPiece){
 }
 
 function SolvedPiece(st_list, piece_num, parent1, parent2){
+    console.log("SolvedPiece  function");
 	//This function is used in replaceWithSolvedPieces. Replaces a piece on the board. Has only one property, on click add itself to the game board
 	var p = ClausePieceShape(st_list, piece_num);
 	p.parent1 = parent1;
@@ -271,7 +275,7 @@ function SolvedPiece(st_list, piece_num, parent1, parent2){
 }
 
 function sendStep(step){
-
+    console.log("sendStep function");
     //Sends steps to the server
     var csrf_token = $.cookie('csrftoken');
                 console.log("Sending Step ajax!")
@@ -298,7 +302,7 @@ function sendStep(step){
 
 
 function abandonGame(){
-
+    console.log("abandonGame function");
     var csrf_token = $.cookie('csrftoken');
                 console.log("Sending Step ajax!")
                     $.ajaxSetup({
@@ -324,6 +328,7 @@ function abandonGame(){
 
 
 function ClausePieceShape(st_list,piece_num){
+    console.log("ClausePieceShape function");
 	//This function ONLY contstructs the visual of the piece. Properties of the piece are added by other functions
     //p is the container that holds the peices and properties associated
 	var p = new createjs.Container();
@@ -459,6 +464,7 @@ function ClausePieceShape(st_list,piece_num){
 
 
 function tweenMatchingPieces(selectedPiece){
+    console.log("tweenMatchingPieces function`");
 	//Sets alpha of matching pieces to 1, everything else is 0.3
     allPieces = pm.getAllPieces();
     for(k in selectedPiece.matching){
@@ -474,7 +480,8 @@ function tweenMatchingPieces(selectedPiece){
 }
 
 function pieceCollision(p1,p2){
-	//Detects collision of 2 pieces
+    console.log("pieceCollision function");
+	//Detects collision of 2 pieces`
 	if((p1.x+p1.orgX - (p2.x+p2.orgX + (p2.width))) >= 0 ||
 	((p1.x+p1.orgX + (p1.width)) - (p2.x+p2.orgX)) <= 0||
 	(p1.y-p1.orgY - (p2.y-p2.orgY + (p2.height)))>= 0 ||
@@ -490,6 +497,7 @@ function pieceCollision(p1,p2){
 }
 
 function arraysEqual(a, b) {
+    console.log("arraysEqual function");
 	//Checks if two arrays are equal in value
   if (a === b) return true;
   if (a == null || b == null) return false;
@@ -504,6 +512,7 @@ function arraysEqual(a, b) {
 
 
 function solveValues(p1,p2){
+    console.log("solveValues function");
 //This function ONLY solves the two pieces and returns an array for the new piece. 
 //Should be used to solve not display
  		var num_negations = 0;
@@ -539,6 +548,7 @@ function solveValues(p1,p2){
 
 
 function solvePieces(p1,p2, addToSolution){
+    console.log("solvePieces function");
 	//Solves 2 pieces together and adds it to the board
 	  var num_negations = 0;
     var p1_keys = p1.keys.slice();

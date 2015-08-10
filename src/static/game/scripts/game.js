@@ -15,7 +15,14 @@ var colors;
 var be = new BranchExplorer();
 //Text for timer
 var play_area_text;
-var track_time = 0.0;
+var track_time = 0;
+if(sessionStorage.track_time!=0) {
+	sessionStorage.track_time=track_time;
+}
+else
+{
+	sessionStorage.setItem("track_time",track_time);
+}
 var timerId;
 var res = [];
 
@@ -49,15 +56,34 @@ var pressmove_flag = false;
 createjs.Sound.registerSound("./sounds/bubble.wav","bubble",4);
 createjs.Sound.registerSound("./sounds/cheer.mp3","cheer",4);
 
-function init() {
-	//Canvas contains the whole game use other containers to manipulate game
-	//console.log(sessionStorage.getItem("username"));
-    stage = new createjs.Stage("canvas");
-	
+
+$(window).on("resize", function(event){
 	stage.canvas.width = window.innerWidth;
 	stage.canvas.height = window.innerHeight;
+
+	play_area_frame.setBounds(0,0, stage.canvas.width, stage.canvas.height);
+    play_area.setBounds(0,0, stage.canvas.width, stage.canvas.height);
 	
+	play_area_border.graphics.setStrokeStyle(5);
+	play_area_border.graphics.beginStroke("black");
+	play_area_border.graphics.beginFill("#f7f7f7");
+	play_area_border.graphics.drawRect(0,0,stage.canvas.width, stage.canvas.height);
+	play_area_border.setBounds(0,0,stage.canvas.width, stage.canvas.height);
+	stage.update();
+
+});
+
+function init() {
+	//console.log("init function");
+	stage = new createjs.Stage("canvas");
+	stage.canvas.width = window.innerWidth;
+	stage.canvas.height = window.innerHeight;
+
 	window.addEventListener('resize', resize, false);   
+
+	//Canvas contains the whole game use other containers to manipulate game
+	////console.log(sessionStorage.getItem("username"));
+
 	createjs.Touch.enable(stage, [allowDefault = false]);
 	
 	//Container defining the frame of the play area (All game play/scaling is done inside here) 
@@ -122,7 +148,6 @@ function init() {
 	play_area_text.x = 20;
 	play_area_text.y = 20;
 
-	
 
 
 	//Mask the control area on the right
@@ -132,8 +157,7 @@ function init() {
 
 	//Separate function to make pieces
 	generatePieces();
-	
-	
+
 	play_area_frame.addChild(play_area);
 	stage.addChild(play_area_frame);
 	//Initializing combobox
@@ -171,6 +195,7 @@ function init() {
 
 
 function sortNumber(a,b) {
+	//console.log("sort number function");
     return a - b;
 }
 
@@ -183,19 +208,23 @@ function resize() {
 }
 
 function generateColors(colors){
+	//console.log("generateColors function");
+    
 	colors =  colors+1;
 	color_list = [];
 	
     if (colors < 1) colors = 1; // defaults to one color - avoid divide by zero
 	for(var i = 0;i <colors;i++){
 		color_list.push("hsl(" + Math.floor(i * (360 / colors) % 360) + ","+ Math.floor(Math.random()*(80-20+1)+20) + "%,"+ Math.floor(Math.random()*(80-20+1)+20) + "%)");
-		//console.log("ColorNum = " + i + "   " + color_list[i]);
+		////console.log("ColorNum = " + i + "   " + color_list[i]);
 	}
 	
     return color_list;
 }
 
 function generatePieces(){
+	//console.log("generatePieces function");
+    
 	//Calling generate problem from the django server
 	var result = httpPOST("/generate_problem/");
 
@@ -213,7 +242,7 @@ function generatePieces(){
 
 	//Sorting each piece internally (by its keys)
 	piece_nums.sort(sortNumber);
-	//console.log(piece_nums);
+	////console.log(piece_nums);
 	
 	//Adding peices to the play area (if the piece is last in the list, it is negated conclusion)
 	
@@ -243,36 +272,99 @@ function generatePieces(){
 		}
 		
 	}
-
-	//Pull saved pieces from the server and add them to the board
-	var result = getSavedGame();
-	console.log(result);
-	if (result.steps){
-	game_state.saved_steps = $.parseJSON(result.steps);
-	track_time = game_state.saved_steps[game_state.saved_steps.length-1].t;
-	}
-	
-
-	console.log(game_state.saved_steps);
-	
-	for (var i=0;i<game_state.saved_steps.length;i++) {
-		pm.addPiece(game_state.saved_steps[i].pk);
-	}
-	
-	
-	
-	
+	gettingSavedValuesAndAddingThem();
 
 	//Setting initial length of the problem (Used in undo function)
 	pm._initial_length = piece_nums_length;
+}
+
+//seperating for pull functionality
+function gettingSavedValuesAndAddingThem() {
+		//Pull saved pieces from the server and add them to the board
+	//console.log("--removing duplicates--");
+	if (!getSavedGame()) { } else {
 	
+	var result = getSavedGame();
+	result = removeJsonDuplicates(result);
+	////console.log("after length "+result.steps.length);
+	//result = (result);
+	////console.log("--removing duplicates--");
+	//console.log(typeof(result));
+
+	if(sessionStorage.saveData)
+	{
+		if (JSON.stringify(result) == sessionStorage.saveData) {
+			//alert("equal so showing zero");
+		} else {
+			sessionStorage.setItem("saveData",JSON.stringify(result));
+			result = result;
+			//alert("else part setting default result");
+
+			/*/-------------------------------------------------------/*/
+				//console.log(JSON.stringify(result));
+			if (result.steps){
+			game_state.saved_steps = $.parseJSON(result.steps);
+			track_time = game_state.saved_steps[game_state.saved_steps.length-1].t;
+			}
+			
+			for (var i=0;i<game_state.saved_steps.length;i++) {
+				pm.addPiece(game_state.saved_steps[i].pk);
+			}
+			/*/----------------------------------------------------/*/
+
+		}
+	}else{
+	sessionStorage.setItem("saveData",JSON.stringify(result));
+
+			/*/----------------------------------------------------/*/
+
+	if (result.steps){
+			game_state.saved_steps = $.parseJSON(result.steps);
+			//console.log("game_state.saved_steps = "+game_state.saved_steps);
+			track_time = game_state.saved_steps[game_state.saved_steps.length-1].t;
+			}
+			
+			for (var i=0;i<game_state.saved_steps.length;i++) {
+				pm.addPiece(game_state.saved_steps[i].pk);
+			}
+	}
+			/*/----------------------------------------------------/*/
+	}
+}
+
+//monday work
+function removeJsonDuplicates(jsObj) {
+	var jsonObj = new Object();
+	jsonObj.steps = jsObj.steps;
+	//jsonObj.steps = JSON.parse(jsonObj.steps);
+	////console.log(" "+typeof(jsObj));
+	
+	//var jsonlength = jsonObj.length -1; 
+	//console.log(jsonObj.steps);
+	var myarr = [""];
+	for (var i = 0; i< (jsonObj.steps.length)-1; i++) {
+		//if((((myarr.indexOf((jsonObj[i].pk).toString())))>0)) 
+		//console.log((((myarr.indexOf((jsonObj.steps[i].pk))))>0));
+		if(((myarr.indexOf((jsonObj.steps[i].pk))))>0) //if present returns true
+		{
+			jsonObj.steps.splice(i,1);
+		}
+		else //if not present adds to the array and moves on to the next element
+		{
+		myarr.push((jsonObj.steps[i].pk));
+		if(myarr[0]==""){myarr.splice(0,1);}
+		}
+	}
+return jsonObj;
 }
 
 
 function getSavedGame(){
+	//console.log("getSavedGame function");
+    
 	var response;
 	var csrf_token = $.cookie('csrftoken');
-    console.log("Getting saved game ajax!")
+    //console.log("Getting saved game ajax!")
     $.ajaxSetup({
             beforeSend: function(xhr, settings) {
             if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
@@ -286,12 +378,13 @@ function getSavedGame(){
               url: '/get_saved_game/',
               data: "problem_name=" + sessionStorage.getItem("filename")+"&username="+ sessionStorage.getItem("username"),
               success: function(data){
-                    response = data;
+                    response =data;
                   //  alert("response= >"+response)
                 },
               dataType: "json",
               async:false
             });
+  //  alert(response.steps);
     return response;
 }
 
@@ -316,9 +409,9 @@ scrollWheelTimer = setTimeout(function(){adjustRowLength();},200);
 }
 
 function adjustRowLength(){
-	console.log("adjust timer executed!")
+	//console.log("adjust timer executed!")
 	num_rows = Math.floor((window.innerHeight-10)/((pm._piece_list[0].height+50)*play_area.scaleY));
-	console.log(num_rows);
+	//console.log(num_rows);
 	pm.column_length = num_rows;
 
 	pm.rearrangePieces();
@@ -347,7 +440,8 @@ function currentKeyNegIn(piece,key){
 
 
 function startGame() {
-	
+	//console.log("startGame function");
+    
     createjs.Ticker.setFPS(60);
     createjs.Ticker.on("tick", function(e){
 	
@@ -359,24 +453,31 @@ function startGame() {
 
 function httpGet(theUrl)
 {
+	//console.log("httpGet function");
+    
     var xmlHttp = null;
 
     xmlHttp = new XMLHttpRequest();
     xmlHttp.open( "GET", theUrl, false );
     xmlHttp.send( "filename=" + sessionStorage.getItem("filename") );
+    alert(" = > "+xmlHttp.responseText);
     return xmlHttp.responseText;
 }
 
 function csrfSafeMethod(method) {
+	//console.log("csrfSafeMethod function");
+    
     // these HTTP methods do not require CSRF protection
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
 
 function httpPOST(theUrl){
-    //console.log(sessionStorage.getItem("filename"));
+	//console.log("httpPOST function");
+    
+    ////console.log(sessionStorage.getItem("filename"));
     var response;
     var csrf_token = $.cookie('csrftoken');
-    //console.log("Sending Ajax!")
+    ////console.log("Sending Ajax!")
         $.ajaxSetup({
             beforeSend: function(xhr, settings) {
                 if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
@@ -395,12 +496,14 @@ function httpPOST(theUrl){
   dataType: "json",
   async:false
 });
-    //console.log(response);    
+    ////console.log(response);    
     return response;
 }
 
 
 function resetBoard(){
+	//console.log("resetBoard function");
+    
 	//Actions to perform when want to reset the board to its original state
 
 	allPieces = pm.getAllPieces();
@@ -424,14 +527,16 @@ function resetBoard(){
 }
 
 function resetWidths(){
+	//console.log("resetWidths function");
+    
 //Experimental function called after clicking the board to reset the width of all pieces to their true values
 
 allPieces = pm.getAllPieces();
 					var allpieces_length = allPieces.length;
 	for(var i = 0; i<allpieces_length; i++){
-		//console.log(allPieces[i].width + " " + allPieces[i].getBounds().width);
+		////console.log(allPieces[i].width + " " + allPieces[i].getBounds().width);
 		allPieces[i].width = allPieces[i].getBounds().width;
-		//console.log(allPieces[i].width + " " + allPieces[i].getBounds().width);
+		////console.log(allPieces[i].width + " " + allPieces[i].getBounds().width);
 	}
 
 	//pm.adjustPieces();

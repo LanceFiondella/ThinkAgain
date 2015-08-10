@@ -82,7 +82,7 @@ function run_game(){
     //alert(data[list.value]);
     sessionStorage.setItem("username", '{{ user.username }}');
     sessionStorage.setItem("language",document.getElementById('language').value);
-    sessionStorage.removeItem("saveData");
+    
 }
 
 

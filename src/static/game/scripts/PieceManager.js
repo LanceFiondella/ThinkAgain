@@ -21,6 +21,8 @@ function PieceManager(){
 
 
 	PieceManager.prototype.addPiece = function(st_list){
+		console.log("PieceManager.prototype.addPiece function");
+    
 		cp = ClausePiece(st_list, this._total_pieces);
 		cp.x = cp.homeX = this.nPosX;
 		cp.y = cp.homeY = this.nPosY;
@@ -63,7 +65,8 @@ function PieceManager(){
 
 	PieceManager.prototype.verifyWin = function(){
 
-
+				console.log("PieceManager.prototype.verifyWin function");
+    
 				el = document.getElementById("overlay");
 				el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
 
@@ -101,6 +104,7 @@ function PieceManager(){
 	};
 	
 	PieceManager.prototype.showPiece = function(st_list, piece_num){
+		console.log("PieceManager.prototype.showPiece function")
 		cp = ClausePieceShape(st_list, piece_num);
 		//cp.regX = (cp.keys.length*100)/2;
 		//cp.regY = 50;
@@ -111,6 +115,7 @@ function PieceManager(){
 	};
 	
 	PieceManager.prototype.getAllPieceValues = function(){
+		console.log("PieceManager.prototype.getAllPieceValues function");
 		var result = []
 		var this_piece_list_length = this._piece_list.length;
 		for(var i =0;i<this_piece_list_length;i++){
@@ -121,10 +126,12 @@ function PieceManager(){
 	
 	//Add the piece to the specified container
 	PieceManager.prototype.displayPiece = function(container,piece_num){
+		console.log("PieceManager.prototype.displayPiece function");
 		container.addChild(this._piece_list[piece_num]);
 	};
 	
 	PieceManager.prototype.displayAllPieces = function(container){
+		console.log("PieceManager.prototype.displayAllPieces  function");
 		var this_piece_list_length = this._piece_list.length;
 		for(var i =0;i<this_piece_list_length;i++){
 			console.log("Displaying peice = " + i);
@@ -134,6 +141,7 @@ function PieceManager(){
 	};
 	
 	PieceManager.prototype.setConclusion =  function(st_list){
+		console.log("PieceManager.prototype.setConclusion ");
 		this._conclusion = st_list;
 		cp = ClausePiece(st_list);
 		createjs.Tween.get(cp,{loop:true}).to({scaleX: 0.7, scaleY: 0.7},500).to({scaleX: 1.1, scaleY: 1.1},500).to({scaleX: 1, scaleY: 1},500);
@@ -155,6 +163,7 @@ function PieceManager(){
 	};
 	
 	PieceManager.prototype.nextPiecePosition =  function(){
+		console.log("PieceManager.prototype.nextPiecePosition function");
 		if (this.currentRow == this.column_length-1){
 			this.nPosX = 320*(this.currentColumn +1) + 160;
 			this.nPosY = 78;
@@ -171,6 +180,7 @@ function PieceManager(){
 	};
 	
 	PieceManager.prototype.getMatchingPieces =  function(selectedPiece){
+		console.log("PieceManager.prototype.getMatchingPieces  function");
 		result = [];
 		var this_piece_list_length = this._piece_list.length;
 		for(var i =0;i<this_piece_list_length;i++){
@@ -183,7 +193,7 @@ function PieceManager(){
 	};
     
     PieceManager.prototype.getMatchingPiecesPositions =  function(selectedPiece){
-        
+        console.log("PieceManager.prototype.getMatchingPiecesPositions function");
 		var this_piece_list_length = this._piece_list.length;
 		for(var i =0;i<this_piece_list_length;i++){
 			if(this.negationPresent(selectedPiece,this._piece_list[i]) && selectedPiece.piece_num != i){
@@ -202,6 +212,7 @@ function PieceManager(){
     
 	
 	PieceManager.prototype.getAllPieces =  function(){
+		console.log("PieceManager.prototype.getAllPieces function");
 		result = [];
 		var this_piece_list_length = this._piece_list.length;
 		for(var i =0;i<this_piece_list_length;i++){
@@ -211,11 +222,12 @@ function PieceManager(){
 	};
 	
 	PieceManager.prototype.getPiece = function(piece_num){
-		
+		console.log("PieceManager.prototype.getPiece function");
 		return this._piece_list[piece_num];
 	};
 	
 	PieceManager.prototype.negationPresent = function(p1,p2){
+		console.log("PieceManager.prototype.negationPresent function");
 		//Checks if only one negation is present in piece 1 and piece 2
 		var result = false;
 		var num_negations = 0;
@@ -245,6 +257,7 @@ function PieceManager(){
 
 	PieceManager.prototype.popPiece = function(){
 			//cp = pm._piece_list.splice(piece_num,1)[0];
+			console.log("PieceManager.prototype.popPiece function");
 
 		if(pm._total_pieces > pm._initial_length){
 			cp = pm._piece_list.pop();
@@ -285,6 +298,7 @@ function PieceManager(){
 	
 
 	PieceManager.prototype.checkPiece = function(st_list){
+		console.log("PieceManager.prototype.checkPiece function");
 		//This function checks if the piece passed to this function exists in the _piece_list. Accepts an array of integers representing the piece
 		var result = false;
 		for (var i =0; i< this._piece_list.length; i++){
@@ -298,6 +312,7 @@ function PieceManager(){
 
 
 	PieceManager.prototype.adjustPieces = function(){
+		console.log("PieceManager.prototype.adjustPieces function");
 		//Experimental function to adjust the spacing between pieces row wise ONLY. Columns are aligned by looking at the col_x_positions array.
 
 		//Minimum space between each piece
@@ -344,6 +359,7 @@ function PieceManager(){
 
 
 	PieceManager.prototype.rearrangePieces = function(){
+		console.log("PieceManager.prototype.rearrangePieces function");
 		//Experimental function to redraw all the rows and columns after zooming. This is to dynamically adjust the number of pieces per column (number of rows)
 		this.nPosX=160;
 		this.nPosY=78;
