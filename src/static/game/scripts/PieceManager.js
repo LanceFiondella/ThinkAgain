@@ -312,6 +312,19 @@ function PieceManager(){
 
 
 	PieceManager.prototype.adjustPieces = function(){
+		
+	///removing duplicates | Jayesh Edit
+	console.log("adjusting ");
+	console.log(pm._piece_list.length);
+	arr = [""];
+	for (var i = 0; i < pm._piece_list.length; i++) {
+		arr.push(pm._piece_list[i].keys);
+		if(arr[0]==""){arr.splice(0,1);}
+
+	}
+
+	pm.Jboardlist = JSON.stringify(arr);
+
 		console.log("PieceManager.prototype.adjustPieces function");
 		//Experimental function to adjust the spacing between pieces row wise ONLY. Columns are aligned by looking at the col_x_positions array.
 

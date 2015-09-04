@@ -108,7 +108,6 @@ BranchExplorer.prototype.addFirstColumn = function(piece_list, all_key_list){
 	columnContainer.setBounds(0,0,max_width,max_height);
 	this.columnList.push(columnContainer);
 	this.be_box.addChild(columnContainer);
-
 }
 
 

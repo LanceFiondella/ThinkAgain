@@ -133,6 +133,7 @@ def generate_problem(request):
 	return HttpResponse(json.dumps(data), content_type = "application/json")
 
 def save_step(request):
+	print "inside save_step"
 	#Saves the solution of the problem at each step
 	context = RequestContext(request)
 	data = {}

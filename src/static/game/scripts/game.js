@@ -273,7 +273,7 @@ function generatePieces(){
 		
 	}
 	gettingSavedValuesAndAddingThem();
-
+	
 	//Setting initial length of the problem (Used in undo function)
 	pm._initial_length = piece_nums_length;
 }
@@ -282,17 +282,24 @@ function generatePieces(){
 function gettingSavedValuesAndAddingThem() {
 		//Pull saved pieces from the server and add them to the board
 	//console.log("--removing duplicates--");
-	if (!getSavedGame()) { } else {
-	
+	if ($.isEmptyObject(getSavedGame())) { 
+		console.log("--No Saved Game--"); 
+		} else {
+	console.log("--Yes Saved Game--");
 	var result = getSavedGame();
+	
+	console.log("before");
+	console.log(result.steps.length);
 	result = removeJsonDuplicates(result);
-	////console.log("after length "+result.steps.length);
+	console.log("after");
+	console.log(result.steps.length);
 	//result = (result);
 	////console.log("--removing duplicates--");
 	//console.log(typeof(result));
 
-	if(sessionStorage.saveData)
+/*	if(sessionStorage.saveData)
 	{
+		console.log("Yes Session Data");
 		if (JSON.stringify(result) == sessionStorage.saveData) {
 			//alert("equal so showing zero");
 		} else {
@@ -300,7 +307,7 @@ function gettingSavedValuesAndAddingThem() {
 			result = result;
 			//alert("else part setting default result");
 
-			/*/-------------------------------------------------------/*/
+
 				//console.log(JSON.stringify(result));
 			if (result.steps){
 			game_state.saved_steps = $.parseJSON(result.steps);
@@ -310,13 +317,12 @@ function gettingSavedValuesAndAddingThem() {
 			for (var i=0;i<game_state.saved_steps.length;i++) {
 				pm.addPiece(game_state.saved_steps[i].pk);
 			}
-			/*/----------------------------------------------------/*/
 
 		}
 	}else{
-	sessionStorage.setItem("saveData",JSON.stringify(result));
+		console.log("No Session Data");
+		sessionStorage.setItem("saveData",JSON.stringify(result));
 
-			/*/----------------------------------------------------/*/
 
 	if (result.steps){
 			game_state.saved_steps = $.parseJSON(result.steps);
@@ -328,34 +334,106 @@ function gettingSavedValuesAndAddingThem() {
 				pm.addPiece(game_state.saved_steps[i].pk);
 			}
 	}
-			/*/----------------------------------------------------/*/
-	}
+*/			/*/----------------------------------------------------/*/
+	
+	if (result.steps){
+			game_state.saved_steps = $.parseJSON(result.steps);
+			//console.log("game_state.saved_steps = "+game_state.saved_steps);
+			track_time = game_state.saved_steps[game_state.saved_steps.length-1].t;
+			}
+			
+			for (var i=0;i<game_state.saved_steps.length;i++) {
+				pm.addPiece(game_state.saved_steps[i].pk);
+			}
+
+	}	
 }
 
-//monday work
 function removeJsonDuplicates(jsObj) {
-	var jsonObj = new Object();
-	jsonObj.steps = jsObj.steps;
-	//jsonObj.steps = JSON.parse(jsonObj.steps);
-	////console.log(" "+typeof(jsObj));
-	
-	//var jsonlength = jsonObj.length -1; 
-	//console.log(jsonObj.steps);
-	var myarr = [""];
-	for (var i = 0; i< (jsonObj.steps.length)-1; i++) {
-		//if((((myarr.indexOf((jsonObj[i].pk).toString())))>0)) 
-		//console.log((((myarr.indexOf((jsonObj.steps[i].pk))))>0));
-		if(((myarr.indexOf((jsonObj.steps[i].pk))))>0) //if present returns true
+	 myarr = [""];		
+
+jsObj.steps= JSON.parse(JSON.stringify(jsObj.steps));
+var a = jsObj.steps;
+a = JSON.parse(a);
+
+/*	for (var i = 0; i< a.length; i++) {
+		if(((myarr.indexOf((a[i].pk))))>0) //if present returns true
 		{
-			jsonObj.steps.splice(i,1);
+			a.splice(i,1);
 		}
 		else //if not present adds to the array and moves on to the next element
 		{
-		myarr.push((jsonObj.steps[i].pk));
+		myarr.push((a[i].pk));
 		if(myarr[0]==""){myarr.splice(0,1);}
 		}
 	}
-return jsonObj;
+
+*/
+var newObj = new Object();
+
+newObj = a;
+if (!pm.Jboardlist) { console.log("no session");} else {
+BoardPieceList = JSON.parse(pm.Jboardlist)
+	for (var i = 0; i < newObj.length; i++) {
+		console.log("inside first for");
+		for(var x = 0 ; x < BoardPieceList.length; x++) {
+
+			var aaa = $.map(newObj, function(obj, index){
+				console.log("obj.pk = "+obj.pk+"  board piece list "+BoardPieceList[x]+" - "+x+" of length "+BoardPieceList.length);
+				if( JSON.stringify(obj.pk) === JSON.stringify(BoardPieceList[x])) 
+					return index;
+			});
+			console.log("index = "+aaa);
+				if (""==aaa) {
+					console.log("none");
+				}else{
+					var i = aaa.length;
+					while (i--) {
+						newObj.splice(aaa[i],1);
+						console.log(aaa[i]);
+						console.log(newObj[aaa[i]]);
+					}					
+				}
+	} /// second for loop
+	} //first for loop
+}
+var finala = new Object();
+finala.steps = JSON.stringify(newObj);
+
+var a = finala.steps;
+a = JSON.parse(a);
+
+//getting unique values in an array
+var unq = [];
+$.each(a, function(index, values) {
+    	
+    if ($.inArray(values.pk.toString(), unq) === -1) {
+    	console.log("indx = "+index+" pushing "+values.pk);
+		console.log("not inside array so pushing");
+    	unq.push((values.pk).toString());
+    }else {
+    	console.log("present inside");
+    	values.pk.splice(index,1);
+        
+    }
+});
+
+
+/*
+//using the unique values and removing the duplicates from the JSON object
+for(var i = 0 ; i<a.length ; i++) {
+	if (unq.indexOf(a[i].pk)) {
+		console.log("splicing "+a[i].pk);
+		a.splice(i,1);
+	}
+}
+*/
+
+
+var finalstep = new Object();
+finalstep.steps = JSON.stringify(a);
+
+return finalstep;
 }
 
 
