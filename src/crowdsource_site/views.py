@@ -82,6 +82,12 @@ def register(request):
 	else:
 		return render(request, "crowdsource_site/index.html", {})
 
+def irb_approval(request):
+	context = {}
+	template = "crowdsource_site/IRB_approval_form.htm"
+	return render(request,template,context)
+
+
 def game(request):
 	context = {}
 	template = "game/game_template.html"

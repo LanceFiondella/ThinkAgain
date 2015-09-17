@@ -1,4 +1,4 @@
-{% extends "crowdsource_site/base.html" %}
+  {% extends "crowdsource_site/base.html" %}
 
 
 {% block navbar-login %}
@@ -49,6 +49,7 @@ function validate_registration(){
 
             success: function(data){
               if (data['result'] == 'success'){
+                window.location.replace("/irb_approval/");
                 $('#registrationCompleteMsg').show();
                 $('#showLoginButton').collapse();
                 $('#showLoginButton').show();
