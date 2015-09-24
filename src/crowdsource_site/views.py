@@ -9,6 +9,8 @@ import json
 import os
 import datetime
 
+
+
 #test comment
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 def home(request):
@@ -147,10 +149,8 @@ def save_step(request):
 		user = User.objects.get(username=username)
 		problem = Problem.objects.get(name=problem_name)
 		
-		data = json.loads(solution)
-		print "Printing data"
-		print len(data["pk"])
-		
+
+		data = json.loads(solution)	
 
 		try:
 			incompSolution = Solution.objects.get(username=user,problem=problem,abandoned=False,complete=False)

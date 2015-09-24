@@ -288,11 +288,7 @@ function gettingSavedValuesAndAddingThem() {
 	console.log("--Yes Saved Game--");
 	var result = getSavedGame();
 	
-	console.log("before");
-	console.log(result.steps.length);
 	result = removeJsonDuplicates(result);
-	console.log("after");
-	console.log(result.steps.length);
 	//result = (result);
 	////console.log("--removing duplicates--");
 	//console.log(typeof(result));
@@ -356,42 +352,27 @@ jsObj.steps= JSON.parse(JSON.stringify(jsObj.steps));
 var a = jsObj.steps;
 a = JSON.parse(a);
 
-/*	for (var i = 0; i< a.length; i++) {
-		if(((myarr.indexOf((a[i].pk))))>0) //if present returns true
-		{
-			a.splice(i,1);
-		}
-		else //if not present adds to the array and moves on to the next element
-		{
-		myarr.push((a[i].pk));
-		if(myarr[0]==""){myarr.splice(0,1);}
-		}
-	}
-
-*/
 var newObj = new Object();
 
 newObj = a;
 if (!pm.Jboardlist) { console.log("no session");} else {
 BoardPieceList = JSON.parse(pm.Jboardlist)
 	for (var i = 0; i < newObj.length; i++) {
-		console.log("inside first for");
+		//console.log("inside first for");
 		for(var x = 0 ; x < BoardPieceList.length; x++) {
 
 			var aaa = $.map(newObj, function(obj, index){
-				console.log("obj.pk = "+obj.pk+"  board piece list "+BoardPieceList[x]+" - "+x+" of length "+BoardPieceList.length);
+				//console.log("obj.pk = "+obj.pk+"  board piece list "+BoardPieceList[x]+" - "+x+" of length "+BoardPieceList.length);
 				if( JSON.stringify(obj.pk) === JSON.stringify(BoardPieceList[x])) 
 					return index;
 			});
-			console.log("index = "+aaa);
+			//console.log("index = "+aaa);
 				if (""==aaa) {
-					console.log("none");
+			//		console.log("none");
 				}else{
 					var i = aaa.length;
 					while (i--) {
 						newObj.splice(aaa[i],1);
-						console.log(aaa[i]);
-						console.log(newObj[aaa[i]]);
 					}					
 				}
 	} /// second for loop
@@ -419,17 +400,6 @@ $.each(a, function(index, values) {
 });
 
 
-/*
-//using the unique values and removing the duplicates from the JSON object
-for(var i = 0 ; i<a.length ; i++) {
-	if (unq.indexOf(a[i].pk)) {
-		console.log("splicing "+a[i].pk);
-		a.splice(i,1);
-	}
-}
-*/
-
-
 var finalstep = new Object();
 finalstep.steps = JSON.stringify(a);
 
@@ -438,11 +408,9 @@ return finalstep;
 
 
 function getSavedGame(){
-	//console.log("getSavedGame function");
     
 	var response;
 	var csrf_token = $.cookie('csrftoken');
-    //console.log("Getting saved game ajax!")
     $.ajaxSetup({
             beforeSend: function(xhr, settings) {
             if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
@@ -457,12 +425,10 @@ function getSavedGame(){
               data: "problem_name=" + sessionStorage.getItem("filename")+"&username="+ sessionStorage.getItem("username"),
               success: function(data){
                     response =data;
-                  //  alert("response= >"+response)
                 },
               dataType: "json",
               async:false
             });
-  //  alert(response.steps);
     return response;
 }
 

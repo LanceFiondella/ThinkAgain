@@ -314,8 +314,8 @@ function PieceManager(){
 	PieceManager.prototype.adjustPieces = function(){
 		
 	///removing duplicates | Jayesh Edit
-	console.log("adjusting ");
-	console.log(pm._piece_list.length);
+	//console.log("adjusting ");
+	//console.log(pm._piece_list.length);
 	arr = [""];
 	for (var i = 0; i < pm._piece_list.length; i++) {
 		arr.push(pm._piece_list[i].keys);

@@ -6,6 +6,7 @@ Kannada_unicode = ["0x0C85", "0x0C86", "0x0C87", "0x0C88", "0x0C89", "0x0C8A", "
 Tamil_unicode = ["0x0B85","0x0B86","0x0B87","0x0B88","0x0B89",'0x0B8A',"0x0B8E","0x0B8F","0x0B90","0x0B92","0x0B93","0x0B94","0x0B83"];
 Greek_unicode = ["0x0391", "0x0392", "0x0393", "0x0394", "0x0395", "0x0396", "0x0397", "0x0398", "0x0399", "0x039A", "0x039B", "0x039C", "0x039D", "0x039E", "0x03A0", "0x03A1", "0x03A2", "0x03A3", "0x03A4", "0x03A5", "0x03A6", "0x03A7", "0x03A8", "0x03A9", "0x03AA", "0x03AB", "0x03AC", "0x03AD", "0x03AE", "0x03B0", "0x03B1", "0x03B2", "0x03B3", "0x03B4", "0x03B5", "0x03B6", "0x03B7", "0x03B8"];
 Symbols_unicode = ["0x2601", "0x2602", "0x2603", "0x2605", "0x2609", "0x260A", "0x260B", "0x260E", "0x2615", "0x2618", "0x2621", "0x2622", "0x2623", "0x2624", "0x2625", "0x2629", "0x262B", "0x262E", "0x262F", "0x263A", "0x2648", "0x264E", "0x2667", "0x2668", "0x267E", "0x2691", "0x269B", "0x269D", "0x26A1", "0x26C1", "0x1D01", "0x1D7A", "0x2042", "0x204B", "0x2728"];
+current_player_step = [];
 
 function ClausePiece(st_list, piece_num) {
     console.log("ClausePiece function");
@@ -228,12 +229,21 @@ function SolvedPiece(st_list, piece_num, parent1, parent2){
                         step ["pk"] = new_piece.keys;
                         step["t"] = track_time;
                         step ["parents"] = parents;
+                        step["ip"] = sessionStorage.ipaddress;
 
                         game_state.saved_steps.push(step);
 
                         //Sending step data to server
 
                         sendStep(step);
+
+
+
+                        //adding the current piece played by the user to a new array to hold the values
+                        current_player_step.push(step);
+                        console.log("current_player_step.length");
+                        console.log(current_player_step.length);
+
 
                         res.push(p.parent1.piece_num+","+p.parent2.piece_num+","+new_piece.piece_num);
                         p.parent2.visible = true;
@@ -276,6 +286,7 @@ function SolvedPiece(st_list, piece_num, parent1, parent2){
 
 function sendStep(step){
     console.log("sendStep function");
+    console.log(step);
     //Sends steps to the server
     var csrf_token = $.cookie('csrftoken');
                 console.log("Sending Step ajax!")
@@ -290,7 +301,7 @@ function sendStep(step){
                 $.ajax({
               type: 'POST',
               url: '/save_step/',
-              data: "problem_name=" + sessionStorage.getItem("filename")+"&username="+ sessionStorage.getItem("username")+"&total_pieces=" + pm._total_pieces+ "&total_time=" + track_time + "&solution=" + JSON.stringify(step),
+              data: "problem_name=" + sessionStorage.getItem("filename")+"&username="+ sessionStorage.getItem("username")+"&total_pieces=" + pm._total_pieces+ "&total_time=" + track_time + "&solution=" + JSON.stringify(step)+ "&current_player_step=" +current_player_step,
               success: function(data){
                     response = data;
                 },
@@ -440,6 +451,7 @@ function ClausePieceShape(st_list,piece_num){
 		
 		piece_letter_text.x = 105*i + 25+50;
 		piece_letter_text.y = 20;
+        console.log(piece_letter_text.text);
 		p.addChild(piece_letter_text);
 
 	}
@@ -497,7 +509,7 @@ function pieceCollision(p1,p2){
 }
 
 function arraysEqual(a, b) {
-    console.log("arraysEqual function");
+console.log("arraysEqual");
 	//Checks if two arrays are equal in value
   if (a === b) return true;
   if (a == null || b == null) return false;
@@ -507,6 +519,7 @@ function arraysEqual(a, b) {
   for (var i = 0; i < a_length ; ++i) {
     if (a[i] !== b[i]) return false;
   }
+  console.log("Returning");
   return true;
 }
 
@@ -542,8 +555,9 @@ function solveValues(p1,p2){
             new_keys = p1_keys.concat(p2_keys).filter(Number);
             new_keys.sort();
         }
-        
+        console.log("new keys -  "+new_keys);
         return new_keys;
+
 }
 
 
