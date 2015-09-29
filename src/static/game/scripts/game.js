@@ -202,7 +202,8 @@ function generatePieces(){
 	//Handles the data, converts into array of integers
     data = result;
 	total_atoms = parseInt(data.total_atoms,10);             
-	colors = generateColors(total_atoms);
+	window.total_variables = total_atoms;
+    colors = generateColors(total_atoms);
 	var piece_list = data.piece_list;
 	piece_nums = []
 	for (k in piece_list){
@@ -317,7 +318,7 @@ scrollWheelTimer = setTimeout(function(){adjustRowLength();},200);
 
 function adjustRowLength(){
 	console.log("adjust timer executed!")
-	num_rows = Math.floor((window.innerHeight-10)/((pm._piece_list[0].height+50)*play_area.scaleY));
+	num_rows = Math.floor((window.innerHeight-30)/((pm._piece_list[0].height+50)*play_area.scaleY));
 	console.log(num_rows);
 	pm.column_length = num_rows;
 

@@ -42,7 +42,7 @@ function ClausePiece(st_list, piece_num) {
             prev_parent.updateCache();
         }
 
-        selected_piece_border.graphics.clear().setStrokeStyle(5).beginStroke("#ff0000").drawRect(50, 0, evt.currentTarget.width, evt.currentTarget.height);
+        selected_piece_border.graphics.clear().setStrokeStyle(5).beginStroke("#ff0000").drawRect(0, 0, evt.currentTarget.width, evt.currentTarget.height);
         evt.currentTarget.addChild(selected_piece_border);
         evt.currentTarget.updateCache();
         var npb_length = new_piece_borders.length;
@@ -120,7 +120,7 @@ function ClausePiece(st_list, piece_num) {
 		}
 		replaceWithSolvedPieces(evt.currentTarget);
 	});
-	
+p.cache(p.getBounds().x,p.getBounds().y,p.width,p.height);	
 	//console.log(p.height + " " + p.width)
 	return p;
 }
@@ -330,9 +330,47 @@ function ClausePieceShape(st_list,piece_num){
 	
 	//Settings properties of the peice
 	p.keys = st_list;
-	
-	
-	p.piece_num = piece_num;
+
+    //Adding background of piece
+    console.log("Adding background?");
+    background = new createjs.Bitmap("./images/smiley.jpg");
+    
+    if (Math.sqrt(window.total_variables)%1 < 0.5){
+    p.x_pieces = Math.ceil(Math.sqrt(window.total_variables))
+    p.y_pieces = Math.floor(Math.sqrt(window.total_variables))
+    
+    }
+    else{
+        p.x_pieces = p.y_pieces = Math.ceil(Math.sqrt(window.total_variables))
+    }
+        //console.log(" total = " + window.total_variables);
+        //console.log(p.x_pieces + " , " + p.y_pieces);
+    p.setBounds(0,0,p.x_pieces*100,p.y_pieces*100);	
+	//background.sourceRect= p.getBounds;
+    background.scaleX = p.x_pieces*100/640;
+    background.scaleY = p.y_pieces*100/430;
+    p.addChild(background);
+    
+    //Adding grid to piece
+    for ( i=0;i < p.x_pieces+1; i++){
+        var line = new createjs.Shape();
+        line.graphics.setStrokeStyle(2).beginStroke("rgba(0,0,0,1)");
+        line.graphics.moveTo(i*100,0);
+        line.graphics.lineTo(i*100,p.y_pieces*100);
+        p.addChild(line);
+    }
+ for ( i=0;i < p.y_pieces+1; i++){
+        var line = new createjs.Shape();
+        line.graphics.setStrokeStyle(2).beginStroke("rgba(0,0,0,1)");
+        line.graphics.moveTo(0,i*100);
+        line.graphics.lineTo(p.x_pieces*100,i*100);
+        p.addChild(line);
+    }
+
+    
+
+
+    p.piece_num = piece_num;
     
 	//Generating individual atoms and adding it to the piece
 	var pkeys_length = p.keys.length;
@@ -340,7 +378,7 @@ function ClausePieceShape(st_list,piece_num){
         var star_image = new createjs.Bitmap("images/star.jpg");
         star_image.scaleX = star_image.scaleY = 0.3;
                 //console.log(star_image);
-                p.addChild(star_image);
+                //p.addChild(star_image);
                 //p.cache(p.getBounds().x,p.getBounds().y,p.width,p.height);
 
     }
@@ -428,14 +466,14 @@ function ClausePieceShape(st_list,piece_num){
             
 
 		//Draw atom
-		
-		atom.graphics.drawRoundRect(105*i+50, 0, 105-2*BORDER_THICKNESS, 95-2*BORDER_THICKNESS,20);
-		atom.setBounds(105*i+50, 0, 105-2*BORDER_THICKNESS, 95-2*BORDER_THICKNESS);
+        //console.log(100*Math.floor((Math.abs(p.keys[i])-1)%p.x_pieces) + "," + 100*Math.floor((Math.abs(p.keys[i])-1)/p.x_pieces)+ "  :  " + p.keys[i])		
+		atom.graphics.drawRect(100*Math.floor((Math.abs(p.keys[i])-1)%p.x_pieces), 100*Math.floor((Math.abs(p.keys[i])-1)/p.x_pieces), 100, 100);
+		atom.setBounds(100*(i%p.x_pieces), 100*(1%p.y_pieces), 105-2*BORDER_THICKNESS, 95-2*BORDER_THICKNESS);
 		p.addChild(atom);
 		
-		piece_letter_text.x = 105*i + 25+50;
-		piece_letter_text.y = 20;
-		p.addChild(piece_letter_text);
+//		piece_letter_text.x = 105*i + 25+50;
+//		piece_letter_text.y = 20;
+//		p.addChild(piece_letter_text);
 
 	}
 	

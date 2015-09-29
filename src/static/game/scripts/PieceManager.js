@@ -39,8 +39,8 @@ function PieceManager(){
 		this._piece_list.push(cp);
 		this._total_pieces++;
 		
-		cp.scaleX = 0.2;
-		cp.scaleY = 0.2;
+		cp.scaleX = 0.5;
+		cp.scaleY = 0.5;
 		cp.cache(cp.getBounds().x-2,cp.getBounds().y-2,cp.width+4,cp.height+4);
 		play_area.addChild(cp);
 
@@ -166,7 +166,7 @@ function PieceManager(){
 		else{
 			this.currentRow++;
 			//this.nPosY = 120*(this.currentRow + 1) + 50;
-			this.nPosY += 78 + 50;
+			this.nPosY += 78 + this._piece_list[0].y_pieces*100;
 		}
 	};
 	
