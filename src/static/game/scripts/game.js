@@ -75,9 +75,9 @@ $(window).on("resize", function(event){
 
 function init() {
 	//console.log("init function");
-	stage = new createjs.Stage("canvas");
-	stage.canvas.width = window.innerWidth;
-	stage.canvas.height = window.innerHeight;
+	//stage = new createjs.Stage("canvas");
+	//stage.canvas.width = window.innerWidth;
+	//stage.canvas.height = window.innerHeight;
 
 	window.addEventListener('resize', resize, false);   
 
