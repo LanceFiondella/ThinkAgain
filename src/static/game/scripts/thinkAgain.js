@@ -30,6 +30,9 @@
 			case game.GameStates.GAME:
 				this.currentGameStateFunction = this.gameStateGame;
 				break;
+			case game.GameStates.MULTIPLAYER:
+				this.currentGameStateFunction= this.gameStateMultiplayer;
+				break;
 			case game.GameStates.RUN_SCENE:
 				this.currentGameStateFunction = this.gameStateRunScene;
 				break;
@@ -45,7 +48,9 @@
 
 	p.gameStateMainMenu = function () {
 		var scene = new game.GameMenu();
+		console.log(this);
 		scene.on(game.GameStateEvents.GAME, this.onStateEvent, this, false, {state:game.GameStates.GAME});
+		scene.on(game.GameStateEvents.MULTIPLAYER, this.onStateEvent, this, false, {state:game.GameStates.MULTIPLAYER});
 		stage.addChild(scene);
 		stage.removeChild(this.currentScene);
 		this.currentScene = scene;
@@ -53,12 +58,23 @@
 	}
 
 	p.gameStateGame = function() {
-		var scene = new game.init();
+		var scene = new game.SinglePlayer();
+		console.log(scene);
 		scene.on(game.GameStateEvents.GAME_OVER, this.onStateEvent, this, false, {state:game.GameStates.GAME_OVER});
 		stage.addChild(scene);
 		stage.removeChild(this.currentScene);
 		this.currentScene = scene;
 		this.changeState(game.GameStates.RUN_SCENE);
+	}
+
+	p.gameStateMultiplayer = function() {
+		var scene = new game.Multiplayer();
+		console.log(scene);
+		scene.on(game.GameStateEvents.GAME_OVER, this.onStateEvent, this, false, {state:game.GameStates.GAME_OVER});
+		stage.addChild(scene);
+		stage.removeChild(this.currentScene);
+		this.currentScene = scene;
+		this.changeState(game.GameStates.RUN_SCENE);	
 	}
 
 	p.gameStateGameOver = function() {

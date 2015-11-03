@@ -12,15 +12,19 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
 	<script src="scripts/state.js"></script>
     <script src="scripts/SimpleButton.js"></script>
-    <script src="scripts/thinkAgain.js"></script>
+    
     <script src="scripts/gameMenu.js"></script>
+
     <script src="scripts/gameOver.js"></script>
 	<script src="scripts/PieceManager.js?1.002"></script>
 	<script src="scripts/ClausePiece.js?1.001"></script>
 	<script src="scripts/BranchExplorer.js?1.0"></script>
 	<script src="scripts/tutorial.js?1.002"></script>
-	<script src="scripts/game.js?1.002"></script>
-	
+	<!--script src="scripts/game.js?1.002"></script-->
+	<script src="scripts/CoreGame.js"></script>
+	<script src="scripts/SinglePlayer.js"></script>
+	<script src="scripts/Multiplayer.js"></script>
+	<script src="scripts/thinkAgain.js"></script>
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 	<script>
@@ -206,7 +210,7 @@
 		top: 39%;
 		z-index: 1000;
 	}
-		#save {
+		.save {
 		width: 2.5%;
 		height: auto;
 		position: fixed;
@@ -401,7 +405,7 @@
 		<canvas id="canvas"></canvas>
 	</div>
 
-	<div id="tutorial-overlay" class="modal-dialog" style="visibility:hidden;">
+	<!--div id="tutorial-overlay" class="modal-dialog" style="visibility:hidden;">
       <div class="modal-content">
           <div class="modal-header">
               <h4 class="modal-title" id="myModalLabel">Tutorial</h4>
@@ -418,7 +422,7 @@
               </div>
           </div>
       </div>
-	</div>
+	</div-->
 	
 
 <script>

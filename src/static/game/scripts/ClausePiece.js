@@ -8,6 +8,10 @@ Greek_unicode = ["0x0391", "0x0392", "0x0393", "0x0394", "0x0395", "0x0396", "0x
 Symbols_unicode = ["0x2601", "0x2602", "0x2603", "0x2605", "0x2609", "0x260A", "0x260B", "0x260E", "0x2615", "0x2618", "0x2621", "0x2622", "0x2623", "0x2624", "0x2625", "0x2629", "0x262B", "0x262E", "0x262F", "0x263A", "0x2648", "0x264E", "0x2667", "0x2668", "0x267E", "0x2691", "0x269B", "0x269D", "0x26A1", "0x26C1", "0x1D01", "0x1D7A", "0x2042", "0x204B", "0x2728"];
 current_player_step = [];
 
+const PIECE_H = 100;
+const PIECE_W = 100;
+const BORDER_THICKNESS = 1;
+
 function ClausePiece(st_list, piece_num) {
     console.log("ClausePiece function");
 	//p is the container that holds the peices and properties associated
@@ -21,14 +25,15 @@ function ClausePiece(st_list, piece_num) {
 
 	//Behaviour on clicking piece
 	p.on("mousedown", function(evt){
-		resetBoard();
-        resetWidths();
+		//resetBoard();
+        //resetWidths();
 		evt.stopPropagation();
-		play_area.setChildIndex(evt.currentTarget,play_area.getNumChildren() - 1);
-		var global = play_area.localToGlobal(evt.currentTarget.x, evt.currentTarget.y);
+        console.log(this.parent)
+		this.parent.setChildIndex(evt.currentTarget,this.parent.getNumChildren() - 1);
+		var global = this.parent.localToGlobal(evt.currentTarget.x, evt.currentTarget.y);
 		evt.currentTarget.offset = {'x' : global.x - evt.stageX, 'y' : global.y - evt.stageY};
 		
-		if(!alpha_locked){
+		if(!this.parent.parent.alpha_locked){
 			tweenMatchingPieces(evt.currentTarget);
 			evt.currentTarget.alpha = 1;
 		}
@@ -367,7 +372,7 @@ function ClausePieceShape(st_list,piece_num){
 		atom.graphics.setStrokeStyle(2);
 		
 		//Generating atom color
-		var atom_color = colors[Math.abs(p.keys[i])];
+		//var atom_color = colors[Math.abs(p.keys[i])];
 		var piece_letter_text;									
 			var chr = (Math.abs(p.keys[i]));
            // alert(sessionStorage.language);

@@ -16,8 +16,9 @@
 		this.Container_initialize();
 		this.addBG();
 		this.addTitle();
-		this.addButton();
-
+		this.addSinglePlayerButton();
+		this.addMultiplayerButton();
+		//this.run();
 	}
 
 	p.addBG = function(){
@@ -34,9 +35,9 @@
 		this.addChild(this.titleTxt);
 	}
 
-	p.addButton = function(){
+	p.addSinglePlayerButton = function(){
 		var btn, event;
-		btn = new ui.SimpleButton('Play Game');
+		btn = new ui.SimpleButton('Single Player Game');
 		btn.on('click', this.playGame,this);
 		btn.regX = btn.width/2;
 		btn.x = canvas.width/2;
@@ -45,8 +46,23 @@
 		this.addChild(btn);
 	}
 
+	p.addMultiplayerButton = function(){
+		var btn, event;
+		btn = new ui.SimpleButton('Multiplayer Game');
+		btn.on('click', this.playMultiplayerGame,this);
+		btn.regX = btn.width/2;
+		btn.x = canvas.width/2;
+		btn.y = 500;
+		btn.setButton({upColor:'#FF0000', color:'#FFF', borderColor:'#FFF',overColor:'#900'});
+		this.addChild(btn);	
+	}
+
 	p.playGame = function(e){
 		this.dispatchEvent(game.GameStateEvents.GAME);
+	}
+
+	p.playMultiplayerGame = function(e){
+		this.dispatchEvent(game.GameStateEvents.MULTIPLAYER);	
 	}
 
 	p.run = function(tickEvent) {

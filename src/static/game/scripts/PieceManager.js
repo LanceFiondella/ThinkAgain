@@ -44,7 +44,7 @@ function PieceManager(){
 		cp.scaleX = 0.2;
 		cp.scaleY = 0.2;
 		cp.cache(cp.getBounds().x-2,cp.getBounds().y-2,cp.width+4,cp.height+4);
-		play_area.addChild(cp);
+		//play_area.addChild(cp);
 
 		
 		
@@ -57,7 +57,7 @@ function PieceManager(){
 		
 			
 		this.nextPiecePosition();
-		this.adjustPieces();
+		//this.adjustPieces();
 		return cp;
 		
 	};
