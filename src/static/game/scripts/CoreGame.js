@@ -1,6 +1,7 @@
 (function (window){
 	window.game = window.game || {}
 	function CoreGame(){
+		//console.log(this);
 		this.initialize();
 	}
 
@@ -13,7 +14,7 @@
 	p.scrollWheelTimer = null;
 	p.playArea;
 	p.alphaLocked = false;
-
+	p.selected_piece_border = new createjs.Shape();
 	p.gameState = {
 		savedSteps:[],
 		elapsedSeconds:0.0
@@ -32,6 +33,10 @@
 		this.playAreaFrame.setBounds(0,0,stage.canvas.width,stage.canvas.height);
 
 		this.playArea = new createjs.Container();
+
+		//Adding reference to play area 
+		this.pm.playArea = this.playArea;
+		this.pm.coreGame = this;
 		this.playArea.setBounds(0,0,stage.canvas.width,stage.canvas.height);		
 
 		canvas.addEventListener("mousewheel", this.MouseWheelHandler.bind(this), false);
@@ -43,6 +48,7 @@
 		this.PlayAreaBorder.graphics.drawRect(0,0,stage.canvas.width, stage.canvas.height);
 		this.PlayAreaBorder.setBounds(0,0,stage.canvas.width, stage.canvas.height);
 		this.addChild(this.PlayAreaBorder); 
+		window.addEventListener('resize', this.resize.bind(this), false);
 	}
 
 
@@ -64,7 +70,7 @@
 		this.PlayAreaBorder.on("pressup",function(evt){
 				if(this.pressmoveFlag == false){
 					//resetWidths();
-					//resetBoard();
+					this.resetBoard();
 					//pm.adjustPieces();
 				}
 			}.bind(this));
@@ -86,6 +92,49 @@
 		//TODO : Stage Level Name
 
 	}
+
+
+	p.resetBoard = function(){
+		//allPieces = this.pm.getAllPieces();
+		allPieces = this.pm._piece_list;
+		var allpieces_length = allPieces.length;
+		for(var i = 0; i<allpieces_length; i++){
+		
+			allPieces[i].alpha = 1.0;
+			allPieces[i].visible = true;
+			allPieces[i].scaleX = allPieces[i].scaleY = 1.0;
+
+		}
+
+
+		if (typeof this.pm.addedSolvedPieces !== 'undefined'){
+	    	var addedSolvedPIeces_length = this.pm.addedSolvedPieces.length;
+			for(var i = 0; i<addedSolvedPIeces_length;i++){
+				this.playArea.removeChild(this.pm.addedSolvedPieces[i]);
+				}
+		}
+
+	}
+
+	p.resetWidths = function(){
+		//Experimental function called after clicking the board to reset the width of all pieces to their true values
+		allPieces = this.pm.getAllPieces();
+		var allpieces_length = allPieces.length;
+		for(var i = 0; i<allpieces_length; i++){
+			allPieces[i].width = allPieces[i].getBounds().width;
+			}
+	}
+
+	p.resize = function(){
+			canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;  
+            this.playArea.width = this.playAreaFrame.width = canvas.width;
+            this.playArea.height = this.playAreaFrame.height = canvas.height;
+            this.PlayAreaBorder.width = canvas.width;
+            this.PlayAreaBorder.height = canvas.height;
+           	stage.update();
+	}
+
 
 	p.addPieces = function(){
 
@@ -185,6 +234,32 @@
 	this.playArea.scaleY += zoom_val;
 	}
 
+	p.sendStep = function(step){
+	    console.log("sendStep function");
+	    console.log(step);
+	    //Sends steps to the server
+	    var csrf_token = $.cookie('csrftoken');
+	                console.log("Sending Step ajax!")
+	                    $.ajaxSetup({
+	                        beforeSend: function(xhr, settings) {
+	                            //if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+	                                xhr.setRequestHeader("X-CSRFToken", csrf_token);
+	                           // }
+	                        }
+	                    });
+
+	                $.ajax({
+	              type: 'POST',
+	              url: '/save_step/',
+	              data: "problem_name=" + sessionStorage.getItem("filename")+"&username="+ sessionStorage.getItem("username")+"&total_pieces=" + this.pm._total_pieces+ "&total_time=" + this.trackTime + "&solution=" + JSON.stringify(step),
+	              success: function(data){
+	                    response = data;
+	                },
+	              dataType: "json",
+	              async:true
+	            });
+
+	}
 	
 	window.game.CoreGame = CoreGame;
 	}(window));

@@ -59,7 +59,7 @@
 
 	p.gameStateGame = function() {
 		var scene = new game.SinglePlayer();
-		console.log(scene);
+		
 		scene.on(game.GameStateEvents.GAME_OVER, this.onStateEvent, this, false, {state:game.GameStates.GAME_OVER});
 		stage.addChild(scene);
 		stage.removeChild(this.currentScene);
@@ -99,6 +99,23 @@
 		stage.update();
 	}
 
+
+
 	window.game.thinkAgain = thinkAgain;
 
 }(window));
+
+	function arraysEqual(a, b) {
+
+	//Checks if two arrays are equal in value
+  if (a === b) return true;
+  if (a == null || b == null) return false;
+  if (a.length != b.length) return false;
+
+	var a_length = a.length
+  for (var i = 0; i < a_length ; ++i) {
+    if (a[i] !== b[i]) return false;
+  }
+  console.log("Returning");
+  return true;
+}

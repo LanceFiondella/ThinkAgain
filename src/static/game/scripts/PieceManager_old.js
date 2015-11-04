@@ -9,7 +9,6 @@ function PieceManager(){
 	this.currentColumn=0;
 	this.currentRow=0;
 	this.conclusion_piece_number=null;
-	this.new_piece_borders = [];
 	//This array keeps track of the x position of the largest piece in each column
 	this.col_x_positions = new Array();
 	this.col_x_positions.push(160);
@@ -20,158 +19,6 @@ function PieceManager(){
 	this.column_length = 10;
 	};
 
-
-	PieceManager.prototype.tweenMatchingPieces = function(selectedPiece){
-	    console.log("tweenMatchingPieces function`");
-		//Sets alpha of matching pieces to 1, everything else is 0.3
-	    
-	    allPieces = this.getAllPieces();
-	    for(k in selectedPiece.matching){
-	        if (selectedPiece.matching[k]){
-	            allPieces[k].alpha = 1.0;
-	        }
-	        else{
-	            allPieces[k].alpha = 0.0;
-	        }
-	        
-	    }
-
-		};
-
-	PieceManager.prototype.addedSolvedPiece = function(piece){
-		//This function triggers when a solved piece on the board is clicked
-						new_piece = this.addPiece(piece.keys);
-        				piece.parent1.matching[piece.parent2.pieceNum] = false;
-                        piece.parent2.matching[piece.parent1.pieceNum] = false;
-                        this._num_steps++;
-                        
-                        
-                        p1_json = {};
-                        p1_json.pn = piece.parent1.piece_num;
-                        p1_json.pk = piece.parent1.keys;
-
-                        p2_json = {};
-                        p2_json.pn = piece.parent2.piece_num;
-                        p2_json.pk = piece.parent2.keys;
-
-                        parents = {};
-                        parents ["p1"] = p1_json;
-                        parents ["p2"] = p2_json;
-
-                        step = {};
-                        step ["pn"] = new_piece.piece_num;
-                        step ["pk"] = new_piece.keys;
-
-                        step["t"] = this.coreGame.trackTime;
-                        step ["parents"] = parents;
-                        step["ip"] = sessionStorage.ipaddress;
-
-                        this.coreGame.gameState.savedSteps.push(step);
-
-                        //Sending step data to server
-
-                        this.coreGame.sendStep(step);
-
-                        //res.push(this.parent1.piece_num+","+this.parent2.piece_num+","+new_piece.piece_num);
-                        piece.parent2.visible = true;
-                        piece.parent2.alpha = 0.3;
-                        piece.visible = false;
-
-
-                        //Adding a green border around a newly placed piece
-                        np_border = new createjs.Shape();
-                        //np_border.graphics.setStrokeStyle(5).beginStroke("green").drawRect(new_piece.x+new_piece.orgX, new_piece.y+new_piece.orgY, new_piece.width-2, new_piece.height-2)
-                        np_border.graphics.setStrokeStyle(5).beginStroke("green").drawRect(50,0, new_piece.width-2, new_piece.height-2)
-                        this.new_piece_borders.push(np_border);
-                        new_piece.addChild(np_border);
-                        new_piece.updateCache();
-                        
-
-
-                        //Adjusting the widths of removed piece
-                        piece.parent2.width = piece.parent2.getBounds().width;
-
-
-                        //Recalculate all solved pieces again. This is to remove repeated results from the board
-                        this.coreGame.resetBoard();
-                        //pm.adjustPieces();
-                        this.tweenMatchingPieces(piece.parent1);
-                        this.replaceWithSolvedPieces(piece.parent1);
-
-                        this.coreGame.playArea.addChild(new_piece);
-                        //Check if new piece satisfies conclusion
-                        if (new_piece.keys.length == 0){
-                            this.verifyWin();
-                
-                            }
-
-	};
-
-	PieceManager.prototype.replaceWithSolvedPieces = function(selectedPiece){
-		//this.addedSolvedPieces = [];
-		temp_piece_list = [];
-		console.log(selectedPiece.matchingSolutions);
-		for(k in selectedPiece.matching){
-	        if (selectedPiece.matching[k]){
-	            //var new_keys = solveValues(selectedPiece,allPieces[k]);
-	            var new_keys = selectedPiece.matchingSolutions[k];
-	            if (this.checkPiece(new_keys) == false){
-	                    this._piece_list[k].visible = false;
-	                    cp = new game.ClausePiece(new_keys, this._piece_list[k].pieceNum, selectedPiece, this._piece_list[k]);
-	                    //Experimental code may want to add it to a separate function
-	                    this._piece_list[k].width = cp.width;
-	                    //End experiment
-	                    //cp.x = allPieces[k].homeX;
-	                    cp.x = this._piece_list[k].homeX;
-	                    cp.y = this._piece_list[k].homeY;
-	                    
-	                    this.playArea.addChild(cp);
-	                    this.addedSolvedPieces.push(cp);
-	            }
-	            else
-	                this._piece_list[k].alpha = 0.0;
-
-	        	}
-        
-    	}
-	};
-
-
-	PieceManager.prototype.solveValues = function(p1,p2){
-    console.log("solveValues function");
-//This function ONLY solves the two pieces and returns an array for the new piece. 
-//Should be used to solve not display
- 		var num_negations = 0;
-        var p1_keys = p1.keys.slice();
-        var p2_keys = p2.keys.slice();
-		
-		var p1_keys_length = p1_keys.length;
-		var p2_keys_length = p2_keys.length;
-        for(var i = 0; i < p1_keys_length; i++){
-			for(var j = 0; j < p2_keys_length; j++){
-                if(p1_keys[i] == -1*p2_keys[j]){
-                    delete p1_keys[i];
-                    delete p2_keys[j];
-                    num_negations++;
-                    
-                }
-                else if(p1_keys[i] == p2_keys[j]){
-                    delete p1_keys[i];
-                    
-                }
-            
-            }
-        }
-        
-        var new_keys = [];
-        if(num_negations == 1){
-            new_keys = p1_keys.concat(p2_keys).filter(Number);
-            new_keys.sort();
-        }
-        console.log("new keys -  "+new_keys);
-        return new_keys;
-
-	};
 
 	PieceManager.prototype.addPiece = function(st_list){
 		console.log("PieceManager.prototype.addPiece function");
@@ -298,9 +145,9 @@ function PieceManager(){
 		this._conclusion = st_list;
 		cp = new game.ClausePiece(st_list);
 		createjs.Tween.get(cp,{loop:true}).to({scaleX: 0.7, scaleY: 0.7},500).to({scaleX: 1.1, scaleY: 1.1},500).to({scaleX: 1, scaleY: 1},500);
-		cp.pieceNum = this._total_pieces;
+		cp.piece_num = this._total_pieces;
 		this.conclusion_piece_number = this._total_pieces;
-		var piece_num_text = new createjs.Text(cp.pieceNum, "30px Arial","red");
+		var piece_num_text = new createjs.Text(cp.piece_num, "30px Arial","red");
 		cp.x = cp.homeX = this.nPosX;
 		cp.y = cp.homeY = this.nPosY;
 		this.nextPiecePosition();
@@ -349,25 +196,13 @@ function PieceManager(){
         console.log("PieceManager.prototype.getMatchingPiecesPositions function");
 		var this_piece_list_length = this._piece_list.length;
 		for(var i =0;i<this_piece_list_length;i++){
-			if(this.negationPresent(selectedPiece,this._piece_list[i]) && selectedPiece.pieceNum != i){
-				console.log(selectedPiece.pieceNum,i);
+			if(this.negationPresent(selectedPiece,this._piece_list[i]) && selectedPiece.piece_num != i){
 				selectedPiece.matching[i] = true;
-                this._piece_list[i].matching[selectedPiece.pieceNum] = true;
-                var solution = this.solveValues(selectedPiece,this._piece_list[i]);
-                console.log(selectedPiece.keys==this._piece_list[i].keys);
-                selectedPiece.matchingSolutions[i] = this.solveValues(selectedPiece,this._piece_list[i]);
-                
-                
-                this._piece_list[i].matchingSolutions[selectedPiece.pieceNum] = this.solveValues(selectedPiece,this._piece_list[i]);
-                
-				console.log(this._piece_list[i].matchingSolutions);
+                this._piece_list[i].matching[selectedPiece.piece_num] = true;
 			}
             else{
                 selectedPiece.matching[i] = false;
-                this._piece_list[i].matching[selectedPiece.pieceNum] = false;
-				//selectedPiece.matchingSolutions[i] = [];
-                
-                //this._piece_list[i].matchingSolutions[selectedPiece.pieceNum] = [];                
+                this._piece_list[i].matching[selectedPiece.piece_num] = false;
             }
 			
 		}
@@ -377,7 +212,7 @@ function PieceManager(){
     
 	
 	PieceManager.prototype.getAllPieces =  function(){
-		//console.log("PieceManager.prototype.getAllPieces function");
+		console.log("PieceManager.prototype.getAllPieces function");
 		result = [];
 		var this_piece_list_length = this._piece_list.length;
 		for(var i =0;i<this_piece_list_length;i++){
@@ -419,7 +254,7 @@ function PieceManager(){
 		return result;
 	};
 
-/*
+
 	PieceManager.prototype.popPiece = function(){
 			//cp = pm._piece_list.splice(piece_num,1)[0];
 			console.log("PieceManager.prototype.popPiece function");
@@ -434,8 +269,6 @@ function PieceManager(){
 			
 			pm._piece_list[parseInt(res1[0])].matching[parseInt(res1[1])] = true;
 			pm._piece_list[parseInt(res1[1])].matching[parseInt(res1[0])] = true;
-
-			//solution = solveValues(selectedPiece,_piece_list[i]);
 
 
 			var this_piece_list_length = this._piece_list.length;
@@ -462,10 +295,10 @@ function PieceManager(){
 			}
 
 	};
-*/	
+	
 
 	PieceManager.prototype.checkPiece = function(st_list){
-		//console.log("PieceManager.prototype.checkPiece function");
+		console.log("PieceManager.prototype.checkPiece function");
 		//This function checks if the piece passed to this function exists in the _piece_list. Accepts an array of integers representing the piece
 		var result = false;
 		for (var i =0; i< this._piece_list.length; i++){
@@ -529,8 +362,8 @@ function PieceManager(){
 				}
 
 			for(var i=0; i< this.addedSolvedPieces.length; i++){
-				if(this.addedSolvedPieces[i].pieceNum>this.column_length-1){
-				this.addedSolvedPieces[i].homeX = this.col_x_positions[Math.floor(this.addedSolvedPieces[i].pieceNum/this.column_length)];
+				if(this.addedSolvedPieces[i].piece_num>this.column_length-1){
+				this.addedSolvedPieces[i].homeX = this.col_x_positions[Math.floor(this.addedSolvedPieces[i].piece_num/this.column_length)];
 				createjs.Tween.get(this.addedSolvedPieces[i]).to({x: this.addedSolvedPieces[i].homeX, y: this.addedSolvedPieces[i].homeY}, 500, createjs.Ease.elasticOut);
 			}
 
@@ -551,9 +384,8 @@ function PieceManager(){
 			this._piece_list[i].y = this._piece_list[i].homeY = this.nPosY;
 			this.nextPiecePosition();
 
-		};
-
-	
+		}
 
 
-	};
+
+	}
