@@ -109,14 +109,21 @@ function PieceManager(){
 
 	PieceManager.prototype.replaceWithSolvedPieces = function(selectedPiece){
 		//this.addedSolvedPieces = [];
-		temp_piece_list = [];
-		console.log(selectedPiece.matchingSolutions);
+		this.temp_piece_list = [];
+		
+		console.log(this._total_pieces)
+		for(i=0;i < this._total_pieces;i++){
+			if (i != selectedPiece.pieceNum)
+				this._piece_list[i].visible = false;
+		}
+
 		for(k in selectedPiece.matching){
 	        if (selectedPiece.matching[k]){
 	            //var new_keys = solveValues(selectedPiece,allPieces[k]);
 	            var new_keys = selectedPiece.matchingSolutions[k];
-	            if (this.checkPiece(new_keys) == false){
-	                    this._piece_list[k].visible = false;
+	            console.log("New keys = " + new_keys);
+	           // if (this.checkPiece(new_keys) == false){
+	                    //this._piece_list[k].visible = false;
 	                    cp = new game.ClausePiece(new_keys, this._piece_list[k].pieceNum, selectedPiece, this._piece_list[k]);
 	                    //Experimental code may want to add it to a separate function
 	                    this._piece_list[k].width = cp.width;
@@ -127,9 +134,9 @@ function PieceManager(){
 	                    
 	                    this.playArea.addChild(cp);
 	                    this.addedSolvedPieces.push(cp);
-	            }
-	            else
-	                this._piece_list[k].alpha = 0.0;
+	            //}
+	            //else
+	            //    this._piece_list[k].alpha = 0.0;
 
 	        	}
         
@@ -168,7 +175,7 @@ function PieceManager(){
             new_keys = p1_keys.concat(p2_keys).filter(Number);
             new_keys.sort();
         }
-        console.log("new keys -  "+new_keys);
+        
         return new_keys;
 
 	};
@@ -224,7 +231,7 @@ function PieceManager(){
 				el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
 
 				//Stop timer
-				clearInterval(timerId);
+				clearInterval(this.CoreGame.timerId);
 
 				//Add time and steps to win window
 				document.getElementById("steps_text").innerHTML = "Total Pieces : " + pm._total_pieces;

@@ -25,9 +25,17 @@
 
 	p.addSolvedPieceMouseProperties = function(parent1, parent2){
 		console.log("Add solved mouse prop function");
-		console.log(parent1,parent2)
+		//console.log(parent1,parent2)
 		this.parent1 = parent1;
 		this.parent2 = parent2;
+
+		//Adding a border around the piece to show that its different
+		var border = new createjs.Shape();
+		border.graphics.setStrokeStyle(6);
+		border.graphics.beginStroke("blue");
+		border.graphics.drawRoundRect(50, 0, 100*this.keys.length, 100,20);
+		this.addChild(border);
+
 		this.on("click", function(evt){
 			console.log("solved piece clicked");
                 var add_piece = true;
@@ -44,11 +52,8 @@
 
 
                 if (add_piece){
-                	
-                		this.parent.parent.pm.addedSolvedPiece(this);
-        				
-                        
-                }
+                	this.parent.parent.pm.addedSolvedPiece(this);
+        				}
 
 
 	}.bind(this));

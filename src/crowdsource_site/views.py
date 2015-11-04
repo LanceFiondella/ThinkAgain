@@ -151,7 +151,7 @@ def save_step(request):
 		
 
 		data = json.loads(solution)	
-
+		print data
 		try:
 			incompSolution = Solution.objects.get(username=user,problem=problem,abandoned=False,complete=False)
 			incompSolution.solution += "," + solution

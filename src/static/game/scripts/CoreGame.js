@@ -33,7 +33,7 @@
 		this.playAreaFrame.setBounds(0,0,stage.canvas.width,stage.canvas.height);
 
 		this.playArea = new createjs.Container();
-
+		this.playArea.y = 50;
 		//Adding reference to play area 
 		this.pm.playArea = this.playArea;
 		this.pm.coreGame = this;
@@ -82,12 +82,18 @@
 		this.playAreaText.y = 20;
 
 		//Change parent to canvas later
-		this.playArea.addChild(this.playAreaText);
+		this.addChild(this.playAreaText);
 		this.addChild(this.playArea);
 
 		//TODO : Add mask
 
 		//TODO : Animate Timer
+		this.timerId = setInterval(function () {this.trackTime++; 
+  							if (Math.trunc(this.trackTime%60) < 10)
+  								this.playAreaText.text = "Time : " +  Math.trunc(this.trackTime/60) +":0"+ (Math.trunc(this.trackTime%60));
+  							else
+  								this.playAreaText.text = "Time : " + Math.trunc(this.trackTime/60) +":"+ (Math.trunc(this.trackTime%60));
+  							 }.bind(this), 1000);
 
 		//TODO : Stage Level Name
 
