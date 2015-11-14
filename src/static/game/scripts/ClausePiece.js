@@ -13,10 +13,14 @@
 			this.addMouseProperties();
 		else if (arguments.length==4)
 			this.addSolvedPieceMouseProperties(parent1, parent2)
+		//Reference to core game
+		//this.coreGame = this.parent.parent;
 	}
 
 	var p = ClausePiece.prototype = new createjs.Container();
 	p.Container_initialize = p.initialize;
+
+
 	//p.matching = {};
 	//p.matchingSolutions = {};
 	p.initialize = function(){
@@ -31,19 +35,20 @@
 
 		//Adding a border around the piece to show that its different
 		var border = new createjs.Shape();
+
 		border.graphics.setStrokeStyle(6);
 		border.graphics.beginStroke("blue");
 		border.graphics.drawRoundRect(50, 0, 100*this.keys.length, 100,20);
-		this.addChild(border);
+		if (this.keys.length != 0)
+			this.addChild(border);
 
 		this.on("click", function(evt){
 			console.log("solved piece clicked");
                 var add_piece = true;
             
-            if (this.parent.parent.pm.checkPiece(evt.currentTarget.keys)){
+            if (this.coreGame.pm.checkPiece(evt.currentTarget.keys)){
                 console.log("Duplicate piece!!!");
-                //Flashing the piece
-                    //createjs.Tween.get(pm._piece_list[i]).to({alpha:0}).wait(250).to({alpha:1}).wait(250).to({alpha:0}).wait(250).to({alpha:1}).wait(250).to({alpha:0}).wait(250).to({alpha:1}).wait(250).to({alpha:0}).wait(250).to({alpha:0.3});
+                
                     add_piece = false;
                     parent1.matching[this.parent2.pieceNum] = false;
                     parent2.matching[this.parent1.pieceNum] = false;
@@ -52,7 +57,7 @@
 
 
                 if (add_piece){
-                	this.parent.parent.pm.addedSolvedPiece(this);
+                	this.coreGame.pm.addedSolvedPiece(this);
         				}
 
 
@@ -64,7 +69,25 @@
 		this.on("mousedown",function(evt){
 			console.log("UNsolved piece clicked");
 			createjs.Tween.get(evt.currentTarget).to({scaleX: 1.0, scaleY: 1.0}).to({scaleX: 0.75, scaleY: 0.75}, 250);
-			this.parent.parent.pm.replaceWithSolvedPieces(this);
+			this.coreGame.pm.replaceWithSolvedPieces(this);
+
+			//Removing red border from previously selected piece
+			prev_piece = this.coreGame.selected_piece_border.parent;
+        	if(prev_piece != null){
+	            prev_piece.removeChild(this.coreGame.selected_piece_border);
+	            
+	        }
+	        this.coreGame.selected_piece_border.graphics.clear().setStrokeStyle(5).beginStroke("#ff0000").drawRoundRect(50, 0, evt.currentTarget.keys.length*100, evt.currentTarget.height, 20);
+	        console.log("width = " + evt.currentTarget.keys.length);
+	        this.addChild(this.coreGame.selected_piece_border);
+
+	        //Removing green borders from pieces added from previous steps
+	        var npb_length = this.coreGame.pm.new_piece_borders.length;
+	        for (var i =npb_length-1; i>=0; i--){
+	            green_piece = this.coreGame.pm.new_piece_borders[i].parent
+	            green_piece.removeChild(this.coreGame.pm.new_piece_borders[i]);
+	            delete this.coreGame.pm.new_piece_borders.pop();
+		        }
 		}.bind(this));
 	}
 
@@ -77,6 +100,9 @@
 		if (keysLength == 0){
 			var star_image = new createjs.Bitmap("images/star.jpg");
         	star_image.scaleX = star_image.scaleY = 0.3;
+        	star_image.x = 50;
+        	//star_image.regX = star_image.getBounds().width/2;
+        	//star_image.regY = star_image.getBounds().height/2;
             this.addChild(star_image);
 		}
 
@@ -97,6 +123,7 @@
                     atom.graphics.beginFill("black");   
                     atom.graphics.beginStroke("white");
 				}
+
 			atom.graphics.drawRoundRect(100*i+50, 0, 102-2*BORDER_THICKNESS, 102-2*BORDER_THICKNESS,20);
 			atom.setBounds(100*i+50, 0, 102-2*BORDER_THICKNESS, 102-2*BORDER_THICKNESS);
 			this.addChild(atom);

@@ -80,25 +80,18 @@ function PieceManager(){
 
                         //Adding a green border around a newly placed piece
                         np_border = new createjs.Shape();
-                        //np_border.graphics.setStrokeStyle(5).beginStroke("green").drawRect(new_piece.x+new_piece.orgX, new_piece.y+new_piece.orgY, new_piece.width-2, new_piece.height-2)
-                        np_border.graphics.setStrokeStyle(5).beginStroke("green").drawRect(50,0, new_piece.width-2, new_piece.height-2)
+                        np_border.graphics.setStrokeStyle(5).beginStroke("green").drawRoundRect(50,0, new_piece.width-2, new_piece.height-2,20);
                         this.new_piece_borders.push(np_border);
                         new_piece.addChild(np_border);
-                        new_piece.updateCache();
                         
-
-
                         //Adjusting the widths of removed piece
                         piece.parent2.width = piece.parent2.getBounds().width;
 
-
                         //Recalculate all solved pieces again. This is to remove repeated results from the board
                         this.coreGame.resetBoard();
-                        //pm.adjustPieces();
                         this.tweenMatchingPieces(piece.parent1);
                         this.replaceWithSolvedPieces(piece.parent1);
-
-                        this.coreGame.playArea.addChild(new_piece);
+						this.coreGame.playArea.addChild(new_piece);
                         //Check if new piece satisfies conclusion
                         if (new_piece.keys.length == 0){
                             this.verifyWin();
@@ -131,7 +124,7 @@ function PieceManager(){
 	                    //cp.x = allPieces[k].homeX;
 	                    cp.x = this._piece_list[k].homeX;
 	                    cp.y = this._piece_list[k].homeY;
-	                    
+	                    cp.coreGame = this.coreGame;
 	                    this.playArea.addChild(cp);
 	                    this.addedSolvedPieces.push(cp);
 	            //}
@@ -203,7 +196,7 @@ function PieceManager(){
 		
 		cp.scaleX = 0.2;
 		cp.scaleY = 0.2;
-		cp.cache(cp.getBounds().x-2,cp.getBounds().y-2,cp.width+4,cp.height+4);
+		//cp.cache(cp.getBounds().x-2,cp.getBounds().y-2,cp.width+4,cp.height+4);
 		//play_area.addChild(cp);
 
 		
@@ -217,6 +210,7 @@ function PieceManager(){
 		
 			
 		this.nextPiecePosition();
+		cp.coreGame = this.coreGame;
 		//this.adjustPieces();
 		return cp;
 		
@@ -318,7 +312,7 @@ function PieceManager(){
 		cp.addChild(piece_num_text);
 		this._piece_list.push(cp);
 		this._total_pieces++;
-		cp.cache(cp.getBounds().x,cp.getBounds().y,cp.width,cp.height);
+		//cp.cache(cp.getBounds().x,cp.getBounds().y,cp.width,cp.height);
 		return cp;
 	};
 	
