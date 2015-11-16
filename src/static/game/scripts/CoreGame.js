@@ -19,6 +19,7 @@
 		savedSteps:[],
 		elapsedSeconds:0.0
 	};
+	
 
 	p.initialize = function(){
 		this.Container_initialize();
@@ -176,7 +177,9 @@
 			else{
 				this.pm.addPiece(temp);
 
-				this.playArea.addChild(this.pm._piece_list[i]);
+				
+
+				//this.playArea.addChild(this.pm._piece_list[i]);
 				this.pm._piece_list[i].piece_num = i;
 			}
 		}
