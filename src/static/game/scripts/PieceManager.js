@@ -16,6 +16,7 @@ function PieceManager(){
 
 	this.addedSolvedPieces = [];
 	this.panelList = {};
+	this.panelListLength = 0;
 	//Current length of a column
 	this.column_length = 10;
 	};
@@ -99,7 +100,8 @@ function PieceManager(){
         this.coreGame.resetBoard();
         this.tweenMatchingPieces(piece.parent1);
         this.replaceWithSolvedPieces(piece.parent1);
-		this.coreGame.playArea.addChild(new_piece);
+		//this.addPiece(new_piece);
+		//this.coreGame.playArea.addChild(new_piece);
         //Check if new piece satisfies conclusion
         if (new_piece.keys.length == 0){
             this.verifyWin();
@@ -121,7 +123,7 @@ function PieceManager(){
 		}
 
 		for(k in selectedPiece.matching){
-	        if (selectedPiece.matching[k]){
+	        if (selectedPiece.matching[k] && !this.checkPiece(selectedPiece.matchingSolutions[k])){
 	            var new_keys = selectedPiece.matchingSolutions[k];
 	            //console.log("New keys = " + new_keys);       
 	            cp = new game.ClausePiece(new_keys, this._piece_list[k].pieceNum, selectedPiece, this._piece_list[k]);
@@ -132,7 +134,8 @@ function PieceManager(){
 	            cp.x = this._piece_list[k].homeX;
 	            cp.y = this._piece_list[k].homeY;
 	            cp.coreGame = this.coreGame;
-	            this.playArea.addChild(cp);
+	            //this.playArea.addChild(cp);
+	            this.panelList[this._piece_list[k].keys.length].displayPiece(cp);
 	            this.addedSolvedPieces.push(cp);
 	        }
         }
@@ -202,20 +205,60 @@ function PieceManager(){
 					
 				}
 
-		//return cp;
+		return cp;
 		
 	};
 
+
+
+	PieceManager.prototype.removePiece = function(piece){
+		//var keyLength = piece.keys.length;
+		panel = piece.parent;
+		panel.removeChild(piece);
+	}
+
 	PieceManager.prototype.addPanel = function(cp){
 		keyLength = cp.keys.length;
-		//for (var i = this.panelList.length; i<keyLength;i++){
-			var panel = new game.PiecePanel(keyLength);
-			this.coreGame.playArea.addChild(panel);
-			this.panelList[keyLength] = panel;
-				
-		//}
+		var panel = new game.PiecePanel(keyLength);
+		this.coreGame.playArea.addChild(panel);
+		this.panelList[keyLength] = panel;
 		this.panelList[cp.keys.length].addPiece(cp);
+		this.panelListLength += 1;
 		
+	};
+
+	PieceManager.prototype.arrangePanels = function(){
+		pieceSizes = [];
+		for (k in this.panelList) {
+			if (this.panelList.hasOwnProperty(k))
+				pieceSizes.push(parseInt(k));
+		}
+
+		pieceSizes.sort(this.coreGame.sortNumber);
+		//console.log("Piecesizes = " + pieceSizes);
+		len = pieceSizes.length;
+		this.panelList[pieceSizes[0]].x = 0;
+		for(var i=1;i < len;i++){
+			//console.log(this.panelList[pieceSizes[i-1]].x + " + " + this.panelList[pieceSizes[i-1]].getBounds().width);
+			this.panelList[pieceSizes[i]].x = this.panelList[pieceSizes[i-1]].x + this.panelList[pieceSizes[i-1]].getBounds().width;
+		}
+	}
+
+	PieceManager.prototype.adjustPanelSize = function(zoomVal){
+		pieceSizes = [];
+		for (k in this.panelList) {
+			if (this.panelList.hasOwnProperty(k))
+				pieceSizes.push(parseInt(k));
+		}
+		pieceSizes.sort(this.coreGame.sortNumber);
+		len = pieceSizes.length;
+
+		for(var i=0;i<len;i++){
+			this.panelList[pieceSizes[i]].updatePanelSize(zoomVal);
+			
+		}
+		this.arrangePanels();
+
 	};
 
 	/**

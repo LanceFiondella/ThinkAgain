@@ -113,12 +113,17 @@
 
 		}
 
-
+		this.pm.arrangePanels();
+		//console.log("Added solved pieces : " + this.pm.addedSolvedPieces);
 		if (typeof this.pm.addedSolvedPieces !== 'undefined'){
+
 	    	var addedSolvedPIeces_length = this.pm.addedSolvedPieces.length;
 			for(var i = 0; i<addedSolvedPIeces_length;i++){
-				this.playArea.removeChild(this.pm.addedSolvedPieces[i]);
+				//this.playArea.removeChild(this.pm.addedSolvedPieces[i]);
+				this.pm.removePiece(this.pm.addedSolvedPieces[i]);
 				}
+			this.pm.addedSolvedPieces = [];
+
 		}
 
 	}
@@ -172,7 +177,7 @@
 			//If piece is last one assign it as a conclusion piece
 			if (i == pieceNumberList.length-1 ){
 				con_piece = this.pm.setConclusion(temp);
-				this.playArea.addChild(con_piece);
+				
 			}
 			else{
 				this.pm.addPiece(temp);
@@ -241,6 +246,9 @@
     	//this.zoom(zoom_val);
     this.playArea.scaleX += zoom_val;
 	this.playArea.scaleY += zoom_val;
+
+	//Change the size of the panels
+	this.pm.adjustPanelSize(zoom_val);
 	}
 
 	p.sendStep = function(step){
