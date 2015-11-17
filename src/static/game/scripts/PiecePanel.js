@@ -14,10 +14,12 @@
 		this.colLen = 0;
 		this.totalPieces = 0;
 		this.pieceList = [];
+		this.tempPieceList = []
 		this.addBorder();
 		this.positionContainer();
-		this.nPosX=(this.pieceLength*100+100)/2;
-		this.nPosY=75;
+		this.nPosX = this.tempNPosX = (this.pieceLength*100+100)/2;
+		this.nPosY = this.tempNPosY = 75;
+
 	}
 
 	p.positionContainer = function(){
@@ -45,8 +47,18 @@
 		this.pieceList.push(newPiece);
 	}
 
+	p.addTempPiece = function(newPiece){
+		newPiece.x = newPiece.homeX = this.tempNPosX;
+		newPiece.y = newPiece.homeY = this.tempNPosY;
+		this.addChild(newPiece);
+		this.tempNPosY += 125;
+		this.tempPieceList.push(newPiece);
+
+	}
+
 	p.displayPiece = function(solvedPiece){
 		this.addChild(solvedPiece);
+		console.log(solvedPiece.parent);
 
 	}
 

@@ -31,10 +31,12 @@ function PieceManager(){
 	    allPieces = this.getAllPieces();
 	    for(k in selectedPiece.matching){
 	        if (selectedPiece.matching[k]){
-	            allPieces[k].alpha = 1.0;
+	            //allPieces[k].alpha = 1.0;
+	            allPieces[k].visible = true;
 	        }
 	        else{
-	            allPieces[k].alpha = 0.0;
+	            //allPieces[k].alpha = 0.0;
+	            allPieces[k].visible = false;
 	        }
 	        
 	    }
@@ -99,9 +101,9 @@ function PieceManager(){
         //Recalculate all solved pieces again. This is to remove repeated results from the board
         this.coreGame.resetBoard();
         this.tweenMatchingPieces(piece.parent1);
-        this.replaceWithSolvedPieces(piece.parent1);
+        this.replaceWithSolvedPiecesAlternate(piece.parent1);
 		//this.addPiece(new_piece);
-		//this.coreGame.playArea.addChild(new_piece);
+
         //Check if new piece satisfies conclusion
         if (new_piece.keys.length == 0){
             this.verifyWin();
@@ -121,7 +123,8 @@ function PieceManager(){
 			if (i != selectedPiece.pieceNum)
 				this._piece_list[i].visible = false;
 		}
-
+	
+		
 		for(k in selectedPiece.matching){
 	        if (selectedPiece.matching[k] && !this.checkPiece(selectedPiece.matchingSolutions[k])){
 	            var new_keys = selectedPiece.matchingSolutions[k];
@@ -140,6 +143,45 @@ function PieceManager(){
 	        }
         }
 	};
+
+	
+	/**
+	* Instead of replacing the pieces at the same position, this function places the result in the appropriate panel
+	*
+	*/
+	PieceManager.prototype.replaceWithSolvedPiecesAlternate = function(selectedPiece){
+		this.temp_piece_list = [];
+		//console.log(this._total_pieces)
+		for(i=0;i < this._total_pieces;i++){
+			if (i != selectedPiece.pieceNum)
+				this._piece_list[i].visible = false;
+		}
+	
+		
+		for(k in selectedPiece.matching){
+	        if (selectedPiece.matching[k] && !this.checkPiece(selectedPiece.matchingSolutions[k])){
+	            var new_keys = selectedPiece.matchingSolutions[k];
+	            //console.log("New keys = " + new_keys);       
+	            cp = new game.ClausePiece(new_keys, this._piece_list[k].pieceNum, selectedPiece, this._piece_list[k]);
+	            //Experimental code may want to add it to a separate function
+	            //this._piece_list[k].width = cp.width;
+	            //End experiment
+	            //cp.x = allPieces[k].homeX;
+	            cp.x = this._piece_list[k].homeX;
+	            cp.y = this._piece_list[k].homeY;
+	            cp.coreGame = this.coreGame;
+	            //this.playArea.addChild(cp);
+	            if(cp.keys.length in this.panelList){
+	            	this.panelList[cp.keys.length].addTempPiece(cp);
+	            }
+	            else{
+	            	this.addPanel(cp,true);
+	            }
+	            this.addedSolvedPieces.push(cp);
+	        }
+        }
+        this.arrangePanels();
+	}
 
 
 	/**
@@ -200,9 +242,7 @@ function PieceManager(){
 					this.panelList[cp.keys.length].addPiece(cp)
 				}
 				else{
-					
-					this.addPanel(cp);
-					
+					this.addPanel(cp,false);
 				}
 
 		return cp;
@@ -210,23 +250,51 @@ function PieceManager(){
 	};
 
 
-
+	/**
+	*Remove piece from the panel
+	*@param {ClausePiece} piece - The piece to be removed
+	* 
+	*/
 	PieceManager.prototype.removePiece = function(piece){
 		//var keyLength = piece.keys.length;
 		panel = piece.parent;
 		panel.removeChild(piece);
 	}
 
-	PieceManager.prototype.addPanel = function(cp){
+	PieceManager.prototype.resetPanels = function(){
+		for (k in this.panelList) {
+			this.panelList[k].tempNPosY = 75;
+			this.panelList[k].tempNPosX = (this.panelList[k].pieceLength*100+100)/2;
+		}
+	}
+
+	/**
+	*Adds a new panel based on the size of the supplied piece
+	*@param - {ClausePiece} cp - Piece for which the new panel is to be created
+	*@param - {Bool} temp - To indicate whether the piece to be added is temporary or permanent
+	*/
+	PieceManager.prototype.addPanel = function(cp,temp){
 		keyLength = cp.keys.length;
 		var panel = new game.PiecePanel(keyLength);
 		this.coreGame.playArea.addChild(panel);
+		if (!temp){
 		this.panelList[keyLength] = panel;
 		this.panelList[cp.keys.length].addPiece(cp);
 		this.panelListLength += 1;
+		}
+		else{
+			this.panelList[keyLength] = panel;
+		this.panelList[cp.keys.length].addTempPiece(cp);
+		this.panelListLength += 1;
+
+		}
 		
 	};
 
+	/**
+	*Arranges the panels based on the piece length and the size of the previous panel
+	*
+	*/
 	PieceManager.prototype.arrangePanels = function(){
 		pieceSizes = [];
 		for (k in this.panelList) {
@@ -244,6 +312,10 @@ function PieceManager(){
 		}
 	}
 
+	/**
+	*Adjust the size of the panel based on zoom level and the number of pieces in the panel (Needs work)
+	*@param {float} zoomVal - Current value of the zoom
+	*/
 	PieceManager.prototype.adjustPanelSize = function(zoomVal){
 		pieceSizes = [];
 		for (k in this.panelList) {
@@ -319,7 +391,7 @@ function PieceManager(){
 				}
 				else{
 					
-					this.addPanel(cp);
+					this.addPanel(cp,false);
 					
 				}
 

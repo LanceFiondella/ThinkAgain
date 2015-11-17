@@ -122,6 +122,19 @@
 			el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
 	}
 
+	function httpGet(theUrl)
+	{
+		//console.log("httpGet function");
+	    
+	    var xmlHttp = null;
+
+	    xmlHttp = new XMLHttpRequest();
+	    xmlHttp.open( "GET", theUrl, false );
+	    xmlHttp.send( "filename=" + sessionStorage.getItem("filename") );
+	    //alert(" = > "+xmlHttp.responseText);
+	    return xmlHttp.responseText;
+	}
+
 	function Next_Problem(){
 		var filename = sessionStorage.getItem('filename');
 		var file = filename.split(".");

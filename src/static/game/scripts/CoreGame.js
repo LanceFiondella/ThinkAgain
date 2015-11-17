@@ -88,7 +88,7 @@
 
 		//TODO : Add mask
 
-		//TODO : Animate Timer
+		//Timer
 		this.timerId = setInterval(function () {this.trackTime++; 
   							if (Math.trunc(this.trackTime%60) < 10)
   								this.playAreaText.text = "Time : " +  Math.trunc(this.trackTime/60) +":0"+ (Math.trunc(this.trackTime%60));
@@ -97,6 +97,7 @@
   							 }.bind(this), 1000);
 
 		//TODO : Stage Level Name
+
 
 	}
 
@@ -120,8 +121,10 @@
 	    	var addedSolvedPIeces_length = this.pm.addedSolvedPieces.length;
 			for(var i = 0; i<addedSolvedPIeces_length;i++){
 				//this.playArea.removeChild(this.pm.addedSolvedPieces[i]);
+				//console.log(this.pm.addedSolvedPieces[i]);
 				this.pm.removePiece(this.pm.addedSolvedPieces[i]);
 				}
+			this.pm.resetPanels();
 			this.pm.addedSolvedPieces = [];
 
 		}
@@ -181,13 +184,13 @@
 			}
 			else{
 				this.pm.addPiece(temp);
-
-				
-
 				//this.playArea.addChild(this.pm._piece_list[i]);
 				this.pm._piece_list[i].piece_num = i;
 			}
 		}
+
+		this.addSavedPieces();
+		this.resetBoard();
 	}
 
 
@@ -215,6 +218,48 @@
 			});
       
     return response;
+	}
+
+	p.getSavedGame = function(){
+    
+		var response;
+		var csrf_token = $.cookie('csrftoken');
+	    $.ajaxSetup({
+	            beforeSend: function(xhr, settings) {
+	            //if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+	                xhr.setRequestHeader("X-CSRFToken", csrf_token);
+	              //             }
+	                        }
+	                    });
+
+	                $.ajax({
+	              type: 'POST',
+	              url: '/get_saved_game/',
+	              data: "problem_name=" + sessionStorage.getItem("filename")+"&username="+ sessionStorage.getItem("username"),
+	              success: function(data){
+	                    response =data;
+	                },
+	              dataType: "json",
+	              async:false
+	            });
+	    return response;
+	}
+
+	p.addSavedPieces = function(){
+		if ($.isEmptyObject(this.getSavedGame())) { 
+				console.log("--No Saved Game--"); 
+				} else {
+			console.log("--Yes Saved Game--");
+			var result = this.getSavedGame();
+		if (result.steps){
+			this.gameState.saved_steps = $.parseJSON(result.steps);
+			this.trackTime = this.gameState.saved_steps[this.gameState.saved_steps.length-1].t;
+			}
+			
+			for (var i=0;i<this.gameState.saved_steps.length;i++) {
+				this.pm.addPiece(this.gameState.saved_steps[i].pk);
+			}
+		}	
 	}
 
 	p.csrfSafeMethod = function(method) {

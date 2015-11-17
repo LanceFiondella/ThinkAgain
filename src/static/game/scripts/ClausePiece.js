@@ -69,7 +69,8 @@
 		this.on("mousedown",function(evt){
 			console.log("UNsolved piece clicked");
 			createjs.Tween.get(evt.currentTarget).to({scaleX: 1.0, scaleY: 1.0}).to({scaleX: 0.75, scaleY: 0.75}, 250);
-			this.coreGame.pm.replaceWithSolvedPieces(this);
+			//this.coreGame.pm.replaceWithSolvedPieces(this);
+			this.coreGame.pm.replaceWithSolvedPiecesAlternate(this);
 
 			//Removing red border from previously selected piece
 			prev_piece = this.coreGame.selected_piece_border.parent;
