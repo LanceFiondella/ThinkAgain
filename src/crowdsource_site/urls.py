@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^save_step/','crowdsource_site.views.save_step',name='save_step'),
     url(r'^abandon_game/','crowdsource_site.views.abandon_game',name='abandon_game'),
     url(r'^get_saved_game/','crowdsource_site.views.get_saved_game',name='get_saved_game'),
+    url(r'^irb_approval/','crowdsource_site.views.irb_approval',name='irb_approval'),
     # url(r'^blog/', include('blog.urls')),
 
     

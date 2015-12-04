@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CrowdLogic</title>
+
+
+</head>
+ 
+<body onload="init()">
+
+<p> Select the problem to solve : </p>
+<p id=p1> Test1</p>
+
+
+<script type="text/javascript" language="JavaScript"><!--
+function init() {
+var text = httpGet("./cgi-bin/get_problem_files.py").toString();
+document.getElementById("p1").innerHTML = text;
+}
+
+function httpGet(theUrl)
+{
+    var xmlHttp = null;
+
+    xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", theUrl, false );
+    xmlHttp.send( null );
+    return xmlHttp.responseText;
+}
+//--></script>
+
+
+ 
+</body>
+ 
+
+</html>

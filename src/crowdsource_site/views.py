@@ -106,11 +106,15 @@ def game_menu(request):
 def get_problem_files(request):
 	#Temp function to get problem files (replaces cgi script get_problem_files.py)
 	dict_of_files = {}
-	print "Getting problem files : " + os.path.join(BASE_DIR, 'templates','game','problems')
-	list_of_files = os.listdir(os.path.join(BASE_DIR, 'static','game','problems'))
+	#print "Getting problem files : " + os.path.join(BASE_DIR, 'templates','game','problems')
+	#list_of_files = os.listdir(os.path.join(BASE_DIR, 'static','game','problems'))
+	all_problems = Problem.objects.all()
 	
+	list_of_files = []
+	for p in all_problems:
+		list_of_files.append(p.name) 
 	for i in range(len(list_of_files)):
-	    dict_of_files[list_of_files[i][:-4]] = list_of_files[i]
+	    dict_of_files[list_of_files[i]] = list_of_files[i]
 	return HttpResponse(json.dumps(dict_of_files), content_type = "application/json")
 
 def generate_problem(request):
@@ -121,9 +125,11 @@ def generate_problem(request):
 		response_data = {}
 		game_filename = request.POST['filename']
 		piece_list = {}
-
-		problem_file = open(os.path.join(BASE_DIR, 'static','game','problems',game_filename))
-		total_atoms = problem_file.next()
+		problem = Problem.objects.get(name=game_filename)
+		
+		problem_file = problem.initial_state
+		problem_file = problem_file.splitlines()
+		total_atoms = problem_file.pop(0)
 		for i,line in enumerate(problem_file):
 		    #Return only lines with text
 		    if line.rstrip():
@@ -141,7 +147,7 @@ def save_step(request):
 	data = {}
 	if request.method == 'POST':
 		#print request.POST
-		problem_name = request.POST['problem_name'][:-4]
+		problem_name = request.POST['problem_name']
 		username = request.POST['username']
 		total_pieces = int(request.POST['total_pieces'])
 		total_time = int(request.POST['total_time'])
@@ -160,6 +166,7 @@ def save_step(request):
 			print "Solution did not exist! Creating new"
 		incompSolution.total_pieces=total_pieces
 		incompSolution.time_taken=total_time
+		data['gameID'] = incompSolution.pk
 		if (len(data["pk"]) == 0):
 			incompSolution.complete = True
 
@@ -171,14 +178,14 @@ def abandon_game(request):
 	context = RequestContext(request)
 	data = {}
 	if request.method == 'POST':
-		#print request.POST
+		print request.POST
 		problem_name = request.POST['problem_name'][:-4]
 		username = request.POST['username']
 
 		user = User.objects.get(username=username)
-		#print user
+		print user
 		problem = Problem.objects.get(name=problem_name)
-		#print problem
+		print problem
 		try:
 			incompSolution = Solution.objects.get(username=user,problem=problem,abandoned=False,complete=False)
 			incompSolution.abandoned = True
@@ -193,20 +200,27 @@ def get_saved_game(request):
 	context = RequestContext(request)
 	data = {}
 	if request.method == 'POST':
-		#print request.POST
-		problem_name = request.POST['problem_name'][:-4]
+		print request.POST
+		problem_name = request.POST['problem_name']
 		username = request.POST['username']
 
 		user = User.objects.get(username=username)
-		#print user
+		print user
 		problem = Problem.objects.get(name=problem_name)
-		#print problem
+		print problem
 		try:
 			print "getting incompleteSolution"
 			incompSolution = Solution.objects.get(username=user,problem=problem,abandoned=False,complete=False)
 			print incompSolution.complete
+			data["gameID"] = incompSolution.pk
 			data["steps"] = "[" + incompSolution.solution + "]"
 			#print data
 		except ObjectDoesNotExist:
 			print "Saved game not found!"
+		
 	return HttpResponse(json.dumps(data), content_type = "application/json")
+
+def irb_approval(request):
+	context = {}
+	template = "crowdsource_site/IRB_approval_form.htm"
+	return render(request,template,context)

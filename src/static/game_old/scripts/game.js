@@ -1,0 +1,596 @@
+const PIECE_H = 100;
+const PIECE_W = 100;
+const BORDER_THICKNESS = 1;
+
+var stage;
+var play_area, side_bar;
+var play_area_border;
+var play_area_frame;
+//var piece_list = [];
+//var pm = Object.create(PieceManager);
+var pm = new PieceManager();
+var total_atoms;
+var colors;
+//var cb = new ComboBox();
+var be = new BranchExplorer();
+//Text for timer
+var play_area_text;
+var track_time = 0;
+
+//Game ID
+var gameID = 0;
+
+
+if(sessionStorage.track_time!=0) {
+	sessionStorage.track_time=track_time;
+}
+else
+{
+	sessionStorage.setItem("track_time",track_time);
+}
+var timerId;
+var res = [];
+
+var alpha_locked = false;
+
+//Scrollwheel timeout for rearrangePieces() in mousewheelhandler
+var scrollWheelTimer = null;
+
+//Temporarily shows resulting piece
+var temp_piece = null;
+
+
+var game_state = {
+	saved_steps:[],
+	elapsed_seconds:0.0
+
+};
+
+//var saved_steps = []; 
+
+//Draws border around selected peice
+var selected_piece_border = new createjs.Shape();
+//This array stores the references to the animations/borders of newly added pieces
+var new_piece_borders = [];
+
+//Flag to detect drag
+var pressmove_flag = false;
+
+
+
+createjs.Sound.registerSound("./sounds/bubble.wav","bubble",4);
+createjs.Sound.registerSound("./sounds/cheer.mp3","cheer",4);
+
+
+$(window).on("resize", function(event){
+	stage.canvas.width = window.innerWidth;
+	stage.canvas.height = window.innerHeight;
+
+	play_area_frame.setBounds(0,0, stage.canvas.width, stage.canvas.height);
+    play_area.setBounds(0,0, stage.canvas.width, stage.canvas.height);
+	
+	play_area_border.graphics.setStrokeStyle(5);
+	play_area_border.graphics.beginStroke("black");
+	play_area_border.graphics.beginFill("#f7f7f7");
+	play_area_border.graphics.drawRect(0,0,stage.canvas.width, stage.canvas.height);
+	play_area_border.setBounds(0,0,stage.canvas.width, stage.canvas.height);
+	stage.update();
+
+});
+
+function init() {
+	//console.log("init function");
+	stage = new createjs.Stage("canvas");
+	stage.canvas.width = window.innerWidth;
+	stage.canvas.height = window.innerHeight;
+
+	window.addEventListener('resize', resize, false);   
+
+	//Canvas contains the whole game use other containers to manipulate game
+	////console.log(sessionStorage.getItem("username"));
+
+	createjs.Touch.enable(stage, [allowDefault = false]);
+	
+	//Container defining the frame of the play area (All game play/scaling is done inside here) 
+	play_area_frame = new createjs.Container();
+	play_area_frame.setBounds(0,0, stage.canvas.width, stage.canvas.height);
+
+	
+	//Container where actual game is played
+    play_area = new createjs.Container();
+	play_area.setBounds(0,0, stage.canvas.width, stage.canvas.height);
+	
+	
+	//Zooming of play area
+	canvas.addEventListener("mousewheel", MouseWheelHandler, false);
+	//canvas.addEventListener("DOMMouseScroll", MouseWheelHandler, false);
+	//canvas.addEventListener("mousedown", MouseDownHandler,false);
+	
+	//Defines the background of play_area
+	play_area_border = new createjs.Shape();
+	play_area_border.graphics.setStrokeStyle(5);
+	play_area_border.graphics.beginStroke("black");
+	play_area_border.graphics.beginFill("#f7f7f7");
+	play_area_border.graphics.drawRect(0,0,stage.canvas.width, stage.canvas.height);
+	play_area_border.setBounds(0,0,stage.canvas.width, stage.canvas.height);
+	play_area_frame.addChild(play_area_border);
+	
+	
+	//Panning of play area
+	play_area_border.on("mousedown", function(evt){
+					window.offset = {x:play_area.x-evt.stageX, y:play_area.y-evt.stageY};
+					window.initialClick = {x:evt.stageX, y:evt.stageY};
+					pressmove_flag = false;
+	});
+	
+	play_area_border.on("pressmove", function(evt){
+				//if (Math.abs(window.initialClick.y - evt.stageY)<15)
+					play_area.x = evt.stageX + window.offset.x;
+				//else if (Math.abs(window.initialClick.x - evt.stageX)<15)
+					//play_area.y = evt.stageY + window.offset.y;
+					
+					//Checks if the mouse has been dragged by 5 pixels
+					if(Math.abs(initialClick.x-evt.stageX) > 5 || Math.abs(initialClick.y-evt.stageY)>5)
+						pressmove_flag = true;
+	});
+
+	play_area_border.on("pressup",function(evt){
+		
+			if(pressmove_flag == false){
+					resetWidths();
+					resetBoard();
+					pm.adjustPieces();
+				}
+	});
+
+
+	//Scaling down the play area to show 10x10 pieces
+	play_area.scaleX = play_area.scaleY = 0.6;
+	play_area.y = 30;
+
+	//This is temporary. Shows where the play area is. Add debugging text to it
+	play_area_text = new createjs.Text("Time - 0:00", "20px Arial","black");
+	play_area_text.x = 20;
+	play_area_text.y = 20;
+
+
+
+	//Mask the control area on the right
+	var mask = new createjs.Shape();
+	mask.graphics.beginFill("#f00").drawRect(0,0,stage.canvas.width, stage.canvas.height);
+	play_area.mask = mask;	
+
+	//Separate function to make pieces
+	generatePieces();
+
+	play_area_frame.addChild(play_area);
+	stage.addChild(play_area_frame);
+	//Initializing combobox
+  	//cb.initialize();
+
+  	be.initialize();
+
+  	//Adding a timer to stage
+  	stage.addChild(play_area_text);
+  	timerId = setInterval(function () {track_time++; 
+  							if (Math.trunc(track_time%60) < 10)
+  								play_area_text.text = "Time : " +  Math.trunc(track_time/60) +":0"+ (Math.trunc(track_time%60));
+  							else
+  								play_area_text.text = "Time : " + Math.trunc(track_time/60) +":"+ (Math.trunc(track_time%60));
+  							 }, 1000);
+
+
+  	//Adding level name to stage
+  	var level_name_text = new createjs.Text("Level : " +sessionStorage.getItem('filename').split(".")[0], "20px Arial","black")
+  	level_name_text.x = 200;
+  	level_name_text.y = 20;
+  	stage.addChild(level_name_text);
+	//play_area.addChild(selected_piece_border);
+    //selected_piece_border.graphics.beginStroke("#ff0000").drawRect(0,0,0,0);
+
+
+    runTutorial();
+
+    startGame();
+
+}
+
+
+
+
+
+function sortNumber(a,b) {
+	//console.log("sort number function");
+    return a - b;
+}
+
+function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;  
+            play_area.width = play_area_frame.width = play_area_border.width = canvas.width;
+            play_area.height = play_area_frame.height = play_area_border.height = canvas.height;
+           stage.update();
+}
+
+function generateColors(colors){
+	//console.log("generateColors function");
+    
+	colors =  colors+1;
+	color_list = [];
+	
+    if (colors < 1) colors = 1; // defaults to one color - avoid divide by zero
+	for(var i = 0;i <colors;i++){
+		color_list.push("hsl(" + Math.floor(i * (360 / colors) % 360) + ","+ Math.floor(Math.random()*(80-20+1)+20) + "%,"+ Math.floor(Math.random()*(80-20+1)+20) + "%)");
+		////console.log("ColorNum = " + i + "   " + color_list[i]);
+	}
+	
+    return color_list;
+}
+
+function generatePieces(){
+	//console.log("generatePieces function");
+    
+	//Calling generate problem from the django server
+	var result = httpPOST("/generate_problem/");
+
+	//Handles the data, converts into array of integers
+    data = result;
+	gameID = data.gameID;
+	total_atoms = parseInt(data.total_atoms,10);             
+	colors = generateColors(total_atoms);
+	var piece_list = data.piece_list;
+	piece_nums = []
+	for (k in piece_list){
+		if (piece_list.hasOwnProperty(k))
+			
+			piece_nums.push(parseInt(k,10));
+	}
+
+	//Sorting each piece internally (by its keys)
+	piece_nums.sort(sortNumber);
+	////console.log(piece_nums);
+	
+	//Adding peices to the play area (if the piece is last in the list, it is negated conclusion)
+	
+	var piece_nums_length = piece_nums.length;
+	for (i=0; i<piece_nums_length;i++){
+		k = piece_nums[i];
+		piece_val = piece_list[k];
+		
+		//Turning array of strings to int
+		var temp = new Array();
+		temp = piece_val.split(",");
+		for (a in temp){
+			temp[a] = parseInt(temp[a],10);
+		}
+		temp.sort();
+		//If piece is last one assign it as a conclusion piece
+		if (i == piece_nums.length-1 ){
+			con_piece = pm.setConclusion(temp);
+			//con_piece.x = 100;
+			//con_piece.y = 100;
+			play_area.addChild(con_piece);
+		}
+		else{
+			pm.addPiece(temp);
+			play_area.addChild(pm._piece_list[i]);
+			pm._piece_list[i].piece_num = i;
+		}
+		
+	}
+	gettingSavedValuesAndAddingThem();
+	
+	//Setting initial length of the problem (Used in undo function)
+	pm._initial_length = piece_nums_length;
+}
+
+//seperating for pull functionality
+function gettingSavedValuesAndAddingThem() {
+		//Pull saved pieces from the server and add them to the board
+	//console.log("--removing duplicates--");
+	if ($.isEmptyObject(getSavedGame())) { 
+		console.log("--No Saved Game--"); 
+		} else {
+	console.log("--Yes Saved Game--");
+	var result = getSavedGame();
+	
+	result = removeJsonDuplicates(result);
+	//result = (result);
+	////console.log("--removing duplicates--");
+	//console.log(typeof(result));
+
+/*	if(sessionStorage.saveData)
+	{
+		console.log("Yes Session Data");
+		if (JSON.stringify(result) == sessionStorage.saveData) {
+			//alert("equal so showing zero");
+		} else {
+			sessionStorage.setItem("saveData",JSON.stringify(result));
+			result = result;
+			//alert("else part setting default result");
+
+
+				//console.log(JSON.stringify(result));
+			if (result.steps){
+			game_state.saved_steps = $.parseJSON(result.steps);
+			track_time = game_state.saved_steps[game_state.saved_steps.length-1].t;
+			}
+			
+			for (var i=0;i<game_state.saved_steps.length;i++) {
+				pm.addPiece(game_state.saved_steps[i].pk);
+			}
+
+		}
+	}else{
+		console.log("No Session Data");
+		sessionStorage.setItem("saveData",JSON.stringify(result));
+
+
+	if (result.steps){
+			game_state.saved_steps = $.parseJSON(result.steps);
+			//console.log("game_state.saved_steps = "+game_state.saved_steps);
+			track_time = game_state.saved_steps[game_state.saved_steps.length-1].t;
+			}
+			
+			for (var i=0;i<game_state.saved_steps.length;i++) {
+				pm.addPiece(game_state.saved_steps[i].pk);
+			}
+	}
+*/			/*/----------------------------------------------------/*/
+	
+	if (result.steps){
+			game_state.saved_steps = $.parseJSON(result.steps);
+			console.log("game_state.saved_steps = "+game_state.saved_steps);
+			track_time = game_state.saved_steps[game_state.saved_steps.length-1].t;
+			}
+			
+			for (var i=0;i<game_state.saved_steps.length;i++) {
+				pm.addPiece(game_state.saved_steps[i].pk);
+			}
+
+	}	
+}
+
+function removeJsonDuplicates(jsObj) {
+	 myarr = [""];		
+
+jsObj.steps= JSON.parse(JSON.stringify(jsObj.steps));
+var a = jsObj.steps;
+a = JSON.parse(a);
+
+var newObj = new Object();
+
+newObj = a;
+if (!pm.Jboardlist) { console.log("no session");} else {
+BoardPieceList = JSON.parse(pm.Jboardlist)
+	for (var i = 0; i < newObj.length; i++) {
+		//console.log("inside first for");
+		for(var x = 0 ; x < BoardPieceList.length; x++) {
+
+			var aaa = $.map(newObj, function(obj, index){
+				//console.log("obj.pk = "+obj.pk+"  board piece list "+BoardPieceList[x]+" - "+x+" of length "+BoardPieceList.length);
+				if( JSON.stringify(obj.pk) === JSON.stringify(BoardPieceList[x])) 
+					return index;
+			});
+			//console.log("index = "+aaa);
+				if (""==aaa) {
+			//		console.log("none");
+				}else{
+					var i = aaa.length;
+					while (i--) {
+						newObj.splice(aaa[i],1);
+					}					
+				}
+	} /// second for loop
+	} //first for loop
+}
+var finala = new Object();
+finala.steps = JSON.stringify(newObj);
+
+var a = finala.steps;
+a = JSON.parse(a);
+
+//getting unique values in an array
+var unq = [];
+$.each(a, function(index, values) {
+    	
+    if ($.inArray(values.pk.toString(), unq) === -1) {
+    	console.log("indx = "+index+" pushing "+values.pk);
+		console.log("not inside array so pushing");
+    	unq.push((values.pk).toString());
+    }else {
+    	console.log("present inside");
+    	values.pk.splice(index,1);
+        
+    }
+});
+
+
+var finalstep = new Object();
+finalstep.steps = JSON.stringify(a);
+
+return finalstep;
+}
+
+
+function getSavedGame(){
+    console.log("getSaved game = ");
+	var response;
+	var csrf_token = $.cookie('csrftoken');
+    $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrf_token);
+                           }
+                        }
+                    });
+
+                $.ajax({
+              type: 'POST',
+              url: '/get_saved_game/',
+              data: "problem_name=" + sessionStorage.getItem("filename")+"&username="+ sessionStorage.getItem("username"),
+              success: function(data){
+                    response =data;
+					console.log("getSaved game = " + response["gameID"]);  
+					window.gameID = response['gameID'];
+                },
+              dataType: "json",
+              async:false
+            });
+    return response;
+}
+
+
+function MouseWheelHandler(e){
+	if(Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)))>0)
+        zoom_val=.025;
+    else
+        zoom_val= -0.025;
+
+zoom(zoom_val);
+
+}
+
+function zoom(value){
+play_area.scaleX += value;
+play_area.scaleY += value;
+if(scrollWheelTimer!=null){
+	clearTimeout(scrollWheelTimer);
+}
+scrollWheelTimer = setTimeout(function(){adjustRowLength();},200);
+}
+
+function adjustRowLength(){
+	//console.log("adjust timer executed!")
+	num_rows = Math.floor((window.innerHeight-10)/((pm._piece_list[0].height+50)*play_area.scaleY));
+	//console.log(num_rows);
+	pm.column_length = num_rows;
+
+	pm.rearrangePieces();
+	resetWidths();
+	resetBoard();
+	pm.adjustPieces();
+
+	//pm.adjustPieces();
+}
+
+
+function currentKeyNegIn(piece,key){
+    var i;
+    var result = false;
+	var piece_keys_length =piece.keys.length;
+    for (i=0;i<piece_keys_length;i++){
+        if( piece.keys[i] == (-1*key) ){
+            //Global variable to keep track of current Negation piece
+            currNegPos = i;
+            result = true;
+            break;
+        }
+    }
+    return result;
+}
+
+
+function startGame() {
+	//console.log("startGame function");
+    
+    createjs.Ticker.setFPS(60);
+    createjs.Ticker.on("tick", function(e){
+	
+	stage.update(e);
+    });
+
+
+}
+
+function httpGet(theUrl)
+{
+	//console.log("httpGet function");
+    
+    var xmlHttp = null;
+
+    xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", theUrl, false );
+    xmlHttp.send( "filename=" + sessionStorage.getItem("filename") );
+    alert(" = > "+xmlHttp.responseText);
+    return xmlHttp.responseText;
+}
+
+function csrfSafeMethod(method) {
+	//console.log("csrfSafeMethod function");
+    
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+
+function httpPOST(theUrl){
+	//console.log("httpPOST function");
+    
+    ////console.log(sessionStorage.getItem("filename"));
+    var response;
+    var csrf_token = $.cookie('csrftoken');
+    ////console.log("Sending Ajax!")
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrf_token);
+                }
+            }
+        });
+
+    $.ajax({
+  type: 'POST',
+  url: theUrl,
+  data: "filename=" + sessionStorage.getItem("filename"),
+  success: function(data){
+        response = data;
+		
+    },
+  dataType: "json",
+  async:false
+});
+    ////console.log(response);    
+    return response;
+}
+
+
+function resetBoard(){
+	//console.log("resetBoard function");
+    
+	//Actions to perform when want to reset the board to its original state
+
+	allPieces = pm.getAllPieces();
+	var allpieces_length = allPieces.length;
+	for(var i = 0; i<allpieces_length; i++){
+		
+		allPieces[i].alpha = 1.0;
+		allPieces[i].visible = true;
+		allPieces[i].scaleX = allPieces[i].scaleY = 1.0;
+
+	}
+
+	if (typeof pm.addedSolvedPieces !== 'undefined'){
+    	var addedSolvedPIeces_length = pm.addedSolvedPieces.length;
+	for(var i = 0; i<addedSolvedPIeces_length;i++){
+		play_area.removeChild(pm.addedSolvedPieces[i]);
+		}
+	}
+
+
+}
+
+function resetWidths(){
+	//console.log("resetWidths function");
+    
+//Experimental function called after clicking the board to reset the width of all pieces to their true values
+
+allPieces = pm.getAllPieces();
+					var allpieces_length = allPieces.length;
+	for(var i = 0; i<allpieces_length; i++){
+		////console.log(allPieces[i].width + " " + allPieces[i].getBounds().width);
+		allPieces[i].width = allPieces[i].getBounds().width;
+		////console.log(allPieces[i].width + " " + allPieces[i].getBounds().width);
+	}
+
+	//pm.adjustPieces();
+}

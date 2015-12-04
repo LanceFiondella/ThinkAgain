@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>CrowdLogic</title>
+	
+
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+	
+	<script>
+
+	var listYeah = new Array("+1","Ace!","Applaudable!","Astonishing!","Awesome!","Beaut!","Bonzer!","Bosting!","Bravo!","Brilliant!","Class!","Congratulations!","Cool!","Extraordinary!","Fab!","Fabulous!","Fantastic!","First class!","First rate!","Formidable!","Ganz richtig! (That's German)","Geil! (That's German)","Genau! (That's German)","Genious!","Grand!","Great","Impressive!","Marvellous!","Matchless!","Mighty!","Neat!","Outstanding!","Phenomenal!","Prodigious!","Rad!","Sensational!","Skore!","Smart!","Smashing!","Spiffing!","Sublime!","Super","Superb!","Swell!","Terrific!","Tip top!","Well done!","Wicked!","Wonderful!","Yeah!");
+$(document).ready(function(){
+jQuery("#cheerMeUp").on("click", function(){
+    console.log("click");
+    jQuery("#cheers").removeClass();
+    jQuery("#cheers")
+        .show()
+        .html(listYeah[Math.floor(Math.random() * listYeah.length)])
+        .position({
+            my:"left bottom",
+            at:"right top",
+            of: jQuery("#cheerMeUp"),
+        });
+    jQuery("#cheers").addClass("fadeOutUp animated");
+});
+});
+	
+
+	</script>
+	<link rel="stylesheet" href="CSS/normalize.css">
+
+	<style>
+	.animated{
+    -webkit-animation-fill-mode:both;
+    -moz-animation-fill-mode:both;
+    -ms-animation-fill-mode:both;
+    -o-animation-fill-mode:both;
+    animation-fill-mode:both;
+    -webkit-animation-duration:1.5s;
+    -moz-animation-duration:1.5s;
+    -ms-animation-duration:1.5s;
+    -o-animation-duration:1.5s;
+    animation-duration:1.5s;
+    }
+.animated.hinge{
+    -webkit-animation-duration:1.5s;
+    -moz-animation-duration:1.5s;
+    -ms-animation-duration:1.5s;
+    -o-animation-duration:1.5s;
+    animation-duration:1.5s;
+    }
+@-webkit-keyframes fadeOutUp {
+    0% {
+        opacity: 1;
+        -webkit-transform: translateY(0);
+    }
+    100% {
+        opacity: 0;
+        -webkit-transform: translateY(-20px);
+    }
+}
+@-moz-keyframes fadeOutUp {
+    0% {
+        opacity: 1;
+        -moz-transform: translateY(0);
+    }
+ 
+    100% {
+        opacity: 0;
+        -moz-transform: translateY(-20px);
+    }
+}
+@-o-keyframes fadeOutUp {
+    0% {
+        opacity: 1;
+        -o-transform: translateY(0);
+    }
+ 
+    100% {
+        opacity: 0;
+        -o-transform: translateY(-20px);
+    }
+}
+@keyframes fadeOutUp {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+ 
+    100% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+}
+.fadeOutUp {
+    -webkit-animation-name: fadeOutUp;
+    -moz-animation-name: fadeOutUp;
+    -o-animation-name: fadeOutUp;
+    animation-name: fadeOutUp;
+}
+	</style>
+</head>
+
+<body>
+	<div id="cheerMeUp" style="background-color: #EAEAEA;box-shadow: 0 0 2px 1px #C0C0C0;padding:10px;position:absolute;">Cheer me up</div>
+<div id="cheers" style="position:absolute;min-width:20px;padding: 2px 10px 2px 10px;text-align: center;color:  black;font-size: 20px;border-radius: 10px;background-color: rgba(0,0,0,0.3);display:none;">
+</div>
+	
+
+	<!-- <!iframe src="./game.html" frameborder="0"  height="100%" width="100%"> -->
+</body>
+
+
+</html>

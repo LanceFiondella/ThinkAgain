@@ -6,17 +6,26 @@
 	
 	
 
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-	<script src="https://code.createjs.com/createjs-2014.12.12.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+	<script src="scripts/jquery-1.11.3.min.js"></script>
+	<script src="scripts/bootstrap.min.js"></script>
 	
+	<script src="scripts/jquery.cookie.min.js"></script>
+	<script src="scripts/createjs-2015.05.21.min.js"></script>
+	<script src="scripts/state.js"></script>
+    <script src="scripts/SimpleButton.js"></script>
+    
+    <script src="scripts/gameMenu.js"></script>
+	<script src="scripts/PiecePanel.js"></script>
+    <script src="scripts/gameOver.js"></script>
 	<script src="scripts/PieceManager.js?1.002"></script>
 	<script src="scripts/ClausePiece.js?1.001"></script>
 	<script src="scripts/BranchExplorer.js?1.0"></script>
 	<script src="scripts/tutorial.js?1.002"></script>
-	<script src="scripts/game.js?1.002"></script>
-	
+	<!--script src="scripts/game.js?1.002"></script-->
+	<script src="scripts/CoreGame.js"></script>
+	<script src="scripts/SinglePlayer.js"></script>
+	<script src="scripts/Multiplayer.js"></script>
+	<script src="scripts/thinkAgain.js"></script>
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 	<script>
@@ -50,9 +59,10 @@
 			pm.popPiece();	
 		});
 
-		$("#zoom_in").click(function(){zoom(0.075);});
 
-		$("#zoom_out").click(function(){zoom(-0.075);});
+		$("#zoom_in").click(function(){window.game.main.currentScene.g.playArea.scaleX = window.game.main.currentScene.g.playArea.scaleY += 0.05; window.game.main.currentScene.g.pm.adjustPanelSize(0.05);});
+
+		$("#zoom_out").click(function(){window.game.main.currentScene.g.playArea.scaleX = window.game.main.currentScene.g.playArea.scaleY -= 0.05; window.game.main.currentScene.g.pm.adjustPanelSize(-0.05);});
 
 		$("#pause").click(function(){
 			//Stop timer
@@ -111,6 +121,19 @@
   							 }, 1000);
 		el = document.getElementById("pause-overlay");
 			el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
+	}
+
+	function httpGet(theUrl)
+	{
+		//console.log("httpGet function");
+	    
+	    var xmlHttp = null;
+
+	    xmlHttp = new XMLHttpRequest();
+	    xmlHttp.open( "GET", theUrl, false );
+	    xmlHttp.send( "filename=" + sessionStorage.getItem("filename") );
+	    //alert(" = > "+xmlHttp.responseText);
+	    return xmlHttp.responseText;
 	}
 
 	function Next_Problem(){
@@ -202,7 +225,7 @@
 		top: 39%;
 		z-index: 1000;
 	}
-		#save {
+		.save {
 		width: 2.5%;
 		height: auto;
 		position: fixed;
@@ -397,7 +420,7 @@
 		<canvas id="canvas"></canvas>
 	</div>
 
-	<div id="tutorial-overlay" class="modal-dialog" style="visibility:hidden;">
+	<!--div id="tutorial-overlay" class="modal-dialog" style="visibility:hidden;">
       <div class="modal-content">
           <div class="modal-header">
               <h4 class="modal-title" id="myModalLabel">Tutorial</h4>
@@ -414,7 +437,7 @@
               </div>
           </div>
       </div>
-	</div>
+	</div-->
 	
 
 <script>
@@ -427,8 +450,18 @@ $("#canvas").css("height",window_height);
 
 });
 */
+
+var stage;
+var canvas;
+
+window.game = window.game || {};
+game.main = new game.thinkAgain();
 $(function() {
-	init();
+	
+
+
+
+	//init();
 });
 $('#get_updated_values').on('click', function(){
 	//get updated values
@@ -437,7 +470,8 @@ $("#game_div").remove();
 
 $("#pause-overlay").after("<div id='game_div'><canvas id='canvas'></canvas></div>");
 init();*/
-gettingSavedValuesAndAddingThem();
+//gettingSavedValuesAndAddingThem();
+window.game.main.currentScene.g.addSavedPieces();
 });
 </script>
 

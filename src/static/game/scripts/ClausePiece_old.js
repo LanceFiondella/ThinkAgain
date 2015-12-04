@@ -1,23 +1,41 @@
+//SOURCE FOR UNICODES http://jrgraphix.net/r/Unicode/
+Hindi_unicode = ["0x0905","0x0906","0x0907","0x0908","0x0909","0x090A","0x090B","0x090C","0x090D","0x090E","0x090F","0x0910","0x0911","0x0912","0x0913","0x0914"];
+Bengali_unicode = ["0x0985","0x0986","0x0987","0x0988","0x0989","0x099A","0x098B","0x098C","0x098F","0x0990","0x0993","0x0994","0x0995","0x0996"];
+Telegu_unicode = ["0x0C05","0x0C06","0x0C07","0x0C08","0x0C09","0x0C0A","0x0C0B","0x0C0C","0x0C0E","0x0C0F","0x0C10","0x0C12","0x0C13","0x0C14"];
+Kannada_unicode = ["0x0C85", "0x0C86", "0x0C87", "0x0C88", "0x0C89", "0x0C8A", "0x0C8B", "0x0C8C", "0x0C8E", "0x0C8F", "0x0C90", "0x0C92", "0x0C93", "0x0C94"]; 
+Tamil_unicode = ["0x0B85","0x0B86","0x0B87","0x0B88","0x0B89",'0x0B8A',"0x0B8E","0x0B8F","0x0B90","0x0B92","0x0B93","0x0B94","0x0B83"];
+Greek_unicode = ["0x0391", "0x0392", "0x0393", "0x0394", "0x0395", "0x0396", "0x0397", "0x0398", "0x0399", "0x039A", "0x039B", "0x039C", "0x039D", "0x039E", "0x03A0", "0x03A1", "0x03A2", "0x03A3", "0x03A4", "0x03A5", "0x03A6", "0x03A7", "0x03A8", "0x03A9", "0x03AA", "0x03AB", "0x03AC", "0x03AD", "0x03AE", "0x03B0", "0x03B1", "0x03B2", "0x03B3", "0x03B4", "0x03B5", "0x03B6", "0x03B7", "0x03B8"];
+Symbols_unicode = ["0x2601", "0x2602", "0x2603", "0x2605", "0x2609", "0x260A", "0x260B", "0x260E", "0x2615", "0x2618", "0x2621", "0x2622", "0x2623", "0x2624", "0x2625", "0x2629", "0x262B", "0x262E", "0x262F", "0x263A", "0x2648", "0x264E", "0x2667", "0x2668", "0x267E", "0x2691", "0x269B", "0x269D", "0x26A1", "0x26C1", "0x1D01", "0x1D7A", "0x2042", "0x204B", "0x2728"];
+current_player_step = [];
+
+const PIECE_H = 100;
+const PIECE_W = 100;
+const BORDER_THICKNESS = 1;
+
 function ClausePiece(st_list, piece_num) {
+    console.log("ClausePiece function");
 	//p is the container that holds the peices and properties associated
 	var p = ClausePieceShape(st_list, piece_num);
 	
 	//Settings properties of the peice
-	//p.keys = st_list;
+	
     p.matching = {};
 
 	//Setting mouse interaction with the whole piece
 
 	//Behaviour on clicking piece
 	p.on("mousedown", function(evt){
-		resetBoard();
-        resetWidths();
+        
+		this.parent.parent.resetBoard();
+        
+        this.parent.parent.resetWidths();
 		evt.stopPropagation();
-		play_area.setChildIndex(evt.currentTarget,play_area.getNumChildren() - 1);
-		var global = play_area.localToGlobal(evt.currentTarget.x, evt.currentTarget.y);
+        
+		this.parent.setChildIndex(evt.currentTarget,this.parent.getNumChildren() - 1);
+		var global = this.parent.localToGlobal(evt.currentTarget.x, evt.currentTarget.y);
 		evt.currentTarget.offset = {'x' : global.x - evt.stageX, 'y' : global.y - evt.stageY};
 		
-		if(!alpha_locked){
+		if(!this.parent.parent.alpha_locked){
 			tweenMatchingPieces(evt.currentTarget);
 			evt.currentTarget.alpha = 1;
 		}
@@ -26,6 +44,7 @@ function ClausePiece(st_list, piece_num) {
         createjs.Tween.get(evt.currentTarget).to({scaleX: 1.0, scaleY: 1.0}).to({scaleX: 0.75, scaleY: 0.75}, 250);
         
         //Adding red border around selected piece and resetting green borders from previous step
+        /*
         prev_parent = selected_piece_border.parent;
         
         if(prev_parent != null){
@@ -33,7 +52,7 @@ function ClausePiece(st_list, piece_num) {
             prev_parent.updateCache();
         }
 
-        selected_piece_border.graphics.clear().setStrokeStyle(5).beginStroke("#ff0000").drawRect(0, 0, evt.currentTarget.width, evt.currentTarget.height);
+        selected_piece_border.graphics.clear().setStrokeStyle(5).beginStroke("#ff0000").drawRect(50, 0, evt.currentTarget.width, evt.currentTarget.height);
         evt.currentTarget.addChild(selected_piece_border);
         evt.currentTarget.updateCache();
         var npb_length = new_piece_borders.length;
@@ -45,6 +64,7 @@ function ClausePiece(st_list, piece_num) {
             delete new_piece_borders.pop();
 
         }
+        */
         replaceWithSolvedPieces(evt.currentTarget);
 
       
@@ -56,7 +76,6 @@ function ClausePiece(st_list, piece_num) {
         /*
 			var local = play_area.globalToLocal(evt.stageX + evt.currentTarget.offset.x, evt.stageY + evt.currentTarget.offset.y);
             evt.currentTarget.x = local.x;
-            evt.currentTarget.y = local.y;
 
 
             
@@ -118,9 +137,11 @@ function ClausePiece(st_list, piece_num) {
 }
 
 function replaceWithSolvedPieces(selectedPiece){
+
+    console.log("replaceWithSolvedPieces function");
 	// Replaces all the pieces that can be solved with the selectedPiece with the resultant piece
-	allPieces = pm.getAllPieces();
-	pm.addedSolvedPieces = [];
+	allPieces = this.parent.parent.pm.getAllPieces();
+	this.parent.parent.pm.addedSolvedPieces = [];
     be.resetResultBox();
     temp_piece_list = [];
     
@@ -173,6 +194,7 @@ function replaceWithSolvedPieces(selectedPiece){
 }
 
 function SolvedPiece(st_list, piece_num, parent1, parent2){
+    console.log("SolvedPiece  function");
 	//This function is used in replaceWithSolvedPieces. Replaces a piece on the board. Has only one property, on click add itself to the game board
 	var p = ClausePieceShape(st_list, piece_num);
 	p.parent1 = parent1;
@@ -216,12 +238,21 @@ function SolvedPiece(st_list, piece_num, parent1, parent2){
                         step ["pk"] = new_piece.keys;
                         step["t"] = track_time;
                         step ["parents"] = parents;
+                        step["ip"] = sessionStorage.ipaddress;
 
                         game_state.saved_steps.push(step);
 
                         //Sending step data to server
 
                         sendStep(step);
+
+
+
+                        //adding the current piece played by the user to a new array to hold the values
+                        current_player_step.push(step);
+                        console.log("current_player_step.length");
+                        console.log(current_player_step.length);
+
 
                         res.push(p.parent1.piece_num+","+p.parent2.piece_num+","+new_piece.piece_num);
                         p.parent2.visible = true;
@@ -232,7 +263,7 @@ function SolvedPiece(st_list, piece_num, parent1, parent2){
                         //Adding a green border around a newly placed piece
                         np_border = new createjs.Shape();
                         //np_border.graphics.setStrokeStyle(5).beginStroke("green").drawRect(new_piece.x+new_piece.orgX, new_piece.y+new_piece.orgY, new_piece.width-2, new_piece.height-2)
-                        np_border.graphics.setStrokeStyle(5).beginStroke("green").drawRect(0,0, new_piece.width-2, new_piece.height-2)
+                        np_border.graphics.setStrokeStyle(5).beginStroke("green").drawRect(50,0, new_piece.width-2, new_piece.height-2)
                         new_piece_borders.push(np_border);
                         new_piece.addChild(np_border);
                         new_piece.updateCache();
@@ -263,7 +294,8 @@ function SolvedPiece(st_list, piece_num, parent1, parent2){
 }
 
 function sendStep(step){
-
+    console.log("sendStep function");
+    console.log(step);
     //Sends steps to the server
     var csrf_token = $.cookie('csrftoken');
                 console.log("Sending Step ajax!")
@@ -278,7 +310,7 @@ function sendStep(step){
                 $.ajax({
               type: 'POST',
               url: '/save_step/',
-              data: "problem_name=" + sessionStorage.getItem("filename")+"&username="+ sessionStorage.getItem("username")+"&total_pieces=" + pm._total_pieces+ "&total_time=" + track_time + "&solution=" + JSON.stringify(step),
+              data: "problem_name=" + sessionStorage.getItem("filename")+"&username="+ sessionStorage.getItem("username")+"&total_pieces=" + pm._total_pieces+ "&total_time=" + track_time + "&solution=" + JSON.stringify(step)+ "&current_player_step=" +current_player_step,
               success: function(data){
                     response = data;
                 },
@@ -290,7 +322,7 @@ function sendStep(step){
 
 
 function abandonGame(){
-
+    console.log("abandonGame function");
     var csrf_token = $.cookie('csrftoken');
                 console.log("Sending Step ajax!")
                     $.ajaxSetup({
@@ -316,6 +348,7 @@ function abandonGame(){
 
 
 function ClausePieceShape(st_list,piece_num){
+    console.log("ClausePieceShape function");
 	//This function ONLY contstructs the visual of the piece. Properties of the piece are added by other functions
     //p is the container that holds the peices and properties associated
 	var p = new createjs.Container();
@@ -343,9 +376,43 @@ function ClausePieceShape(st_list,piece_num){
 		atom.graphics.setStrokeStyle(2);
 		
 		//Generating atom color
-		var atom_color = colors[Math.abs(p.keys[i])];
+		//var atom_color = colors[Math.abs(p.keys[i])];
 		var piece_letter_text;									
 			var chr = (Math.abs(p.keys[i]));
+           // alert(sessionStorage.language);
+            switch(sessionStorage.language){
+                case "0": //number 
+                    chr = chr;
+                    break;
+                case "1": //english
+                    chr = String.fromCharCode(96 + chr);    
+                    break;
+                case "2": //Hindi
+                    chr = String.fromCharCode(Hindi_unicode[chr-1]);
+                    break;
+                case "3": //bengali
+                    chr = String.fromCharCode(Bengali_unicode[chr-1]);
+                    break;
+                case "4": //telegu
+                    chr = String.fromCharCode(Telegu_unicode[chr-1]);
+                    break;
+                case "5": //kannada
+                    chr = String.fromCharCode(Kannada_unicode[chr-1]);
+                    break;
+                case "6": //tamil
+                    chr = String.fromCharCode(Tamil_unicode[chr-1]);
+                    break;
+                case "7": //greek
+                    chr = String.fromCharCode(Greek_unicode[chr-1]);
+                    break;
+                case "8": //symbols
+                    chr = String.fromCharCode(Symbols_unicode[chr-1]);
+                    break;
+
+            }
+
+          //  chr = String.fromCharCode(symbols_unicode[chr]);
+           // console.log("from char code "+String.fromCharCode(0x0B8A));
 			//var chr = String.fromCharCode(96 + Math.abs(p.keys[i]));
 			//var chr = String.fromCharCode(0x4E00 + Math.abs(p.keys[i]));
 			//var chr = String.fromCharCode(0x0904 + Math.abs(p.keys[i]));
@@ -354,32 +421,52 @@ function ClausePieceShape(st_list,piece_num){
             //var chr = String.fromCharCode(0x03B0 + Math.abs(p.keys[i]));
 			
 			//If atom is positive fill the block and no border
-			if (p.keys[i] > 0){
-				piece_letter_text = new createjs.Text(chr, "bold 50px Arial","black");
+/*			if (p.keys[i] > 0){
+				piece_letter_text = new createjs.Text(chr, "40px Arial","black");
 				atom.graphics.beginFill("white");
 				atom.graphics.beginStroke("black");
 			}
 			//If atom is negative draw border no fill
 			else if(p.keys[i] < 0){
-				piece_letter_text = new createjs.Text(chr, "bold 50px Arial","white");
+				piece_letter_text = new createjs.Text(chr, "40px Arial","white");
 				atom.graphics.beginFill("black");	
 				atom.graphics.beginStroke("white");
 				}
-		
+*/
+                if (p.keys[i] > 0){
+                piece_letter_text = new createjs.Text((chr), "bold 50px Arial","black");
+                atom.graphics.beginFill("white");
+                atom.graphics.beginStroke("black");
+            }
+            //If atom is negative draw border no fill
+            //If atom is negative draw border no fill
+                else if(p.keys[i] < 0 && sessionStorage.language== '0'){
+                    piece_letter_text = new createjs.Text((0-chr), "bold 50px Arial","white");
+                    atom.graphics.beginFill("black");   
+                    atom.graphics.beginStroke("white");
+                    }
+                else if(p.keys[i] < 0 &&  sessionStorage.language != '0'){
+                    piece_letter_text = new createjs.Text((chr), "bold 50px Arial","white");
+                    atom.graphics.beginFill("black");   
+                    atom.graphics.beginStroke("white");
+                    }                   
+            
+
 		//Draw atom
 		
-		atom.graphics.drawRoundRect(80*i, 0, 80-2*BORDER_THICKNESS, 80-2*BORDER_THICKNESS,20);
-		atom.setBounds(80*i, 0, 80-2*BORDER_THICKNESS, 80-2*BORDER_THICKNESS);
+		atom.graphics.drawRoundRect(105*i+50, 0, 105-2*BORDER_THICKNESS, 95-2*BORDER_THICKNESS,20);
+		atom.setBounds(105*i+50, 0, 105-2*BORDER_THICKNESS, 95-2*BORDER_THICKNESS);
 		p.addChild(atom);
 		
-		piece_letter_text.x = 80*i + 25;
+		piece_letter_text.x = 105*i + 25+50;
 		piece_letter_text.y = 20;
+        console.log(piece_letter_text.text);
 		p.addChild(piece_letter_text);
 
 	}
 	
-	var piece_num_text = new createjs.Text(piece_num, "40px Arial","red");
-	piece_num_text.x = 20;
+	var piece_num_text = new createjs.Text(piece_num, "15px Arial","red");
+	piece_num_text.x = 20+50;
 	p.addChild(piece_num_text);
 	if(p.getBounds() != null){
 			p.height = p.getBounds().height;
@@ -398,8 +485,10 @@ function ClausePieceShape(st_list,piece_num){
 
 
 function tweenMatchingPieces(selectedPiece){
+    console.log("tweenMatchingPieces function`");
 	//Sets alpha of matching pieces to 1, everything else is 0.3
-    allPieces = pm.getAllPieces();
+    console.log(this.g.pm);
+    allPieces = this.g.pm.getAllPieces();
     for(k in selectedPiece.matching){
         if (selectedPiece.matching[k]){
             allPieces[k].alpha = 1.0;
@@ -413,7 +502,8 @@ function tweenMatchingPieces(selectedPiece){
 }
 
 function pieceCollision(p1,p2){
-	//Detects collision of 2 pieces
+    console.log("pieceCollision function");
+	//Detects collision of 2 pieces`
 	if((p1.x+p1.orgX - (p2.x+p2.orgX + (p2.width))) >= 0 ||
 	((p1.x+p1.orgX + (p1.width)) - (p2.x+p2.orgX)) <= 0||
 	(p1.y-p1.orgY - (p2.y-p2.orgY + (p2.height)))>= 0 ||
@@ -429,6 +519,7 @@ function pieceCollision(p1,p2){
 }
 
 function arraysEqual(a, b) {
+console.log("arraysEqual");
 	//Checks if two arrays are equal in value
   if (a === b) return true;
   if (a == null || b == null) return false;
@@ -438,11 +529,13 @@ function arraysEqual(a, b) {
   for (var i = 0; i < a_length ; ++i) {
     if (a[i] !== b[i]) return false;
   }
+  console.log("Returning");
   return true;
 }
 
 
 function solveValues(p1,p2){
+    console.log("solveValues function");
 //This function ONLY solves the two pieces and returns an array for the new piece. 
 //Should be used to solve not display
  		var num_negations = 0;
@@ -472,12 +565,14 @@ function solveValues(p1,p2){
             new_keys = p1_keys.concat(p2_keys).filter(Number);
             new_keys.sort();
         }
-        
+        console.log("new keys -  "+new_keys);
         return new_keys;
+
 }
 
 
 function solvePieces(p1,p2, addToSolution){
+    console.log("solvePieces function");
 	//Solves 2 pieces together and adds it to the board
 	  var num_negations = 0;
     var p1_keys = p1.keys.slice();

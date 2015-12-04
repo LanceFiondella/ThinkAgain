@@ -32,6 +32,8 @@ Select a Level:
 Select Style :
 <select id="language">
 </select>
+<br/><br/>
+
 <p></p> 
 <a href="/game/"><button type="submit" onclick="run_game()">Play game</button>
 
@@ -87,6 +89,7 @@ function run_game(){
     sessionStorage.setItem("username", '{{ user.username }}');
     sessionStorage.setItem("language",document.getElementById('language').value);
     sessionStorage.removeItem("saveData");
+
 }
 
 
