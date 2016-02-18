@@ -1,5 +1,11 @@
 (function (window){
 	window.game = window.game || {}
+
+	/*This file creates a canvas and sets up the board and pieces.
+	Based on which level is chosen
+
+
+	*/
 	function CoreGame(){
 		//console.log(this);
 		this.initialize();

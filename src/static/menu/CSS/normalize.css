@@ -432,7 +432,7 @@ th {
 }
 
 .modal-body {
-  background-color: #ffcc00;
+  background-color: white;
 }
 
 .modal-header{
@@ -520,3 +520,4 @@ th {
   margin-bottom: 7px;
   margin-top: 3px;
 }
+

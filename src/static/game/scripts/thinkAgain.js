@@ -18,7 +18,17 @@
 		stage.canvas.height = window.innerHeight;
 		createjs.Ticker.setFPS(60);
 		createjs.Ticker.on('tick',this.onTick, this);
-		this.changeState(game.GameStates.MAIN_MENU);
+		var gameType = sessionStorage.getItem("gameType");
+		if (gameType = "sp"){
+			this.changeState(game.GameStates.GAME);	
+			
+		}
+		else if(gameType = "mp")
+		{
+			this.changeState(game.GameStates.MULTIPLAYER);
+			
+		}
+		//this.changeState(game.GameStates.MAIN_MENU);
 	}
 
 	p.changeState = function (state) {

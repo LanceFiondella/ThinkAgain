@@ -14,11 +14,18 @@
 
 	p.initialize = function(){
 		this.Container_initialize();
+		
+		
+		
+		
 		this.addBG();
 		this.addTitle();
 		this.addSinglePlayerButton();
 		this.addMultiplayerButton();
-		//this.run();
+		this.run();
+		
+
+		
 	}
 
 	p.addBG = function(){
@@ -26,6 +33,7 @@
 		bg.graphics.beginFill('0').drawRect(0,0, canvas.width, canvas.height);
 		this.addChild(bg);
 	}
+
 
 	p.addTitle = function(){
 		this.titleTxt = new createjs.Text("Think Again!", '40px Arial','#FFF');
@@ -36,14 +44,15 @@
 	}
 
 	p.addSinglePlayerButton = function(){
-		var btn, event;
-		btn = new ui.SimpleButton('Single Player Game');
-		btn.on('click', this.playGame,this);
-		btn.regX = btn.width/2;
-		btn.x = canvas.width/2;
-		btn.y = 400;
-		btn.setButton({upColor:'#FF0000', color:'#FFF', borderColor:'#FFF',overColor:'#900'});
-		this.addChild(btn);
+		//var this.btn;
+		var event;
+		this.btn = new ui.SimpleButton('Single Player Game');
+		this.btn.on('click', this.playGame,this);
+		this.btn.regX = this.btn.width/2;
+		this.btn.x = canvas.width/2;
+		this.btn.y = 400;
+		this.btn.setButton({upColor:'#FF0000', color:'#FFF', borderColor:'#FFF',overColor:'#900'});
+		this.addChild(this.btn);
 	}
 
 	p.addMultiplayerButton = function(){
@@ -67,6 +76,7 @@
 
 	p.run = function(tickEvent) {
 		this.titleTxt.alpha = Math.cos(this.count++ * 0.1) * 0.4 + 0.6;
+		
 	}
 	window.game.GameMenu = GameMenu;
 

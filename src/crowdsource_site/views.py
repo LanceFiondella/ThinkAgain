@@ -106,11 +106,15 @@ def game_menu(request):
 def get_problem_files(request):
 	#Temp function to get problem files (replaces cgi script get_problem_files.py)
 	dict_of_files = {}
-	print "Getting problem files : " + os.path.join(BASE_DIR, 'templates','game','problems')
-	list_of_files = os.listdir(os.path.join(BASE_DIR, 'static','game','problems'))
+	#print "Getting problem files : " + os.path.join(BASE_DIR, 'templates','game','problems')
+	#list_of_files = os.listdir(os.path.join(BASE_DIR, 'static','game','problems'))
+	all_problems = Problem.objects.all()
 	
+	list_of_files = []
+	for p in all_problems:
+		list_of_files.append(p.name) 
 	for i in range(len(list_of_files)):
-	    dict_of_files[list_of_files[i][:-4]] = list_of_files[i]
+	    dict_of_files[list_of_files[i]] = list_of_files[i]
 	return HttpResponse(json.dumps(dict_of_files), content_type = "application/json")
 
 def generate_problem(request):
@@ -121,9 +125,11 @@ def generate_problem(request):
 		response_data = {}
 		game_filename = request.POST['filename']
 		piece_list = {}
-
-		problem_file = open(os.path.join(BASE_DIR, 'static','game','problems',game_filename))
-		total_atoms = problem_file.next()
+		problem = Problem.objects.get(name=game_filename)
+		
+		problem_file = problem.initial_state
+		problem_file = problem_file.splitlines()
+		total_atoms = problem_file.pop(0)
 		for i,line in enumerate(problem_file):
 		    #Return only lines with text
 		    if line.rstrip():
@@ -141,7 +147,7 @@ def save_step(request):
 	data = {}
 	if request.method == 'POST':
 		#print request.POST
-		problem_name = request.POST['problem_name'][:-4]
+		problem_name = request.POST['problem_name']
 		username = request.POST['username']
 		total_pieces = int(request.POST['total_pieces'])
 		total_time = int(request.POST['total_time'])
@@ -151,7 +157,7 @@ def save_step(request):
 		
 
 		data = json.loads(solution)	
-		print data
+
 		try:
 			incompSolution = Solution.objects.get(username=user,problem=problem,abandoned=False,complete=False)
 			incompSolution.solution += "," + solution
@@ -160,6 +166,7 @@ def save_step(request):
 			print "Solution did not exist! Creating new"
 		incompSolution.total_pieces=total_pieces
 		incompSolution.time_taken=total_time
+		data['gameID'] = incompSolution.pk
 		if (len(data["pk"]) == 0):
 			incompSolution.complete = True
 
@@ -171,14 +178,14 @@ def abandon_game(request):
 	context = RequestContext(request)
 	data = {}
 	if request.method == 'POST':
-		#print request.POST
+		print request.POST
 		problem_name = request.POST['problem_name'][:-4]
 		username = request.POST['username']
 
 		user = User.objects.get(username=username)
-		#print user
+		print user
 		problem = Problem.objects.get(name=problem_name)
-		#print problem
+		print problem
 		try:
 			incompSolution = Solution.objects.get(username=user,problem=problem,abandoned=False,complete=False)
 			incompSolution.abandoned = True
@@ -193,20 +200,93 @@ def get_saved_game(request):
 	context = RequestContext(request)
 	data = {}
 	if request.method == 'POST':
-		#print request.POST
-		problem_name = request.POST['problem_name'][:-4]
+		print request.POST
+		problem_name = request.POST['problem_name']
 		username = request.POST['username']
 
 		user = User.objects.get(username=username)
-		#print user
+		print user
 		problem = Problem.objects.get(name=problem_name)
-		#print problem
+		print problem
 		try:
 			print "getting incompleteSolution"
 			incompSolution = Solution.objects.get(username=user,problem=problem,abandoned=False,complete=False)
 			print incompSolution.complete
+			data["gameID"] = incompSolution.pk
 			data["steps"] = "[" + incompSolution.solution + "]"
 			#print data
 		except ObjectDoesNotExist:
 			print "Saved game not found!"
+		
 	return HttpResponse(json.dumps(data), content_type = "application/json")
+
+def irb_approval(request):
+	context = {}
+	template = "crowdsource_site/IRB_approval_form.htm"
+	return render(request,template,context)
+
+def get_level_list(request):
+	context = RequestContext(request)
+	data = {}
+	
+	singleplayer = {}
+	multiplayer = {}
+	last_sol = {}
+	if request.method == 'POST':
+		username = request.POST['username']
+		print "Get level list!"
+		try:
+			user = User.objects.get(username=username)
+			multi = User.objects.get(username='multi')
+			
+			problem_list = Problem.objects.all()
+			singleplayer,sp_last = get_user_level_list(user,problem_list)
+			multiplayer,mp_last = get_user_level_list(multi,problem_list)
+			print "In try block " + str(sp_last) + str(mp_last)
+			if (mp_last != None and sp_last !=None):
+				if sp_last.time_stamp > mp_last.time_stamp:
+					last_sol['type'] = 'sp'
+					last_sol['name'] = sp_last.problem.name
+				else:
+					last_sol['type'] = 'mp'
+					last_sol['name'] = mp_last.problem_name
+			elif (mp_last == None and sp_last !=None):
+				last_sol['type'] = 'sp'
+				last_sol['name'] = sp_last.problem.name
+			elif (mp_last != None and sp_last ==None):
+				last_sol['type'] = 'mp'
+				last_sol['name'] = mp_last.problem.name
+			else:
+				last_sol['type'] = 'none'
+				last_sol['name'] = 'none'
+
+		except ObjectDoesNotExist:
+			print "Saved game not found!"
+	final = {}
+	final['singleplayer'] = singleplayer
+	final['multiplayer'] = multiplayer
+	final['last_sol'] = last_sol
+	return HttpResponse(json.dumps(final), content_type = "application/json")
+
+
+def get_user_level_list(user,problem_list):
+	data = {}
+	for problem in problem_list:
+		data[str(problem.name)] = {'current_status':'Not started','abandoned_count':0,'complete_count':0,'time_spent':0}
+
+	solution_list = Solution.objects.filter(username=user).order_by('timestamp')
+	
+	last_sol = None
+	for sol in solution_list:
+		if sol.problem.name in data.keys():
+			if sol.abandoned:
+				data[sol.problem.name]['abandoned_count'] += 1
+				data[sol.problem.name]['current_status'] = 'Abandoned'
+			elif sol.complete:
+				data[sol.problem.name]['complete_count'] += 1
+				data[sol.problem.name]['current_status'] = 'Complete'
+			else:
+				data[sol.problem.name]['current_status'] = 'In Progress'
+			data[sol.problem.name]['time_spent'] = sol.time_taken
+		last_sol = sol
+	return data,last_sol
