@@ -249,7 +249,7 @@ def get_level_list(request):
 					last_sol['name'] = sp_last.problem.name
 				else:
 					last_sol['type'] = 'mp'
-					last_sol['name'] = mp_last.problem_name
+					last_sol['name'] = mp_last.problem.name
 			elif (mp_last == None and sp_last !=None):
 				last_sol['type'] = 'sp'
 				last_sol['name'] = sp_last.problem.name
