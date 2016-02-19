@@ -34,7 +34,7 @@ $.ajax({
       window.spList = data['singleplayer'];
       window.mpList = data['multiplayer'];
       window.lastSol = data['last_sol'];
-      console.log("Getting level_list_data");
+      console.log(window.lastSol);
       
       populate_list();
       }
@@ -49,6 +49,7 @@ $.ajax({
 function populate_list(){
 var singlePlayerList = document.getElementById('singlePlayerList');
 var multiPlayerList =  document.getElementById('multiPlayerList');
+
 console.log(window.spList);
 window.keys = [];
 var k, i, len;
@@ -140,9 +141,9 @@ function play(){
 }
 
 function continueLast(){
-  if(window.last_sol != null){
-    sessionStorage.setItem("filename",window.last_sol['name']);
-    sessionStorage.setItem("gameType",window.last_sol['type']);
+  if(window.lastSol != null){
+    sessionStorage.setItem("filename",window.lastSol['name']);
+    sessionStorage.setItem("gameType",window.lastSol['type']);
   }
 }
 
