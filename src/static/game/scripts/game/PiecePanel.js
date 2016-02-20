@@ -63,7 +63,7 @@
 	}
 
 	p.updatePanelSize = function(zoomVal){
-		console.log(parseInt(this.parent.getBounds().height/(125*this.parent.scaleY))-2);
+		//console.log(parseInt(this.parent.getBounds().height/(125*this.parent.scaleY))-2);
 		this.rearrangePieces(parseInt(this.parent.getBounds().height/(125*this.parent.scaleY))-2);
 		//this.bg.graphics.clear().beginStroke("black").drawRect(0,0, (this.pieceLength*100)+100, canvas.height-100);
 		this.bg.scaleY = 1/this.parent.scaleY;
@@ -76,7 +76,7 @@
 			this.nPosX = (this.pieceLength*100+100)/2;
 			this.colLen = newColLen;
 			this.rowLen = parseInt(this.totalPieces/this.colLen)+1;
-			console.log(this.colLen,this.rowLen);
+			//console.log(this.colLen,this.rowLen);
 			var currRow = 1;
 			var currCol = 0;
 

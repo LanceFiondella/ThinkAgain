@@ -77,13 +77,10 @@ WSGI_APPLICATION = 'crowdsource_site.wsgi.application'
 
 DATABASES = {
 'default': {
-    'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'ThinkagainDB',
-    'USER': 'postgres',
-    'PASSWORD': 'thinkagain',
-    'HOST': 'localhost',
-    'PORT': '5432',
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'db.sqlite3',
     }
+
     
 }
 

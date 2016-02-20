@@ -89,7 +89,8 @@ def game(request):
 	template = "game/game_template.html"
 
 	if request.user.is_authenticated():
-		return HttpResponseRedirect("/static/game/index_game.html")
+		#return HttpResponseRedirect("/static/game/index_game.html")
+		return render(request, "game/game_template.html", {})
 	else:
 		return HttpResponse("Error: You are not logged in. Please go to main page and login to play")
 
