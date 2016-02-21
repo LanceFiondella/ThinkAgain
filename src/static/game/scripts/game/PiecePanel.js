@@ -38,7 +38,7 @@
 		newPiece.y = this.nPosY;
 		newPiece.homeX = this.nPosX;
 		newPiece.homeY = this.nPosY;
-		console.log(newPiece.keys + "  " + newPiece.x+ "," + newPiece.y);
+		//console.log(newPiece.keys + "  " + newPiece.x+ "," + newPiece.y);
 		
 		this.addChild(newPiece);
 		//console.log(newPiece.parent);

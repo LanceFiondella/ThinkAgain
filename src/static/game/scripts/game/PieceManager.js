@@ -237,7 +237,7 @@ function PieceManager(){
 		createjs.Sound.play("bubble");
 		this.nextPiecePosition();
 		cp.coreGame = this.coreGame;
-		console.log("Panel list length = " + (cp.keys.length in this.panelList));
+		//console.log("Panel list length = " + (cp.keys.length in this.panelList));
 		if(cp.keys.length in this.panelList){
 					this.panelList[cp.keys.length].addPiece(cp)
 				}

@@ -1,4 +1,7 @@
+
 <!DOCTYPE html>
+{% load swampdragon_tags static%}
+
 <html>
 <head>
 <meta charset="utf-8">
@@ -10,6 +13,9 @@
 	<script src="{{ STATIC_URL }}/static/game/scripts/lib/bootstrap.min.js"></script>
 	<script src="{{ STATIC_URL }}/static/game/scripts/lib/jquery.cookie.min.js"></script>
 	<script src="{{ STATIC_URL }}/static/game/scripts/lib/createjs-2015.05.21.min.js"></script>
+
+{% swampdragon_settings %}
+<script type="text/javascript" src="{% static 'swampdragon/js/dist/swampdragon.min.js' %}"></script>
 	
 	<!-- Importing game related scripts. May be combined later -->
 	<script src="{{ STATIC_URL }}/static/game/scripts/game/state.js"></script>
@@ -180,6 +186,19 @@
 
 		window.location = "index_game.html";
 	}
+
+	swampdragon.ready(function(){
+		console.log('connected to swampdragon');
+		swampdragon.subscribe('MultiSol', 'multiGames', null,function(context,data) {
+            console.log(context, data);
+        }, function(context,data){
+        	console.log('Failed subscription');
+        });
+	});
+
+	swampdragon.onChannelMessage(function(channels, message){
+		console.log(channels,message);
+	});
 
 	</script>
 	<link rel="stylesheet" href="CSS/normalize.css">
