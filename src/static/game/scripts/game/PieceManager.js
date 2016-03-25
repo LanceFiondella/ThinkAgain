@@ -19,6 +19,11 @@ function PieceManager(){
 	this.panelListLength = 0;
 	//Current length of a column
 	this.column_length = 10;
+	
+	//This boolean indicates whether the player is currently solving a piece. If true new incoming pieces will not be displayed
+	this.solveState = false;
+	
+	this.unaddedPieces = [];
 	};
 
 	/**
@@ -40,6 +45,7 @@ function PieceManager(){
 	        }
 	        
 	    }
+
 
 	};
 
@@ -75,13 +81,15 @@ function PieceManager(){
 
         step["t"] = this.coreGame.trackTime;
         step ["parents"] = parents;
-        step["ip"] = sessionStorage.ipaddress;
+        //step["ip"] = sessionStorage.ipaddress;
 
         this.coreGame.gameState.savedSteps.push(step);
 
         //Sending step data to server
-
-        this.coreGame.sendStep(step);
+		if(!this.checkUnaddedPieces(new_piece.keys)){
+        	this.coreGame.sendStep(step);
+        	console.log("Piece does not exist in unadded pieces");
+        	}
 
         //res.push(this.parent1.piece_num+","+this.parent2.piece_num+","+new_piece.piece_num);
         piece.parent2.visible = true;
@@ -156,7 +164,9 @@ function PieceManager(){
 			if (i != selectedPiece.pieceNum)
 				this._piece_list[i].visible = false;
 		}
-	
+		//This indicates addPieces not to display newly added pieces
+	    this.solveState = true;
+	    console.log("Solve state is true!");
 		
 		for(k in selectedPiece.matching){
 	        if (selectedPiece.matching[k] && !this.checkPiece(selectedPiece.matchingSolutions[k])){
@@ -212,7 +222,9 @@ function PieceManager(){
         var new_keys = [];
         if(num_negations == 1){
             new_keys = p1_keys.concat(p2_keys).filter(Number);
-            new_keys.sort();
+            //console.log('Unsorted : ' + new_keys);
+            new_keys.sort(function(a,b){return a-b});
+            //console.log('Sorted : ' + new_keys);
         }
         return new_keys;
 	};
@@ -230,9 +242,15 @@ function PieceManager(){
         this.getMatchingPiecesPositions(cp);
 		this._piece_list.push(cp);
 		this._total_pieces++;
+		cp.piece_num = this._total_pieces;
+		//console.log(this._total_pieces)
 		cp.scaleX = 0.2;
 		cp.scaleY = 0.2;
 		//Animate the new piece
+		if(this.solveState){
+			console.log("Solve state is true!");	
+			cp.visible = false;
+		}
 		createjs.Tween.get(cp).to({scaleX: 0.2, scaleY: 0.2}).to({scaleX: 1, scaleY: 1}, 250);
 		createjs.Sound.play("bubble");
 		this.nextPiecePosition();
@@ -244,6 +262,8 @@ function PieceManager(){
 				else{
 					this.addPanel(cp,false);
 				}
+		
+
 
 		return cp;
 		
@@ -512,6 +532,49 @@ function PieceManager(){
 		return result;
 	};
 
+	/**
+	* This function handles incoming pieces 
+	* @param {Integer<Array>} - Key list of the latest piece received from swampdragon
+	* @return {null}
+	*/
+	PieceManager.prototype.pieceReceived = function(st_list){
+		if(!this.checkPiece(st_list)){
+			if(this.coreGame.pauseUpdates){
+				this.unaddedPieces.push(st_list);
+				document.getElementById("new_pieces").innerHTML = this.unaddedPieces.length;
+			}else{
+				p = window.g.pm.addPiece(message.data.piece_key);
+				
+			}
+		}
+		
+	};
+	
+	/**
+	* This function adds all the pieces in the unadded list 
+	* @param {null} 
+	* @return {null}
+	*/
+	PieceManager.prototype.flushUnadded = function(){
+		for(var i=0;i<this.unaddedPieces.length; i++){
+			if(!this.checkPiece(this.unaddedPieces[i]))
+				this.addPiece(this.unaddedPieces[i]);
+		}
+		this.unaddedPieces = [];
+		document.getElementById("new_pieces").innerHTML = 0;
+	};
+	
+	PieceManager.prototype.checkUnaddedPieces = function(st_list){
+		var result = false;
+		for (var i =0; i< this.unaddedPieces.length; i++){
+                if(arraysEqual(st_list,this.unaddedPieces[i])){
+                	result = true;
+                	break;
+                }
+        }
+		return result;
+	
+	};
 	
 	/**
 	*This function checks if the piece passed to this function exists in the _piece_list. Accepts an array of integers representing the piece

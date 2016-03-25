@@ -1,7 +1,7 @@
 from swampdragon import route_handler
 from swampdragon.route_handler import ModelRouter
-from crowdsource_site.models import MultiSol, MultiMove
-from crowdsource_site.serializers import MultiSolSerializer, MultiMoveSerializer
+from crowdsource_site.models import MultiSol, MultiMove, Chat
+from crowdsource_site.serializers import MultiSolSerializer, MultiMoveSerializer, ChatSerializer
 
 class MultiSolRouter(ModelRouter):
 	route_name = 'MultiSol'
@@ -25,7 +25,17 @@ class MultiMoveRouter(ModelRouter):
 
 	def get_query_set(self, **kwargs):
 		return self.model.objects.filter(solution= kwargs['solution'])
+		
+class ChatRouter(ModelRouter):
+	route_name = 'Chat'
+	serializer_class = ChatSerializer
+	model = Chat
+	def get_object(self, **kwargs):
+		return self.model.objects.get(solution= kwargs['solution'], username = kwargs['username'], initiator = kwargs['initiator'])
+
+	def get_query_set(self, **kwargs):
+		return self.model.objects.filter(solution__problem__name = kwargs['problem_name'])
 
 route_handler.register(MultiSolRouter)
 route_handler.register(MultiMoveRouter)
-
+route_handler.register(ChatRouter)

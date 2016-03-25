@@ -1,0 +1,2 @@
+{% load staticfiles swampdragon%}
+<iframe src="{% static 'game/index_game.html' %}" style="border:none; height:100%; width:100%" ></iframe>

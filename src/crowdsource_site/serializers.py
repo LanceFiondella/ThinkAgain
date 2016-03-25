@@ -11,3 +11,9 @@ class MultiMoveSerializer(ModelSerializer):
 		model = 'crowdsource_site.MultiMove'
 		publish_fields = ('solution', 'piece_key')
 		update_fields = ('solution','username', 'piece_key', 'p1', 'p2',)
+		
+class ChatSerializer(ModelSerializer):
+	class Meta:
+		model = 'crowdsource_site.Chat'
+		publish_fields = ('username__username', 'message', 'solution__problem__name', 'timestamp')
+		update_fields = ('message','solution',)

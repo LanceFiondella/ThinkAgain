@@ -16,45 +16,40 @@
 
 {% swampdragon_settings %}
 <script type="text/javascript" src="{% static 'swampdragon/js/dist/swampdragon.min.js' %}"></script>
+
 	
 	<!-- Importing game related scripts. May be combined later -->
-	<script src="{{ STATIC_URL }}/static/game/scripts/game/state.js"></script>
-    <script src="{{ STATIC_URL }}/static/game/scripts/game/gameOver.js"></script>
-    <script src="{{ STATIC_URL }}/static/game/scripts/game/PiecePanel.js"></script>
-	<script src="{{ STATIC_URL }}/static/game/scripts/game/PieceManager.js?1.002"></script>
-	<script src="{{ STATIC_URL }}/static/game/scripts/game/ClausePiece.js?1.001"></script>
-	<script src="{{ STATIC_URL }}/static/game/scripts/game/tutorial.js?1.002"></script>
+	<script src="{{ STATIC_URL }}/static/game/scripts/game/state.js?1.000"></script>
+    <script src="{{ STATIC_URL }}/static/game/scripts/game/gameOver.js?1.000"></script>
+    <script src="{{ STATIC_URL }}/static/game/scripts/game/PiecePanel.js?1.000"></script>
+	<script src="{{ STATIC_URL }}/static/game/scripts/game/PieceManager.js?1.003"></script>
+	<script src="{{ STATIC_URL }}/static/game/scripts/game/ClausePiece.js?1.002"></script>
+	<script src="{{ STATIC_URL }}/static/game/scripts/game/tutorial.js?1.003"></script>
 
-	<script src="{{ STATIC_URL }}/static/game/scripts/game/CoreGame.js"></script>
-	<script src="{{ STATIC_URL }}/static/game/scripts/game/SinglePlayer.js"></script>
-	<script src="{{ STATIC_URL }}/static/game/scripts/game/Multiplayer.js"></script>
-	<script src="{{ STATIC_URL }}/static/game/scripts/game/thinkAgain.js"></script>
-
+	<script src="{{ STATIC_URL }}/static/game/scripts/game/CoreGame.js?1.000"></script>
+	<script src="{{ STATIC_URL }}/static/game/scripts/game/SinglePlayer.js?1.000"></script>
+	<script src="{{ STATIC_URL }}/static/game/scripts/game/Multiplayer.js?1.000"></script>
+	<script src="{{ STATIC_URL }}/static/game/scripts/game/thinkAgain.js?1.000"></script>
+	<script src="{{ STATIC_URL }}/static/game/scripts/gameChat.js?1.000"></script>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-
+	<link rel="stylesheet" href="{{ STATIC_URL }}/static/game/CSS/normalize.css">
 	<script>
 	/*Menu Slider functions*/
 	$(document).ready(function(){
+	window.onbeforeunload = logout;
+	
 		$("#slide").click(function(){
-			$("#nav").fadeIn(500);
-/*			$("#slide").hide();
-			$("#bin").hide();
-			$("#save").hide();
-			$("#zoom_in").hide();
-			$("#zoom_out").hide();
-			$("#pause").hide();
-*/			$(".right_menu").hide();
+			$("#nav").show(500);
+			
+			//$(".right-menu").hide();
+			window.unreadMessages = 0;
+			var chatBadge = document.getElementById('chatBadge');
+			chatBadge.innerHTML = window.unreadMessages;
 		});
 
-		$("#nav").click(function(){
-			$("#nav").fadeOut(400);/*
-			$("#slide").show(450);
-			$("#bin").show(450);
-			$("#save").show(450);
-			$("#zoom_in").show(450);
-			$("#zoom_out").show(450);
-			$("#pause").show(450);*/
-     		$(".right_menu").show(450);
+		$("#hidenav").click(function(){
+			$("#nav").hide(400);
+			//$(".right-menu").show(450);
 
 		});
 		
@@ -65,14 +60,14 @@
 
 		$("#zoom_in").click(function(){
 			zoom_val = 0.075;
-			console.log(window.g);
+			//console.log(window.g);
 			window.g.playArea.scaleX += zoom_val;
 			window.g.playArea.scaleY += zoom_val;
 			window.g.pm.adjustPanelSize(zoom_val);}
 			);
 
 		$("#zoom_out").click(function(){zoom_val = -0.075;
-			console.log(window.g);
+			//console.log(window.g);
 			window.g.playArea.scaleX += zoom_val;
 			window.g.playArea.scaleY += zoom_val;
 			window.g.pm.adjustPanelSize(zoom_val);}
@@ -97,34 +92,47 @@
 			location.reload();
 
 		});
+		
+		$('#btn-input').keyup(function(e) {
+			if (e.keyCode == 13) {
+       				sendMessage();
+    			}
+		});
 	});
 	/*Escape Key fade out*/
 	$(document).keyup(function(e) {
 		if (e.keyCode == 27) {
 			$("#nav").fadeOut(400); 
-			/*$("#slide").show(450);
-			$("#bin").show(450);
-			$("#save").show(450);
-			$("#zoom_in").show(450);
-			$("#zoom_out").show(450);
-			$("#pause").show(450);
-			*/$(".right_menu").show(450);
+			//$(".right-menu").show(450);
 
 		}
+
 	});
 
 	$(document).keypress("m",function(e) {
 		if(e.ctrlKey)
 		$("#nav").fadeIn(500);
-		/*$("#slide").hide();
-		$("#bin").hide();
-		$("#save").hide();
-		$("#zoom_in").hide();
-		$("#zoom_out").hide();
-		$("#pause").hide();*/
-		$(".right_menu").hide()	;
+		//$(".right-menu").hide()	;
 
 	});
+	
+$('#btn-chat').click(function(event){
+	event.stopImmediatePropogation();
+  // prevent default browser behaviour
+  event.preventDefault();
+
+  //do stuff with your form here
+  sendMessage();
+ return false;
+
+});
+
+
+
+
+
+
+
 
 	function unpause(){
 		timerId = setInterval(function () {track_time++; 
@@ -187,253 +195,138 @@
 		window.location = "index_game.html";
 	}
 
-	swampdragon.ready(function(){
+//	TODO: Change problem__name to the selected level. Not hardcoded!
+	swampdragon.open(function(){
 		console.log('connected to swampdragon');
-		swampdragon.subscribe('MultiSol', 'multiGames', null,function(context,data) {
+		swampdragon.subscribe('MultiMove', 'moves', {solution__problem__name:sessionStorage.getItem('filename')} ,function(context,data) {
             console.log(context, data);
         }, function(context,data){
         	console.log('Failed subscription');
         });
+        
+        swampdragon.subscribe('MultiSol', 'sol', {problem__name:sessionStorage.getItem('filename')} ,function(context,data) {
+            console.log(context, data);
+        }, function(context,data){
+        	console.log('Failed subscription');
+        });
+        
+        swampdragon.subscribe('Chat','chat', {solution__problem__name:sessionStorage.getItem('filename') } ,function(context,data) {
+            console.log(context, data);
+        }, function(context,data){
+        	console.log('Failed subscription');
+        });
+        
+       /* if(sessionStorage.getItem('gameType') == 'mp'){
+	        changePlayerCount(1);
+        }*/
 	});
-
-	swampdragon.onChannelMessage(function(channels, message){
-		console.log(channels,message);
+	
+	swampdragon.close(function() {
+		console.log('disconnected from swampdragon');
+		//changePlayerCount(-1);
 	});
+	
+	
+	
+	function logout(){
+		window.alert("Exiting");
+		changePlayerCount(-1);
+	}
 
-	</script>
-	<link rel="stylesheet" href="CSS/normalize.css">
 
-	<style>
-	/*Menu Button Div*/
-	html, body
-	{
-		height: 99%;
-		background-color: #CCC;
+	function changePlayerCount(count){
+		var response;
+		var csrf_token = $.cookie('csrftoken');
+
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                //if (!this.csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrf_token);
+                //	}
+            	}
+        	});
+
+	    $.ajax({
+			  type: 'POST',
+			  url: "/change_player_count/",
+			  data: "filename=" + sessionStorage.getItem("filename") +"&initiator=" + 'vshekar' + "&value=" + count.toString() ,
+			  success: function(data){
+			        response = data;
+			        console.log("Succesfully incremented player_count");
+			        if(count == 0){
+			        	window.numPlayers = response['total_players'];
+						
+
+			        }
+			    },
+			  dataType: "json",
+			  async:false
+			});
+      
+    return response;
+	
 	}
 	
 
-	.menu-button{
-		width: 2.5%;
-		height: auto;
-		position: fixed;
-		right: 1%;
-		top: 5%;
-		font-size: 2.6em;
-		z-index: 1000;
-		background-color: white;
-	}
-	.garbage{
-		width: 2.5%;
-		height: auto;
-		position: fixed;
-		right: 1%;
-		top: 12%;
-		font-size: 2.6em;
-		z-index: 1000;
-		background-color: white;
-	}
-	.zoom_in {
-		width: 2.5%;
-		height: auto;
-		position: fixed;
-		right: 1%;
-		top: 26%;
-		font-size: 2.6em;
-		z-index: 1000;
-		background-color: white;
-	}
-	.zoom_out {
-		width: 2.5%;
-		height: auto;
-		position: fixed;
-		right: 1%;
-		top: 32%;
-		font-size: 2.6em;
-		z-index: 1000;
-		background-color: white;
-	}
-	.pause {
-		width: 2.5%;
-		height: auto;
-		position: fixed;
-		right: 1%;
-		top: 39%;
-		font-size: 2.6em;
-		z-index: 1000;
-		background-color: white;
-	}
-		.save {
-		width: 2.5%;
-		height: auto;
-		position: fixed;
-		right: 1%;
-		top: 19%;
-		font-size: 2.6em;
-		z-index: 1000;
-		background-color: white;
-	}
-	#get_updated_values{
-		position: fixed;
-		right: 1%;
-		top:46%;
-		font-size: 2.6em;
-		z-index: 1;
-		background-color: white;
-	}
+	</script>
+	
 
-	/*Main Navbar*/
-	.main-nav{
-		display: none;
-		position: fixed;
-		right: 0px;
-		width: 190px;
-		height: 100%;
-		background: #47a3da;
-		top: 0;
-		font-size: 90%;
-		z-index: 1000;
-	}
-	.main-nav a{
-		display: block;
-		border-bottom: 1px solid #258ecd;
-		padding: 1em;
-		font-weight: 100;
-		cursor: pointer;
-		text-decoration: none;
-		color: black;
-	}
-	#nav a:hover{
-		color: #258ecd;
-	}
-	.menu-nav a:active{
-		background: #afdefa;
-		color: #47a3da;
-	}
-	.main-nav h3{
-		color: #afdefa;
-		font-size: 1.7em;
-		padding: 20px;
-		margin: 0;
-		font-weight: 300;
-		background: #0d77b6;
-	}
-
-	#canvas{
-		position: absolute;
-		width: 100%;
-		height: 100%;
-	}
-	/*Pause Screen*/
-	#pause-overlay{
-		visibility: hidden;
-		position: absolute;
-		left: 0;
-		right: 0;
-		width: 100%;
-		height: 100%;
-		text-align: center;
-		z-index: 1000;
-		background: rgba(0, 0, 0, 0.95);
-		-webkit-transition: opacity 400ms ease-in;
-   		-moz-transition: opacity 400ms ease-in;
-   		transition: opacity 400ms ease-in;
-	}
-
-	#pause-overlay div{position: absolute;
-		top: 20%;
-		left: 38%;
-		width: 300px;
-		margin: 100px auto;
-		background-size: 40px 40px;
-    background-image: linear-gradient(135deg, rgba(255, 255, 255, .05) 25%, transparent 25%,
-                        transparent 50%, rgba(255, 255, 255, .05) 50%, rgba(255, 255, 255, .05) 75%,
-                        transparent 75%, transparent);                                      
-     box-shadow: 1px 1px 10px rgba(255,255,255,.4);
-     border: 1px solid;
-     color: #fff;
-     padding: 15px;
-     position: fixed;
- 	 background-color: #61b832;
-     border-color: #55a12c;
-     text-shadow: 0 1px 0 rgba(0,0,0,.5);
-     animation: animate-bg 5s linear infinite;
-     border-radius: 5px;}
-
-
-
-	/*Message*/
-	#overlay{
-		visibility: hidden;
-		position: absolute;
-		left: 0;
-		right: 0;
-		width: 100%;
-		height: 100%;
-		text-align: center;
-		z-index: 1000;
-		background: rgba(0, 0, 0, 0.5);
-		-webkit-transition: opacity 400ms ease-in;
-   		-moz-transition: opacity 400ms ease-in;
-   		transition: opacity 400ms ease-in;
-	}
-	#overlay div{
-		position: absolute;
-		top: 20%;
-		left: 38%;
-		width: 300px;
-		margin: 100px auto;
-		background-size: 40px 40px;
-    background-image: linear-gradient(135deg, rgba(255, 255, 255, .05) 25%, transparent 25%,
-                        transparent 50%, rgba(255, 255, 255, .05) 50%, rgba(255, 255, 255, .05) 75%,
-                        transparent 75%, transparent);                                      
-     box-shadow: 1px 1px 10px rgba(255,255,255,.4);
-     border: 1px solid;
-     color: #fff;
-     padding: 15px;
-     position: fixed;
- 	 background-color: #61b832;
-     border-color: #55a12c;
-     text-shadow: 0 1px 0 rgba(0,0,0,.5);
-     animation: animate-bg 5s linear infinite;
-     border-radius: 5px;
-	}
-	#message h3{
-		text-shadow: 0 0 10px rgba(255,255,255,1) , 0 0 20px rgba(255,255,255,1) , 0 0 30px rgba(255,255,255,1) , 0 0 40px #00ffff , 0 0 70px #00ffff , 0 0 80px #00ffff , 0 0 100px #00ffff ;
-	}
+	<style>
+	
 	</style>
 </head>
 
 <body>
 	<nav class="main-nav" id="nav">
-		<h3>Menu</h3>
-		<a href="">Problem Page</a>
-		<a href="">About US</a>
-		<a href="">Contact Us</a>
-		<h3>Instruction</h3>
+		
+		<h3>  Chat  <span class="glyphicon glyphicon-comment"></span>
+		<div class="btn-group pull-right">
+                        <button type="button" class="btn btn-default btn-xs" id="hidenav">
+                            <span class="glyphicon glyphicon-remove" style="font-size: 18px" ></span>
+                        </button>
+        </div>
+		</h3>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-3">
+				    <div class="panel panel-primary">
+				        
+				        <div class="panel-body">
+				            <ul class="chat" id="chatBody" >
+				                
+				            </ul>
+				        </div>
+				        <div class="panel-footer">
+				        	
+						        <div class="input-group">
+						            <input id="btn-input" type="text" class="form-control input-sm" placeholder="Type your message here..." />
+						            <button class="btn btn-warning btn-sm" id="btn-chat" onclick="sendMessage();">Send</button>
+						            <!--span class="input-group-btn">
+						                
+						            </span-->
+						        </div>
+				            
+				        </div>
+				    </div>
+				</div>
+			</div>
+		</div>
 	</nav>
-<div class='right_menu'>
-	<div class="menu-button">
-		<a href="#" class="menu-nav" id="slide" ><span class="glyphicon glyphicon-menu-hamburger"></span></a>	
-	</div>
-	<div class="garbage">
-		<a href="#" class="bin-button" id="bin"><span class="glyphicon glyphicon-trash"></span></a>
-	</div>
-	<div class="save">
-		<a href="#" class="save-button" id="save"><span class="glyphicon glyphicon-floppy-save"></span></a>
-	</div>
-	<div class="zoom_in">
-		<a href="#" class="zoom-in-button" id="zoom_in"><span class="glyphicon glyphicon-zoom-in"></span></a>
-	</div>
-	<div class="zoom_out">
-		<a href="#" class="zoom-out-button" id="zoom_out"><span class="glyphicon glyphicon-zoom-out"></span></a>
-	</div>
-	<div class="pause">
-		<a href="#" class="pause-button" id="pause"><span class="glyphicon glyphicon-pause"></span></a>
-	</div>
-	<div class="getNewStuff" id="get_updated_values">
-		<span class="glyphicon glyphicon-save"></span>
-	</div>
-</div> <!-- end of right menu -->
+
+<nav class='right-menu'>
+	
+		  	
+		  
+		 <a onclick="window.g.pm.flushUnadded()"><span class="label label-success" id="new_pieces" style="font-size: 36px">0</span></a>
+		 <a href="#" class="zoom-in-button" id="zoom_in"><span class="glyphicon glyphicon-zoom-in " style="font-size: 36px"></span></a>
+		 <a href="#" class="zoom-out-button" id="zoom_out"><span class="glyphicon glyphicon-zoom-out" style="font-size: 36px"></span></a>
+		 <a href="#" class="pause-button" id="pause"><span class="glyphicon glyphicon-pause" style="font-size: 36px"></span></a>
+		 <button class="btn btn-default btn-lg btn-link" id="slide" style="font-size:36px;">
+		<span class="glyphicon glyphicon-comment"></span>
+		  <span id="chatBadge" class="badge badge-notify">0</span>
+		  </button>
+</nav>
+
 	<div id="overlay">
 		<div id="message">
 		<h3 >Puzzle Complete!</h3>

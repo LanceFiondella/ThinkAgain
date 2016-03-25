@@ -121,6 +121,7 @@ function showOptions(){
 $(function() {
 $( "#mptab" ).click(function() {
   window.activeTab = "mp";
+  console.log(window.activeTab);
 });
 
 $( "#sptab" ).click(function() {
@@ -134,6 +135,7 @@ function play(){
     sessionStorage.setItem("filename",window.keys[window.selItem]);
     sessionStorage.setItem("gameType",window.activeTab);
   }else if (window.activeTab == "mp"){
+  	
     console.log(window.keys[window.selMultiItem]);
     sessionStorage.setItem("filename",window.keys[window.selMultiItem]);
     sessionStorage.setItem("gameType",window.activeTab);

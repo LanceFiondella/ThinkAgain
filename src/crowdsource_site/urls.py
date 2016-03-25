@@ -24,6 +24,11 @@ urlpatterns = [
     url(r'^get_saved_game/','crowdsource_site.views.get_saved_game',name='get_saved_game'),
     url(r'^irb_approval/','crowdsource_site.views.irb_approval',name='irb_approval'),
     url(r'^get_level_list/','crowdsource_site.views.get_level_list',name='get_level_list'),
+    url(r'^change_player_count/','crowdsource_site.views.change_player_count',name='change_player_count'),
+    url(r'^add_multi_level/','crowdsource_site.views.add_multi_level', name='add_multi_level'),
+    #Chat related URLS
+    url(r'^send_chat_message/','crowdsource_site.views.send_chat_message', name='send_chat_message'),
+    url(r'^get_all_messages/','crowdsource_site.views.get_all_messages', name='get_all_messages'),
     # url(r'^blog/', include('blog.urls')),
 
     

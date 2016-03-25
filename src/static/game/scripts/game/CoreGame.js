@@ -21,6 +21,8 @@
 	p.playArea;
 	p.alphaLocked = false;
 	p.selected_piece_border = new createjs.Shape();
+	p.pauseUpdates = true;
+	window.numPlayers = 0;
 	p.gameState = {
 		savedSteps:[],
 		elapsedSeconds:0.0
@@ -28,11 +30,52 @@
 	
 
 	p.initialize = function(){
+		this.setupWebsocket();
 		this.Container_initialize();
 		this.addPlayBorder();
 		this.addPlayArea();
 		this.addPieces();
+		
+		//Gets all chat messages definition in gameChat.js
+		getAllChat();
 
+	}
+	
+	p.setupWebsocket = function(){
+	
+	swampdragon.onChannelMessage(function(channels, message){
+		console.log(channels,message);
+		for (var i =0; i< channels.length; i++){
+					if (channels[i] == 'moves' && message.action == "created"){
+		
+						console.log(message.data.piece_key);
+			
+						if (window.g.pm.checkPiece(message.data.piece_key)){
+							console.log("piece is already present");
+						}else{
+							window.g.pm.pieceReceived(message.data.piece_key);
+						}
+					}
+					else if (channels[i] == 'sol' && message.action == "updated"){
+						console.log('updating players');
+						window.numPlayers = message.data.connected_players;
+						if(window.g && window.g.numPlayersText)
+						window.g.numPlayersText.text = "Number of concurrent players = " + window.numPlayers;
+					}
+					else if (channels[i] == 'chat' && message.action == "created"){
+						console.log('Updating chat');
+						addMessage(message.data.message, message.data.username__username, message.data.timestamp.slice(0,19));
+						var elem = document.getElementById('chatBody');
+						elem.scrollTop = elem.scrollHeight;
+						if ($('#nav').is(':hidden')){
+							var chatBadge = document.getElementById('chatBadge');
+							window.unreadMessages += 1;
+							chatBadge.innerHTML = window.unreadMessages;
+							}
+					}
+		}
+	});
+	
 	}
 
 	p.addPlayBorder = function(){
@@ -87,9 +130,26 @@
 		this.playAreaText = new createjs.Text("Time - 0:00", "20px Arial","black");
 		this.playAreaText.x = 20;
 		this.playAreaText.y = 20;
+		
+		levelName = sessionStorage.getItem("filename");
+		this.levelNameText = new createjs.Text("Level - " + levelName , "20px Arial","black");
+		this.levelNameText.x = 300;
+		this.levelNameText.y = 20;
+		
+		
+		if (sessionStorage.getItem("gameType") == "mp")
+			changePlayerCount(1);
+		this.numPlayersText = new createjs.Text("Number of concurrent players - " + window.numPlayers , "20px Arial","black");
+		this.numPlayersText.x = 500;
+		this.numPlayersText.y = 20;
+		
 
+
+		
 		//Change parent to canvas later
 		this.addChild(this.playAreaText);
+		this.addChild(this.levelNameText);
+		this.addChild(this.numPlayersText);
 		this.addChild(this.playArea);
 
 		//TODO : Add mask
@@ -111,6 +171,8 @@
 	p.resetBoard = function(){
 		//allPieces = this.pm.getAllPieces();
 		allPieces = this.pm._piece_list;
+		//New pieces will be displayed
+		this.pm.solveState = false;
 		var allpieces_length = allPieces.length;
 		for(var i = 0; i<allpieces_length; i++){
 		
@@ -196,7 +258,11 @@
 		}
 
 		this.addSavedPieces();
-		this.resetBoard();
+		//this.resetBoard();
+		this.playArea.scaleX += -0.25;
+		this.playArea.scaleY += -0.25;
+		this.pm.adjustPanelSize(-0.25);
+		
 	}
 
 
@@ -227,44 +293,60 @@
 	}
 
 	p.getSavedGame = function(){
-    
+    	console.log("In getSavedGame : " + sessionStorage.getItem("gameType"));
 		var response;
 		var csrf_token = $.cookie('csrftoken');
-	    $.ajaxSetup({
-	            beforeSend: function(xhr, settings) {
-	            //if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-	                xhr.setRequestHeader("X-CSRFToken", csrf_token);
-	              //             }
-	                        }
-	                    });
 
-	                $.ajax({
-	              type: 'POST',
-	              url: '/get_saved_game/',
-	              data: "problem_name=" + sessionStorage.getItem("filename")+"&username="+ sessionStorage.getItem("username"),
-	              success: function(data){
-	                    response =data;
-	                },
-	              dataType: "json",
-	              async:false
-	            });
+			$.ajaxSetup({
+			        beforeSend: function(xhr, settings) {
+			        //if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+			            xhr.setRequestHeader("X-CSRFToken", csrf_token);
+			          //             }
+			                    }
+			                });
+
+			            $.ajax({
+			          type: 'POST',
+			          url: '/get_saved_game/',
+			          data: "problem_name=" + sessionStorage.getItem("filename")+"&username="+ sessionStorage.getItem("username")+"&game_type="+ sessionStorage.getItem("gameType"),
+			          success: function(data){
+			                response =data;
+			            },
+			          dataType: "json",
+			          async:false
+			        });
+
+
+	    console.log(response);
 	    return response;
 	}
 
 	p.addSavedPieces = function(){
 		if ($.isEmptyObject(this.getSavedGame())) { 
 				console.log("--No Saved Game--"); 
-				} else {
-			console.log("--Yes Saved Game--");
-			var result = this.getSavedGame();
-		if (result.steps){
-			this.gameState.saved_steps = $.parseJSON(result.steps);
-			this.trackTime = this.gameState.saved_steps[this.gameState.saved_steps.length-1].t;
-			}
-			
-			for (var i=0;i<this.gameState.saved_steps.length;i++) {
-				this.pm.addPiece(this.gameState.saved_steps[i].pk);
-			}
+				} 
+		else {
+				console.log("--Yes Saved Game--");
+				var result = this.getSavedGame();
+				if (result.steps){
+					this.gameState.saved_steps = $.parseJSON(result.steps);
+					this.trackTime = this.gameState.saved_steps[this.gameState.saved_steps.length-1].t;
+					for (var i=0;i<this.gameState.saved_steps.length;i++) {
+						this.pm.addPiece(this.gameState.saved_steps[i].pk);
+						}
+	
+					}
+				else if(result.mp_steps){
+					this.gameState.saved_steps = []
+					this.trackTime = result.game_time
+					console.log("Game time = " + result.mp_steps);
+					for (var i=0;i<result.mp_steps.length;i++) {
+						this.gameState.saved_steps.push($.parseJSON(result.mp_steps[i]));
+					}
+					for (var i=this.pm._total_pieces;i<this.gameState.saved_steps.length;i++) {
+							this.pm.addPiece(this.gameState.saved_steps[i]);
+						}
+				}
 		}	
 	}
 
@@ -279,27 +361,18 @@
     return a - b;
 	}
 
-	p.zoom = function(value){
-		
-		//if(scrollWheelTimer!=null){
-		//	clearTimeout(scrollWheelTimer);
-		//}
-		//TODO : Remove comment after adjustRowLength is done
-		//scrollWheelTimer = setTimeout(function(){adjustRowLength();},200);
-
-	}
 
 	p.MouseWheelHandler = function(e){
 		if(Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)))>0)
-        zoom_val=.025;
-    else
-        zoom_val= -0.025;
-    	//this.zoom(zoom_val);
-    this.playArea.scaleX += zoom_val;
-	this.playArea.scaleY += zoom_val;
+		    zoom_val=.025;
+		else
+		    zoom_val= -0.025;
+			//this.zoom(zoom_val);
+		this.playArea.scaleX += zoom_val;
+		this.playArea.scaleY += zoom_val;
 
-	//Change the size of the panels
-	this.pm.adjustPanelSize(zoom_val);
+		//Change the size of the panels
+		this.pm.adjustPanelSize(zoom_val);
 	}
 
 	p.sendStep = function(step){
@@ -319,7 +392,7 @@
 	                $.ajax({
 	              type: 'POST',
 	              url: '/save_step/',
-	              data: "problem_name=" + sessionStorage.getItem("filename")+"&username="+ sessionStorage.getItem("username")+"&total_pieces=" + this.pm._total_pieces+ "&total_time=" + this.trackTime + "&solution=" + JSON.stringify(step),
+	              data: "problem_name=" + sessionStorage.getItem("filename")+"&username="+ sessionStorage.getItem("username")+"&total_pieces=" + this.pm._total_pieces+ "&total_time=" + this.trackTime + "&solution=" + JSON.stringify(step)+"&game_type=" + sessionStorage.getItem("gameType"),
 	              success: function(data){
 	                    response = data;
 	                },
@@ -328,6 +401,8 @@
 	            });
 
 	}
+	
+	
 	
 	window.game.CoreGame = CoreGame;
 	}(window));

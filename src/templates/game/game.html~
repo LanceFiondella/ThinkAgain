@@ -1,0 +1,376 @@
+
+<!DOCTYPE html>
+{% load swampdragon_tags static%}
+
+<html>
+<head>
+<meta charset="utf-8">
+	<title>CrowdLogic</title>
+	
+	
+	<!-- Importing external libraries -->
+	<script src="{{ STATIC_URL }}/static/game/scripts/lib/jquery-1.11.3.min.js"></script>
+	<script src="{{ STATIC_URL }}/static/game/scripts/lib/bootstrap.min.js"></script>
+	<script src="{{ STATIC_URL }}/static/game/scripts/lib/jquery.cookie.min.js"></script>
+	<script src="{{ STATIC_URL }}/static/game/scripts/lib/createjs-2015.05.21.min.js"></script>
+
+{% swampdragon_settings %}
+<script type="text/javascript" src="{% static 'swampdragon/js/dist/swampdragon.min.js' %}"></script>
+
+	
+	<!-- Importing game related scripts. May be combined later -->
+	<script src="{{ STATIC_URL }}/static/game/scripts/game/state.js?1.000"></script>
+    <script src="{{ STATIC_URL }}/static/game/scripts/game/gameOver.js?1.000"></script>
+    <script src="{{ STATIC_URL }}/static/game/scripts/game/PiecePanel.js?1.000"></script>
+	<script src="{{ STATIC_URL }}/static/game/scripts/game/PieceManager.js?1.003"></script>
+	<script src="{{ STATIC_URL }}/static/game/scripts/game/ClausePiece.js?1.002"></script>
+	<script src="{{ STATIC_URL }}/static/game/scripts/game/tutorial.js?1.003"></script>
+
+	<script src="{{ STATIC_URL }}/static/game/scripts/game/CoreGame.js?1.000"></script>
+	<script src="{{ STATIC_URL }}/static/game/scripts/game/SinglePlayer.js?1.000"></script>
+	<script src="{{ STATIC_URL }}/static/game/scripts/game/Multiplayer.js?1.000"></script>
+	<script src="{{ STATIC_URL }}/static/game/scripts/game/thinkAgain.js?1.000"></script>
+	<script src="{{ STATIC_URL }}/static/game/scripts/gameChat.js?1.000"></script>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+	<link rel="stylesheet" href="{{ STATIC_URL }}/static/game/CSS/normalize.css">
+	<script>
+	/*Menu Slider functions*/
+	$(document).ready(function(){
+	window.onbeforeunload = logout;
+	
+		$("#slide").click(function(){
+			$("#nav").show(500);
+			
+			//$(".right-menu").hide();
+			window.unreadMessages = 0;
+			var chatBadge = document.getElementById('chatBadge');
+			chatBadge.innerHTML = window.unreadMessages;
+		});
+
+		$("#hidenav").click(function(){
+			$("#nav").hide(400);
+			//$(".right-menu").show(450);
+
+		});
+		
+		$("#bin").click(function(){
+			//alert(pm._total_pieces);
+			pm.popPiece();	
+		});
+
+		$("#zoom_in").click(function(){
+			zoom_val = 0.075;
+			//console.log(window.g);
+			window.g.playArea.scaleX += zoom_val;
+			window.g.playArea.scaleY += zoom_val;
+			window.g.pm.adjustPanelSize(zoom_val);}
+			);
+
+		$("#zoom_out").click(function(){zoom_val = -0.075;
+			//console.log(window.g);
+			window.g.playArea.scaleX += zoom_val;
+			window.g.playArea.scaleY += zoom_val;
+			window.g.pm.adjustPanelSize(zoom_val);}
+			);
+
+		$("#pause").click(function(){
+			//Stop timer
+			clearInterval(timerId);
+			el = document.getElementById("pause-overlay");
+			el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
+
+
+
+		});
+
+
+		$("#save").click(function(){
+			//Save time stamp and game state
+			//game_state.elapsed_seconds = track_time;
+			//console.log(game_state);
+			abandonGame();
+			location.reload();
+
+		});
+		
+		$('#btn-input').keyup(function(e) {
+			if (e.keyCode == 13) {
+       				sendMessage();
+    			}
+		});
+	});
+	/*Escape Key fade out*/
+	$(document).keyup(function(e) {
+		if (e.keyCode == 27) {
+			$("#nav").fadeOut(400); 
+			//$(".right-menu").show(450);
+
+		}
+
+	});
+
+	$(document).keypress("m",function(e) {
+		if(e.ctrlKey)
+		$("#nav").fadeIn(500);
+		//$(".right-menu").hide()	;
+
+	});
+	
+$('#btn-chat').click(function(event){
+	event.stopImmediatePropogation();
+  // prevent default browser behaviour
+  event.preventDefault();
+
+  //do stuff with your form here
+  sendMessage();
+ return false;
+
+});
+
+
+
+
+
+
+
+
+	function unpause(){
+		timerId = setInterval(function () {track_time++; 
+  							if (Math.trunc(track_time%60) < 10)
+  								play_area_text.text = "Time : " +  Math.trunc(track_time/60) +":0"+ (Math.trunc(track_time%60));
+  							else
+  								play_area_text.text = "Time : " + Math.trunc(track_time/60) +":"+ (Math.trunc(track_time%60));
+  							 }, 1000);
+		el = document.getElementById("pause-overlay");
+			el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
+	}
+
+	function httpGet(theUrl)
+	{
+		//console.log("httpGet function");
+	    
+	    var xmlHttp = null;
+
+	    xmlHttp = new XMLHttpRequest();
+	    xmlHttp.open( "GET", theUrl, false );
+	    xmlHttp.send( "filename=" + sessionStorage.getItem("filename") );
+	    //alert(" = > "+xmlHttp.responseText);
+	    return xmlHttp.responseText;
+	}
+
+	function Next_Problem(){
+		var filename = sessionStorage.getItem('filename');
+		var file = filename.split(".");
+		//alert(file[0]);
+		var check = 0;
+		var next_value,i;
+		//var data = JSON.parse(problem_list);
+		problem_list = httpGet("/cgi-bin/get_problem_files.py");
+		
+		var data = JSON.parse(problem_list);
+		var keys = [];
+		for(var k in data){
+    	if(data.hasOwnProperty(k)){
+        	keys.push(k);
+    	}
+		}
+
+		keys.sort();
+
+		
+		//var arr = Object.keys(data);
+		//var array = arr;
+		
+
+		for(i=0;i<keys.length;i++)
+		{
+			if(file[0] == keys[i])
+			{
+				next_value = keys[i+1];
+			}
+		}
+		//alert(data[next_value]);
+		sessionStorage.setItem("filename",data[next_value]);
+
+		window.location = "index_game.html";
+	}
+
+//	TODO: Change problem__name to the selected level. Not hardcoded!
+	swampdragon.open(function(){
+		console.log('connected to swampdragon');
+		swampdragon.subscribe('MultiMove', 'moves', {solution__problem__name:sessionStorage.getItem('filename')} ,function(context,data) {
+            console.log(context, data);
+        }, function(context,data){
+        	console.log('Failed subscription');
+        });
+        
+        swampdragon.subscribe('MultiSol', 'sol', {problem__name:sessionStorage.getItem('filename')} ,function(context,data) {
+            console.log(context, data);
+        }, function(context,data){
+        	console.log('Failed subscription');
+        });
+        
+        swampdragon.subscribe('Chat','chat', {solution__problem__name:sessionStorage.getItem('filename') } ,function(context,data) {
+            console.log(context, data);
+        }, function(context,data){
+        	console.log('Failed subscription');
+        });
+        
+       /* if(sessionStorage.getItem('gameType') == 'mp'){
+	        changePlayerCount(1);
+        }*/
+	});
+	
+	swampdragon.close(function() {
+		console.log('disconnected from swampdragon');
+		changePlayerCount(-1);
+	});
+	
+	
+	
+	function logout(){
+		window.alert("Exiting");
+		changePlayerCount(-1);
+	}
+
+
+	function changePlayerCount(count){
+		var response;
+		var csrf_token = $.cookie('csrftoken');
+
+        $.ajaxSetup({
+            beforeSend: function(xhr, settings) {
+                //if (!this.csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", csrf_token);
+                //	}
+            	}
+        	});
+
+	    $.ajax({
+			  type: 'POST',
+			  url: "/change_player_count/",
+			  data: "filename=" + sessionStorage.getItem("filename") +"&initiator=" + 'vshekar' + "&value=" + count.toString() ,
+			  success: function(data){
+			        response = data;
+			        console.log("Succesfully incremented player_count");
+			        if(count == 0){
+			        	window.numPlayers = response['total_players'];
+						
+
+			        }
+			    },
+			  dataType: "json",
+			  async:false
+			});
+      
+    return response;
+	
+	}
+	
+
+	</script>
+	
+
+	<style>
+	
+	</style>
+</head>
+
+<body>
+	<nav class="main-nav" id="nav">
+		
+		<h3>  Chat  <span class="glyphicon glyphicon-comment"></span>
+		<div class="btn-group pull-right">
+                        <button type="button" class="btn btn-default btn-xs" id="hidenav">
+                            <span class="glyphicon glyphicon-remove" style="font-size: 18px" ></span>
+                        </button>
+        </div>
+		</h3>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-3">
+				    <div class="panel panel-primary">
+				        
+				        <div class="panel-body">
+				            <ul class="chat" id="chatBody" >
+				                
+				            </ul>
+				        </div>
+				        <div class="panel-footer">
+				        	
+						        <div class="input-group">
+						            <input id="btn-input" type="text" class="form-control input-sm" placeholder="Type your message here..." />
+						            <button class="btn btn-warning btn-sm" id="btn-chat" onclick="sendMessage();">Send</button>
+						            <!--span class="input-group-btn">
+						                
+						            </span-->
+						        </div>
+				            
+				        </div>
+				    </div>
+				</div>
+			</div>
+		</div>
+	</nav>
+
+<nav class='right-menu'>
+	
+		  	
+		  
+		 <a onclick="window.g.pm.flushUnadded()"><span class="label label-success" id="new_pieces" style="font-size: 36px">0</span></a>
+		 <a href="#" class="zoom-in-button" id="zoom_in"><span class="glyphicon glyphicon-zoom-in " style="font-size: 36px"></span></a>
+		 <a href="#" class="zoom-out-button" id="zoom_out"><span class="glyphicon glyphicon-zoom-out" style="font-size: 36px"></span></a>
+		 <a href="#" class="pause-button" id="pause"><span class="glyphicon glyphicon-pause" style="font-size: 36px"></span></a>
+		 <button class="btn btn-default btn-lg btn-link" id="slide" style="font-size:36px;">
+		<span class="glyphicon glyphicon-comment"></span>
+		  <span id="chatBadge" class="badge badge-notify">0</span>
+		  </button>
+</nav>
+
+	<div id="overlay">
+		<div id="message">
+		<h3 >Puzzle Complete!</h3>
+		<h3 id="steps_text"></h3>
+		<h3 id="time_text"></h3>
+		<p id="instruction">To Play Next Level Press Next</p>
+		<button class="btn btn-danger" id="button" value="Cancel" onclick="location.href='/game_menu/'; return false;">Menu</button>
+		<button class="btn btn-warning" id="button" value="Play Again" onclick="location.reload(true); return false;">Play Again</button>
+		<a type="submit" class="btn btn-primary" id="button" value="Next" onclick="Next_Problem()">Next</a>
+		</div>
+	</div>
+
+	<div id="pause-overlay">
+		<div id="pause-menu">
+			<button class="btn btn-danger" id="button" value="Cancel" onclick="unpause()">Resume</button>
+
+		</div>
+	</div>
+
+	
+
+
+	<div id="game_div">
+		<canvas id="canvas"></canvas>
+	</div>
+
+
+	
+
+<script>
+
+var stage;
+var canvas;
+
+window.game = window.game || {};
+game.main = new game.thinkAgain();
+
+$('#get_updated_values').on('click', function(){
+gettingSavedValuesAndAddingThem();
+});
+</script>
+
+
+</body>
+
+
+</html>

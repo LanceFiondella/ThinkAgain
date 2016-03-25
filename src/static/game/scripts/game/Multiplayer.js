@@ -8,6 +8,7 @@
 	var p = Multiplayer.prototype= new createjs.Container();
 
 	p.initialize = function(){
+		sessionStorage.setItem('gametype','mp');
 		g = new game.CoreGame();
 		this.addChild(g);
 

@@ -78,8 +78,12 @@ WSGI_APPLICATION = 'crowdsource_site.wsgi.application'
 
 DATABASES = {
 'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'db.sqlite3',
+    'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'ThinkagainDB',
+    'USER': 'postgres',
+    'PASSWORD': 'thinkagain',
+    'HOST': 'localhost',
+    'PORT': '5432',
     }
 
     
@@ -126,4 +130,9 @@ STATICFILES_DIRS = (
 
 # SwampDragon settings
 SWAMP_DRAGON_CONNECTION = ('swampdragon.connections.sockjs_connection.DjangoSubscriberConnection', '/data')
-DRAGON_URL = 'http://localhost:9999/'
+#SWAMP_DRAGON_CONNECTION = ('swampdragon_notifications.notification_connection.Connection', '/data')
+#DRAGON_URL = 'http://localhost:9999/'
+DRAGON_URL = 'http://134.88.13.52:8003/'
+
+SWAMP_DRAGON_HOST = '127.0.0.1'
+SWAMP_DRAGON_PORT = 9001

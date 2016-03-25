@@ -520,3 +520,279 @@ th {
   margin-bottom: 7px;
   margin-top: 3px;
 }
+
+/******************************************************
+  CSS FOR GAME SIDE MENU
+******************************************************/
+/*Menu Button Div*/
+	html, body
+	{
+		height: 99%;
+		background-color: #CCC;
+	}
+	
+	.right-menu{
+		position: fixed;
+		right: 0px;
+		width: 100px;
+		height: 100%;
+		background: #47a3da;
+		top: 0;
+		font-size: 90%;
+		z-index: 1000;
+	}
+	.right-menu a{
+		display: block;
+		border-bottom: 1px solid #258ecd;
+		padding: 1em;
+		font-weight: 100;
+		cursor: pointer;
+		text-decoration: none;
+		color: black;
+	}
+
+	.menu-button{
+		width: 2.5%;
+		height: auto;
+		position: fixed;
+		right: 1%;
+		top: 5%;
+		font-size: 2.6em;
+		z-index: 1000;
+		background-color: white;
+	}
+	.garbage{
+		width: 2.5%;
+		height: auto;
+		position: fixed;
+		right: 1%;
+		top: 12%;
+		font-size: 2.6em;
+		z-index: 1000;
+		background-color: white;
+	}
+	.new_pieces{
+	position: fixed;
+		right: 1%;
+		top: 12%;
+		 width: 2.5%;
+		height:auto;
+		z-index: 1000;
+				font-size: 2.6em;
+		background-color: white;
+		/*border-radius: 50%;
+		border:1px solid #cfdcec;
+		overflow:hidden;
+		
+		background: #4679BD; 
+		box-shadow: 0 0 3px gray;*/
+	}
+	.bubble{
+	/*
+		 display:block;
+	float:left;
+	width:100%;
+	padding-top:50%;
+    padding-bottom:50%;
+	line-height:1em;
+	margin-top:-0.5em;
+    
+	
+	
+    text-decoration:none;*/
+    color:#e2eaf3;
+    font-family:Verdana;
+    font-size:1.7em;
+    font-weight:bold;
+    text-align:center;
+    font-size:1.2em;
+    z-index: 1000;
+	}
+	
+	.badge-notify{
+   background:red;
+   position:absolute;
+   top: 10px;
+   left: -20px;
+}
+	
+	.zoom_in {
+		width: 2.5%;
+		height: auto;
+		position: fixed;
+		right: 1%;
+		top: 26%;
+		font-size: 2.6em;
+		z-index: 1000;
+		background-color: white;
+	}
+	.zoom_out {
+		width: 2.5%;
+		height: auto;
+		position: fixed;
+		right: 1%;
+		top: 32%;
+		font-size: 2.6em;
+		z-index: 1000;
+		background-color: white;
+	}
+	.pause {
+		width: 2.5%;
+		height: auto;
+		position: fixed;
+		right: 1%;
+		top: 39%;
+		font-size: 2.6em;
+		z-index: 1000;
+		background-color: white;
+	}
+		.save {
+		width: 2.5%;
+		height: auto;
+		position: fixed;
+		right: 1%;
+		top: 19%;
+		font-size: 2.6em;
+		z-index: 1000;
+		background-color: white;
+	}
+	#get_updated_values{
+		position: fixed;
+		right: 1%;
+		top:46%;
+		font-size: 2.6em;
+		z-index: 1;
+		background-color: white;
+	}
+
+	/*Main Navbar*/
+	.main-nav{
+		display: none;
+		position: fixed;
+		right: 0px;
+		width: 300px;
+		
+		height:70vh;
+		background: #47a3da;
+		top: 30%;
+		font-size: 90%;
+		z-index: 1001;
+	}
+	.main-nav a{
+		display: block;
+		border-bottom: 1px solid #258ecd;
+		padding: 1em;
+		font-weight: 100;
+		cursor: pointer;
+		text-decoration: none;
+		color: black;
+	}
+	#nav a:hover{
+		color: #258ecd;
+	}
+	.menu-nav a:active{
+		background: #afdefa;
+		color: #47a3da;
+	}
+	.main-nav h3{
+		color: #afdefa;
+		font-size: 1.7em;
+		padding: 20px;
+		margin: 0;
+		font-weight: 300;
+		background: #0d77b6;
+	}
+
+	#canvas{
+		position: absolute;
+		width: 100%;
+		height: 100%;
+	}
+	/*Pause Screen*/
+	#pause-overlay{
+		visibility: hidden;
+		position: absolute;
+		left: 0;
+		right: 0;
+		width: 100%;
+		height: 100%;
+		text-align: center;
+		z-index: 1000;
+		background: rgba(0, 0, 0, 0.95);
+		-webkit-transition: opacity 400ms ease-in;
+   		-moz-transition: opacity 400ms ease-in;
+   		transition: opacity 400ms ease-in;
+	}
+
+	#pause-overlay div{position: absolute;
+		top: 20%;
+		left: 38%;
+		width: 300px;
+		margin: 100px auto;
+		background-size: 40px 40px;
+    background-image: linear-gradient(135deg, rgba(255, 255, 255, .05) 25%, transparent 25%,
+                        transparent 50%, rgba(255, 255, 255, .05) 50%, rgba(255, 255, 255, .05) 75%,
+                        transparent 75%, transparent);                                      
+     box-shadow: 1px 1px 10px rgba(255,255,255,.4);
+     border: 1px solid;
+     color: #fff;
+     padding: 15px;
+     position: fixed;
+ 	 background-color: #61b832;
+     border-color: #55a12c;
+     text-shadow: 0 1px 0 rgba(0,0,0,.5);
+     animation: animate-bg 5s linear infinite;
+     border-radius: 5px;}
+
+
+
+	/*Message*/
+	#overlay{
+		visibility: hidden;
+		position: absolute;
+		left: 0;
+		right: 0;
+		width: 100%;
+		height: 100%;
+		text-align: center;
+		z-index: 1000;
+		background: rgba(0, 0, 0, 0.5);
+		-webkit-transition: opacity 400ms ease-in;
+   		-moz-transition: opacity 400ms ease-in;
+   		transition: opacity 400ms ease-in;
+	}
+	#overlay div{
+		position: absolute;
+		top: 20%;
+		left: 38%;
+		width: 300px;
+		margin: 100px auto;
+		background-size: 40px 40px;
+    background-image: linear-gradient(135deg, rgba(255, 255, 255, .05) 25%, transparent 25%,
+                        transparent 50%, rgba(255, 255, 255, .05) 50%, rgba(255, 255, 255, .05) 75%,
+                        transparent 75%, transparent);                                      
+     box-shadow: 1px 1px 10px rgba(255,255,255,.4);
+     border: 1px solid;
+     color: #fff;
+     padding: 15px;
+     position: fixed;
+ 	 background-color: #61b832;
+     border-color: #55a12c;
+     text-shadow: 0 1px 0 rgba(0,0,0,.5);
+     animation: animate-bg 5s linear infinite;
+     border-radius: 5px;
+	}
+	#message h3{
+		text-shadow: 0 0 10px rgba(255,255,255,1) , 0 0 20px rgba(255,255,255,1) , 0 0 30px rgba(255,255,255,1) , 0 0 40px #00ffff , 0 0 70px #00ffff , 0 0 80px #00ffff , 0 0 100px #00ffff ;
+	}
+	
+	/*Chat box*/
+	.chat {
+	font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+		list-style-type:none; 
+		max-height:48vh;
+		  margin:0;
+		  overflow:auto;
+		  padding:0;
+		  text-indent:2px;
+	}

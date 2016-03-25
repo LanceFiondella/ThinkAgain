@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+	<title>CrowdLogic</title>
+	
+	
+
+	<script src="scripts/jquery-1.11.3.min.js"></script>
+	<script src="scripts/bootstrap.min.js"></script>
+	
+	<script src="scripts/jquery.cookie.min.js"></script>
+	<script src="scripts/createjs-2015.05.21.min.js"></script>
+	<script src="scripts/state.js"></script>
+    <script src="scripts/SimpleButton.js"></script>
+    
+    <script src="scripts/gameMenu.js"></script>
+	<script src="scripts/PiecePanel.js"></script>
+    <script src="scripts/gameOver.js"></script>
+	<script src="scripts/PieceManager.js?1.002"></script>
+	<script src="scripts/ClausePiece.js?1.001"></script>
+	<script src="scripts/BranchExplorer.js?1.0"></script>
+	<script src="scripts/tutorial.js?1.002"></script>
+	<!--script src="scripts/game.js?1.002"></script-->
+	<script src="scripts/CoreGame.js"></script>
+	<script src="scripts/SinglePlayer.js"></script>
+	<script src="scripts/Multiplayer.js"></script>
+	<script src="scripts/thinkAgain.js"></script>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+	<script>
+	/*Menu Slider functions*/
+	$(document).ready(function(){
+		$("#slide").click(function(){
+			$("#nav").fadeIn(500);
+/*			$("#slide").hide();
+			$("#bin").hide();
+			$("#save").hide();
+			$("#zoom_in").hide();
+			$("#zoom_out").hide();
+			$("#pause").hide();
+*/			$(".right_menu").hide();
+		});
+
+		$("#nav").click(function(){
+			$("#nav").fadeOut(400);/*
+			$("#slide").show(450);
+			$("#bin").show(450);
+			$("#save").show(450);
+			$("#zoom_in").show(450);
+			$("#zoom_out").show(450);
+			$("#pause").show(450);*/
+     		$(".right_menu").show(450);
+
+		});
+		
+		$("#bin").click(function(){
+			//alert(pm._total_pieces);
+			pm.popPiece();	
+		});
+
+		$("#zoom_in").click(function(){window.game.currentScene.g.playArea.scaleX = window.game.currentScene.g.playArea.scaleY += 0.05; window.game.currentScene.g.playArea.pm.adjustPanelSize(0.05);});
+
+		$("#zoom_out").click(function(){zoom(-0.075);});
+
+		$("#pause").click(function(){
+			//Stop timer
+			clearInterval(timerId);
+			el = document.getElementById("pause-overlay");
+			el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
+
+
+
+		});
+
+
+		$("#save").click(function(){
+			//Save time stamp and game state
+			//game_state.elapsed_seconds = track_time;
+			//console.log(game_state);
+			abandonGame();
+			location.reload();
+
+		});
+	});
+	/*Escape Key fade out*/
+	$(document).keyup(function(e) {
+		if (e.keyCode == 27) {
+			$("#nav").fadeOut(400); 
+			/*$("#slide").show(450);
+			$("#bin").show(450);
+			$("#save").show(450);
+			$("#zoom_in").show(450);
+			$("#zoom_out").show(450);
+			$("#pause").show(450);
+			*/$(".right_menu").show(450);
+
+		}
+	});
+
+	$(document).keypress("m",function(e) {
+		if(e.ctrlKey)
+		$("#nav").fadeIn(500);
+		/*$("#slide").hide();
+		$("#bin").hide();
+		$("#save").hide();
+		$("#zoom_in").hide();
+		$("#zoom_out").hide();
+		$("#pause").hide();*/
+		$(".right_menu").hide()	;
+
+	});
+
+	function unpause(){
+		timerId = setInterval(function () {track_time++; 
+  							if (Math.trunc(track_time%60) < 10)
+  								play_area_text.text = "Time : " +  Math.trunc(track_time/60) +":0"+ (Math.trunc(track_time%60));
+  							else
+  								play_area_text.text = "Time : " + Math.trunc(track_time/60) +":"+ (Math.trunc(track_time%60));
+  							 }, 1000);
+		el = document.getElementById("pause-overlay");
+			el.style.visibility = (el.style.visibility == "visible") ? "hidden" : "visible";
+	}
+
+	function httpGet(theUrl)
+	{
+		//console.log("httpGet function");
+	    
+	    var xmlHttp = null;
+
+	    xmlHttp = new XMLHttpRequest();
+	    xmlHttp.open( "GET", theUrl, false );
+	    xmlHttp.send( "filename=" + sessionStorage.getItem("filename") );
+	    //alert(" = > "+xmlHttp.responseText);
+	    return xmlHttp.responseText;
+	}
+
+	function Next_Problem(){
+		var filename = sessionStorage.getItem('filename');
+		var file = filename.split(".");
+		//alert(file[0]);
+		var check = 0;
+		var next_value,i;
+		//var data = JSON.parse(problem_list);
+		problem_list = httpGet("/cgi-bin/get_problem_files.py");
+		
+		var data = JSON.parse(problem_list);
+		var keys = [];
+		for(var k in data){
+    	if(data.hasOwnProperty(k)){
+        	keys.push(k);
+    	}
+		}
+
+		keys.sort();
+
+		
+		//var arr = Object.keys(data);
+		//var array = arr;
+		
+
+		for(i=0;i<keys.length;i++)
+		{
+			if(file[0] == keys[i])
+			{
+				next_value = keys[i+1];
+			}
+		}
+		//alert(data[next_value]);
+		sessionStorage.setItem("filename",data[next_value]);
+
+		window.location = "index_game.html";
+	}
+
+	</script>
+	<link rel="stylesheet" href="CSS/normalize.css">
+
+	<style>
+	/*Menu Button Div*/
+	html, body
+	{
+		height: 99%;
+		background-color: #CCC;
+	}
+	
+
+	.menu-button{
+		width: 2.5%;
+		height: auto;
+		position: fixed;
+		right: 1%;
+		top: 5%;
+		z-index: 1000;
+	}
+	.garbage{
+		width: 2.5%;
+		height: auto;
+		position: fixed;
+		right: 1%;
+		top: 12%;
+		z-index: 1000;
+	}
+	.zoom_in {
+		width: 2.5%;
+		height: auto;
+		position: fixed;
+		right: 1%;
+		top: 26%;
+		z-index: 1000;
+	}
+	.zoom_out {
+		width: 2.5%;
+		height: auto;
+		position: fixed;
+		right: 1%;
+		top: 32%;
+		z-index: 1000;
+	}
+	.pause {
+		width: 2.5%;
+		height: auto;
+		position: fixed;
+		right: 1%;
+		top: 39%;
+		z-index: 1000;
+	}
+		.save {
+		width: 2.5%;
+		height: auto;
+		position: fixed;
+		right: 1%;
+		top: 19%;
+		z-index: 1000;
+	}
+	#get_updated_values{
+		position: fixed;
+		right: 1.4%;
+		top:46%;
+		font-size: 1.6em;
+		z-index: 1;
+	}
+
+	/*Main Navbar*/
+	.main-nav{
+		display: none;
+		position: fixed;
+		right: 0px;
+		width: 190px;
+		height: 100%;
+		background: #47a3da;
+		top: 0;
+		font-size: 90%;
+		z-index: 1000;
+	}
+	.main-nav a{
+		display: block;
+		border-bottom: 1px solid #258ecd;
+		padding: 1em;
+		font-weight: 100;
+		cursor: pointer;
+		text-decoration: none;
+		color: black;
+	}
+	#nav a:hover{
+		color: #258ecd;
+	}
+	.menu-nav a:active{
+		background: #afdefa;
+		color: #47a3da;
+	}
+	.main-nav h3{
+		color: #afdefa;
+		font-size: 1.7em;
+		padding: 20px;
+		margin: 0;
+		font-weight: 300;
+		background: #0d77b6;
+	}
+
+	#canvas{
+		position: absolute;
+		width: 100%;
+		height: 100%;
+	}
+	/*Pause Screen*/
+	#pause-overlay{
+		visibility: hidden;
+		position: absolute;
+		left: 0;
+		right: 0;
+		width: 100%;
+		height: 100%;
+		text-align: center;
+		z-index: 1000;
+		background: rgba(0, 0, 0, 0.95);
+		-webkit-transition: opacity 400ms ease-in;
+   		-moz-transition: opacity 400ms ease-in;
+   		transition: opacity 400ms ease-in;
+	}
+
+	#pause-overlay div{position: absolute;
+		top: 20%;
+		left: 38%;
+		width: 300px;
+		margin: 100px auto;
+		background-size: 40px 40px;
+    background-image: linear-gradient(135deg, rgba(255, 255, 255, .05) 25%, transparent 25%,
+                        transparent 50%, rgba(255, 255, 255, .05) 50%, rgba(255, 255, 255, .05) 75%,
+                        transparent 75%, transparent);                                      
+     box-shadow: 1px 1px 10px rgba(255,255,255,.4);
+     border: 1px solid;
+     color: #fff;
+     padding: 15px;
+     position: fixed;
+ 	 background-color: #61b832;
+     border-color: #55a12c;
+     text-shadow: 0 1px 0 rgba(0,0,0,.5);
+     animation: animate-bg 5s linear infinite;
+     border-radius: 5px;}
+
+
+
+	/*Message*/
+	#overlay{
+		visibility: hidden;
+		position: absolute;
+		left: 0;
+		right: 0;
+		width: 100%;
+		height: 100%;
+		text-align: center;
+		z-index: 1000;
+		background: rgba(0, 0, 0, 0.5);
+		-webkit-transition: opacity 400ms ease-in;
+   		-moz-transition: opacity 400ms ease-in;
+   		transition: opacity 400ms ease-in;
+	}
+	#overlay div{
+		position: absolute;
+		top: 20%;
+		left: 38%;
+		width: 300px;
+		margin: 100px auto;
+		background-size: 40px 40px;
+    background-image: linear-gradient(135deg, rgba(255, 255, 255, .05) 25%, transparent 25%,
+                        transparent 50%, rgba(255, 255, 255, .05) 50%, rgba(255, 255, 255, .05) 75%,
+                        transparent 75%, transparent);                                      
+     box-shadow: 1px 1px 10px rgba(255,255,255,.4);
+     border: 1px solid;
+     color: #fff;
+     padding: 15px;
+     position: fixed;
+ 	 background-color: #61b832;
+     border-color: #55a12c;
+     text-shadow: 0 1px 0 rgba(0,0,0,.5);
+     animation: animate-bg 5s linear infinite;
+     border-radius: 5px;
+	}
+	#message h3{
+		text-shadow: 0 0 10px rgba(255,255,255,1) , 0 0 20px rgba(255,255,255,1) , 0 0 30px rgba(255,255,255,1) , 0 0 40px #00ffff , 0 0 70px #00ffff , 0 0 80px #00ffff , 0 0 100px #00ffff ;
+	}
+	</style>
+</head>
+
+<body>
+	<nav class="main-nav" id="nav">
+		<h3>Menu</h3>
+		<a href="">Problem Page</a>
+		<a href="">About US</a>
+		<a href="">Contact Us</a>
+		<h3>Instruction</h3>
+	</nav>
+<div class='right_menu'>
+	<div class="menu-button">
+		<a href="#" class="menu-nav" id="slide" ><img src="images/menu_nav.png" alt="Instructions" height="100%" width="100%" /></a>	
+	</div>
+	<div class="garbage">
+		<a href="#" class="bin-button" id="bin"><img src="images/bin.png" alt="bin" height="100%" width="100%" /></a>
+	</div>
+	<div class="save">
+		<a href="#" class="save-button" id="save"><img src="images/Close.png" alt="save" height="100%" width="100%" /></a>
+	</div>
+	<div class="zoom_in">
+		<a href="#" class="zoom-in-button" id="zoom_in"><img src="images/zoom_in.png" alt="zoom_in" height="100%" width="100%" /></a>
+	</div>
+	<div class="zoom_out">
+		<a href="#" class="zoom-out-button" id="zoom_out"><img src="images/zoom_out.png" alt="zoom_out" height="100%" width="100%" /></a>
+	</div>
+	<div class="pause">
+		<a href="#" class="pause-button" id="pause"><img src="images/pause.png" alt="pause" height="100%" width="100%" /></a>
+	</div>
+	<div class="getNewStuff" id="get_updated_values">
+		<span class="glyphicon glyphicon-save"></span>
+	</div>
+</div> <!-- end of right menu -->
+	<div id="overlay">
+		<div id="message">
+		<h3 >Puzzle Complete!</h3>
+		<h3 id="steps_text"></h3>
+		<h3 id="time_text"></h3>
+		<p id="instruction">To Play Next Level Press Next</p>
+		<button class="btn btn-danger" id="button" value="Cancel" onclick="location.href='/game_menu/'; return false;">Menu</button>
+		<button class="btn btn-warning" id="button" value="Play Again" onclick="location.reload(true); return false;">Play Again</button>
+		<a type="submit" class="btn btn-primary" id="button" value="Next" onclick="Next_Problem()">Next</a>
+		</div>
+	</div>
+
+	<div id="pause-overlay">
+		<div id="pause-menu">
+			<button class="btn btn-danger" id="button" value="Cancel" onclick="unpause()">Resume</button>
+
+		</div>
+	</div>
+
+	
+
+
+	<div id="game_div">
+		<canvas id="canvas"></canvas>
+	</div>
+
+	<!--div id="tutorial-overlay" class="modal-dialog" style="visibility:hidden;">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h4 class="modal-title" id="myModalLabel">Tutorial</h4>
+          </div>
+          <div class="modal-body">
+              <div class="row">
+                  <div class="col-xs-8">
+                    <p id="instruction-text"> This is where the instructions get placed!  I want to see if the line gets wrapped ..........................................................................................</p>
+                </div>
+                  <div class="col-xs-4">  
+                    <button onclick = "nextStep();" class="btn btn-info btn-block">Next</button>
+                    <button onclick = "prevStep();" class="btn btn-info btn-block">Previous</button>
+                  </div>
+              </div>
+          </div>
+      </div>
+	</div-->
+	
+
+<script>
+/*window_width = $(window).width();
+window_height = $(window).height();
+
+$(window).bind("resize", function() {
+$("#canvas").css("width",window_width);
+$("#canvas").css("height",window_height);
+
+});
+*/
+
+var stage;
+var canvas;
+
+window.game = window.game || {};
+game.main = new game.thinkAgain();
+$(function() {
+	
+
+
+
+	//init();
+});
+$('#get_updated_values').on('click', function(){
+	//get updated values
+/*$("#canvas").remove();	
+$("#game_div").remove();
+
+$("#pause-overlay").after("<div id='game_div'><canvas id='canvas'></canvas></div>");
+init();*/
+//gettingSavedValuesAndAddingThem();
+window.game.main.currentScene.g.addSavedPieces();
+});
+</script>
+
+	<!-- <!iframe src="./game.html" frameborder="0"  height="100%" width="100%"> -->
+</body>
+
+
+</html>
