@@ -37,6 +37,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'swampdragon',
     'crowdsource_site',
 )
 
@@ -76,15 +77,29 @@ WSGI_APPLICATION = 'crowdsource_site.wsgi.application'
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-	'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'ThinkagainDB',
-	'USER': 'postgres',
-	'PASSWORD': 'thinkagain',
-	'HOST': 'localhost',
-	'PORT': '5432',
+ 'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'db.sqlite3',
     }
+
+   
 }
+
+"""
+'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'db.sqlite3',
+    }
+
+    'default': {
+    'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'ThinkagainDB',
+    'USER': 'postgres',
+    'PASSWORD': 'thinkagain',
+    'HOST': 'localhost',
+    'PORT': '5432',
+    }
+    """
 
 
 # Internationalization
@@ -108,3 +123,12 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, "static"),
     )
+
+# SwampDragon settings
+SWAMP_DRAGON_CONNECTION = ('swampdragon.connections.sockjs_connection.DjangoSubscriberConnection', '/data')
+#SWAMP_DRAGON_CONNECTION = ('swampdragon_notifications.notification_connection.Connection', '/data')
+DRAGON_URL = 'http://localhost:9001/'
+#DRAGON_URL = 'http://134.88.13.52:8003/'
+
+SWAMP_DRAGON_HOST = '127.0.0.1'
+SWAMP_DRAGON_PORT = 9001

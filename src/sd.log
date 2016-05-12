@@ -1,0 +1,881 @@
+Unknown command: 'socketserver'
+Type 'manage.py help' for usage.
+Unknown command: 'socketserver'
+Type 'manage.py help' for usage.
+Unknown command: 'socketserver'
+Type 'manage.py help' for usage.
+Unknown command: 'socketserver'
+Type 'manage.py help' for usage.
+Unknown command: 'socketserver'
+Type 'manage.py help' for usage.
+Unknown command: 'socketserver'
+Type 'manage.py help' for usage.
+Unknown command: 'socketserver'
+Type 'manage.py help' for usage.
+Unknown command: 'socketserver'
+Type 'manage.py help' for usage.
+Unknown command: 'socketserver'
+Type 'manage.py help' for usage.
+Unknown command: 'socketserver'
+Type 'manage.py help' for usage.
+Unknown command: 'socketserver'
+Type 'manage.py help' for usage.
+Unknown command: 'socketserver'
+Type 'manage.py help' for usage.
+Unknown command: 'socketserver'
+Type 'manage.py help' for usage.
+Unknown command: 'socketserver'
+Type 'manage.py help' for usage.
+Unknown command: 'socketserver'
+Type 'manage.py help' for usage.
+Unknown command: 'socketserver'
+Type 'manage.py help' for usage.
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+usage: manage.py runsd [-h] [--version] [-v {0,1,2,3}] [--settings SETTINGS]
+                       [--pythonpath PYTHONPATH] [--traceback] [--no-color]
+manage.py runsd: error: unrecognized arguments: 127.0.0.1:9999
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+usage: manage.py runsd [-h] [--version] [-v {0,1,2,3}] [--settings SETTINGS]
+                       [--pythonpath PYTHONPATH] [--traceback] [--no-color]
+manage.py runsd: error: unrecognized arguments: 127.0.0.1:9999
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+usage: manage.py runsd [-h] [--version] [-v {0,1,2,3}] [--settings SETTINGS]
+                       [--pythonpath PYTHONPATH] [--traceback] [--no-color]
+manage.py runsd: error: unrecognized arguments: 127.0.0.1:9999
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+usage: manage.py runsd [-h] [--version] [-v {0,1,2,3}] [--settings SETTINGS]
+                       [--pythonpath PYTHONPATH] [--traceback] [--no-color]
+manage.py runsd: error: unrecognized arguments: 127.0.0.1:9999
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+usage: manage.py runsd [-h] [--version] [-v {0,1,2,3}] [--settings SETTINGS]
+                       [--pythonpath PYTHONPATH] [--traceback] [--no-color]
+manage.py runsd: error: unrecognized arguments: 127.0.0.1:9001
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+usage: manage.py runsd [-h] [--version] [-v {0,1,2,3}] [--settings SETTINGS]
+                       [--pythonpath PYTHONPATH] [--traceback] [--no-color]
+manage.py runsd: error: unrecognized arguments: 127.0.0.1:9001
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+usage: manage.py runsd [-h] [--version] [-v {0,1,2,3}] [--settings SETTINGS]
+                       [--pythonpath PYTHONPATH] [--traceback] [--no-color]
+manage.py runsd: error: unrecognized arguments: 127.0.0.1:9001
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+usage: manage.py runsd [-h] [--version] [-v {0,1,2,3}] [--settings SETTINGS]
+                       [--pythonpath PYTHONPATH] [--traceback] [--no-color]
+manage.py runsd: error: unrecognized arguments: 127.0.0.1:9001
+Unknown command: 'socketserver'
+Type 'manage.py help' for usage.
+Unknown command: 'socketserver'
+Type 'manage.py help' for usage.
+Unknown command: 'socketserver'
+Type 'manage.py help' for usage.
+Unknown command: 'socketserver'
+Type 'manage.py help' for usage.
+Unknown command: 'socketserver'
+Type 'manage.py help' for usage.
+Unknown command: 'socketserver'
+Type 'manage.py help' for usage.
+Unknown command: 'socketserver'
+Type 'manage.py help' for usage.
+Unknown command: 'socketserver'
+Type 'manage.py help' for usage.
+Unknown command: 'socketserver'
+Type 'manage.py help' for usage.
+Unknown command: 'socketserver'
+Type 'manage.py help' for usage.
+Unknown command: 'socketserver'
+Type 'manage.py help' for usage.
+Unknown command: 'socketserver'
+Type 'manage.py help' for usage.
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+usage: manage.py runsd [-h] [--version] [-v {0,1,2,3}] [--settings SETTINGS]
+                       [--pythonpath PYTHONPATH] [--traceback] [--no-color]
+manage.py runsd: error: unrecognized arguments: 134.88.13.52:9000
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+usage: manage.py runsd [-h] [--version] [-v {0,1,2,3}] [--settings SETTINGS]
+                       [--pythonpath PYTHONPATH] [--traceback] [--no-color]
+manage.py runsd: error: unrecognized arguments: 134.88.13.52:9000
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+usage: manage.py runsd [-h] [--version] [-v {0,1,2,3}] [--settings SETTINGS]
+                       [--pythonpath PYTHONPATH] [--traceback] [--no-color]
+manage.py runsd: error: unrecognized arguments: 134.88.13.52:9000
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+usage: manage.py runsd [-h] [--version] [-v {0,1,2,3}] [--settings SETTINGS]
+                       [--pythonpath PYTHONPATH] [--traceback] [--no-color]
+manage.py runsd: error: unrecognized arguments: 134.88.13.52:9000
+Unknown command: 'socketserver'
+Type 'manage.py help' for usage.
+Unknown command: 'socketserver'
+Type 'manage.py help' for usage.
+Unknown command: 'socketserver'
+Type 'manage.py help' for usage.
+Unknown command: 'socketserver'
+Type 'manage.py help' for usage.
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+Traceback (most recent call last):
+  File "/home/vshekar/Desktop/multiplayer_shekar/src/manage.py", line 10, in <module>
+    execute_from_command_line(sys.argv)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/__init__.py", line 354, in execute_from_command_line
+    utility.execute()
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/__init__.py", line 328, in execute
+    django.setup()
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/vshekar/Desktop/multiplayer_shekar/src/crowdsource_site/models.py", line 4, in <module>
+    from crowdsource_site.serializers import MultiSolSerializer, MultiMoveSerializer, ChatRoomSerializer, ChatSerializer
+ImportError: cannot import name ChatRoomSerializer
+Traceback (most recent call last):
+  File "/home/vshekar/Desktop/multiplayer_shekar/src/manage.py", line 10, in <module>
+    execute_from_command_line(sys.argv)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/__init__.py", line 354, in execute_from_command_line
+    utility.execute()
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/__init__.py", line 328, in execute
+    django.setup()
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/vshekar/Desktop/multiplayer_shekar/src/crowdsource_site/models.py", line 4, in <module>
+    from crowdsource_site.serializers import MultiSolSerializer, MultiMoveSerializer, ChatRoomSerializer, ChatSerializer
+ImportError: cannot import name ChatRoomSerializer
+Traceback (most recent call last):
+  File "/home/vshekar/Desktop/multiplayer_shekar/src/manage.py", line 10, in <module>
+    execute_from_command_line(sys.argv)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/__init__.py", line 354, in execute_from_command_line
+    utility.execute()
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/__init__.py", line 328, in execute
+    django.setup()
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/vshekar/Desktop/multiplayer_shekar/src/crowdsource_site/models.py", line 4, in <module>
+    from crowdsource_site.serializers import MultiSolSerializer, MultiMoveSerializer, ChatRoomSerializer, ChatSerializer
+ImportError: cannot import name ChatRoomSerializer
+Traceback (most recent call last):
+  File "/home/vshekar/Desktop/multiplayer_shekar/src/manage.py", line 10, in <module>
+    execute_from_command_line(sys.argv)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/__init__.py", line 354, in execute_from_command_line
+    utility.execute()
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/__init__.py", line 328, in execute
+    django.setup()
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/vshekar/Desktop/multiplayer_shekar/src/crowdsource_site/models.py", line 4, in <module>
+    from crowdsource_site.serializers import MultiSolSerializer, MultiMoveSerializer, ChatRoomSerializer, ChatSerializer
+ImportError: cannot import name ChatRoomSerializer
+Traceback (most recent call last):
+  File "/home/vshekar/Desktop/multiplayer_shekar/src/manage.py", line 10, in <module>
+    execute_from_command_line(sys.argv)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/__init__.py", line 354, in execute_from_command_line
+    utility.execute()
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/__init__.py", line 328, in execute
+    django.setup()
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/vshekar/Desktop/multiplayer_shekar/src/crowdsource_site/models.py", line 4, in <module>
+    from crowdsource_site.serializers import MultiSolSerializer, MultiMoveSerializer, ChatRoomSerializer, ChatSerializer
+ImportError: cannot import name ChatRoomSerializer
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+ERROR:tornado.general:WebSocket
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/sockjs/tornado/transports/websocket.py", line 60, in on_message
+    self.session.on_messages(msg)
+  File "/usr/local/lib/python2.7/dist-packages/sockjs/tornado/session.py", line 418, in on_messages
+    self.conn.on_message(msg)
+  File "/usr/local/lib/python2.7/dist-packages/swampdragon/connections/sockjs_connection.py", line 90, in on_message
+    raise e
+RouteException: No route named "Chat"
+ERROR:tornado.general:WebSocket
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/sockjs/tornado/transports/websocket.py", line 60, in on_message
+    self.session.on_messages(msg)
+  File "/usr/local/lib/python2.7/dist-packages/sockjs/tornado/session.py", line 418, in on_messages
+    self.conn.on_message(msg)
+  File "/usr/local/lib/python2.7/dist-packages/swampdragon/connections/sockjs_connection.py", line 90, in on_message
+    raise e
+RouteException: No route named "Chat"
+ERROR:tornado.general:WebSocket
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/sockjs/tornado/transports/websocket.py", line 60, in on_message
+    self.session.on_messages(msg)
+  File "/usr/local/lib/python2.7/dist-packages/sockjs/tornado/session.py", line 418, in on_messages
+    self.conn.on_message(msg)
+  File "/usr/local/lib/python2.7/dist-packages/swampdragon/connections/sockjs_connection.py", line 90, in on_message
+    raise e
+RouteException: No route named "Chat"
+ERROR:tornado.general:WebSocket
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/sockjs/tornado/transports/websocket.py", line 60, in on_message
+    self.session.on_messages(msg)
+  File "/usr/local/lib/python2.7/dist-packages/sockjs/tornado/session.py", line 418, in on_messages
+    self.conn.on_message(msg)
+  File "/usr/local/lib/python2.7/dist-packages/swampdragon/connections/sockjs_connection.py", line 90, in on_message
+    raise e
+RouteException: No route named "Chat"
+ERROR:tornado.general:WebSocket
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/sockjs/tornado/transports/websocket.py", line 60, in on_message
+    self.session.on_messages(msg)
+  File "/usr/local/lib/python2.7/dist-packages/sockjs/tornado/session.py", line 418, in on_messages
+    self.conn.on_message(msg)
+  File "/usr/local/lib/python2.7/dist-packages/swampdragon/connections/sockjs_connection.py", line 90, in on_message
+    raise e
+RouteException: No route named "Chat"
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+-------- SwampDragon ------
+Running SwampDragon on 127.0.0.1:9999
+DRAGON_URL: http://134.88.13.52:9000/
+Version 0.4.2.2
+Debug: True
+Quit the server with ctrl+c
+---------------------------
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+Traceback (most recent call last):
+  File "/home/vshekar/Desktop/multiplayer_shekar/src/manage.py", line 10, in <module>
+    execute_from_command_line(sys.argv)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/__init__.py", line 354, in execute_from_command_line
+    utility.execute()
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/__init__.py", line 328, in execute
+    django.setup()
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/vshekar/Desktop/multiplayer_shekar/src/crowdsource_site/models.py", line 69, in <module>
+    class Chat(SelfPublishModel, models.Model):
+  File "/home/vshekar/Desktop/multiplayer_shekar/src/crowdsource_site/models.py", line 74, in Chat
+    timestamp = models.DateTimeField(auto_now_add=True, auto_now=False, default=time.now())
+NameError: name 'time' is not defined
+Traceback (most recent call last):
+  File "/home/vshekar/Desktop/multiplayer_shekar/src/manage.py", line 10, in <module>
+    execute_from_command_line(sys.argv)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/__init__.py", line 354, in execute_from_command_line
+    utility.execute()
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/__init__.py", line 328, in execute
+    django.setup()
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/vshekar/Desktop/multiplayer_shekar/src/crowdsource_site/models.py", line 69, in <module>
+    class Chat(SelfPublishModel, models.Model):
+  File "/home/vshekar/Desktop/multiplayer_shekar/src/crowdsource_site/models.py", line 74, in Chat
+    timestamp = models.DateTimeField(auto_now_add=True, auto_now=False, default=time.now())
+NameError: name 'time' is not defined
+Traceback (most recent call last):
+  File "/home/vshekar/Desktop/multiplayer_shekar/src/manage.py", line 10, in <module>
+    execute_from_command_line(sys.argv)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/__init__.py", line 354, in execute_from_command_line
+    utility.execute()
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/__init__.py", line 328, in execute
+    django.setup()
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/vshekar/Desktop/multiplayer_shekar/src/crowdsource_site/models.py", line 69, in <module>
+    class Chat(SelfPublishModel, models.Model):
+  File "/home/vshekar/Desktop/multiplayer_shekar/src/crowdsource_site/models.py", line 74, in Chat
+    timestamp = models.DateTimeField(auto_now_add=True, auto_now=False, default=time.now())
+NameError: name 'time' is not defined
+Traceback (most recent call last):
+  File "/home/vshekar/Desktop/multiplayer_shekar/src/manage.py", line 10, in <module>
+    execute_from_command_line(sys.argv)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/__init__.py", line 354, in execute_from_command_line
+    utility.execute()
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/__init__.py", line 328, in execute
+    django.setup()
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/vshekar/Desktop/multiplayer_shekar/src/crowdsource_site/models.py", line 69, in <module>
+    class Chat(SelfPublishModel, models.Model):
+  File "/home/vshekar/Desktop/multiplayer_shekar/src/crowdsource_site/models.py", line 74, in Chat
+    timestamp = models.DateTimeField(auto_now_add=True, auto_now=False, default=time.now())
+NameError: name 'time' is not defined
+Traceback (most recent call last):
+  File "/home/vshekar/Desktop/multiplayer_shekar/src/manage.py", line 10, in <module>
+    execute_from_command_line(sys.argv)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/__init__.py", line 354, in execute_from_command_line
+    utility.execute()
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/__init__.py", line 328, in execute
+    django.setup()
+  File "/usr/local/lib/python2.7/dist-packages/django/__init__.py", line 18, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/registry.py", line 108, in populate
+    app_config.import_models(all_models)
+  File "/usr/local/lib/python2.7/dist-packages/django/apps/config.py", line 198, in import_models
+    self.models_module = import_module(models_module_name)
+  File "/usr/lib/python2.7/importlib/__init__.py", line 37, in import_module
+    __import__(name)
+  File "/home/vshekar/Desktop/multiplayer_shekar/src/crowdsource_site/models.py", line 69, in <module>
+    class Chat(SelfPublishModel, models.Model):
+  File "/home/vshekar/Desktop/multiplayer_shekar/src/crowdsource_site/models.py", line 74, in Chat
+    timestamp = models.DateTimeField(auto_now_add=True, auto_now=False, default=time.now())
+NameError: name 'time' is not defined
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+-------- SwampDragon ------
+Running SwampDragon on 127.0.0.1:9999
+DRAGON_URL: http://134.88.13.52:9000/
+Version 0.4.2.2
+Debug: True
+Quit the server with ctrl+c
+---------------------------
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+-------- SwampDragon ------
+Running SwampDragon on 127.0.0.1:9999
+DRAGON_URL: http://134.88.13.52:9000/
+Version 0.4.2.2
+Debug: True
+Quit the server with ctrl+c
+---------------------------
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+-------- SwampDragon ------
+Running SwampDragon on 127.0.0.1:9999
+DRAGON_URL: http://134.88.13.52:9000/
+Version 0.4.2.2
+Debug: True
+Quit the server with ctrl+c
+---------------------------
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+ERROR:tornado.general:WebSocket
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/sockjs/tornado/transports/websocket.py", line 60, in on_message
+    self.session.on_messages(msg)
+  File "/usr/local/lib/python2.7/dist-packages/sockjs/tornado/session.py", line 418, in on_messages
+    self.conn.on_message(msg)
+  File "/usr/local/lib/python2.7/dist-packages/swampdragon/connections/sockjs_connection.py", line 90, in on_message
+    raise e
+RouteException: No route named "chat"
+Exception TypeError: TypeError('must be type, not None',) in  ignored
+-------- SwampDragon ------
+Running SwampDragon on 127.0.0.1:9999
+DRAGON_URL: http://134.88.13.52:9000/
+Version 0.4.2.2
+Debug: True
+Quit the server with ctrl+c
+---------------------------
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+ERROR:tornado.general:WebSocket
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/sockjs/tornado/transports/websocket.py", line 60, in on_message
+    self.session.on_messages(msg)
+  File "/usr/local/lib/python2.7/dist-packages/sockjs/tornado/session.py", line 418, in on_messages
+    self.conn.on_message(msg)
+  File "/usr/local/lib/python2.7/dist-packages/swampdragon/connections/sockjs_connection.py", line 90, in on_message
+    raise e
+FieldError: Cannot resolve keyword 'initiator_username' into field. Choices are: id, message, solution, solution_id, timestamp, username, username_id
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+-------- SwampDragon ------
+Running SwampDragon on 127.0.0.1:9999
+DRAGON_URL: http://134.88.13.52:9000/
+Version 0.4.2.2
+Debug: True
+Quit the server with ctrl+c
+---------------------------
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+ERROR:tornado.general:WebSocket
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/sockjs/tornado/transports/websocket.py", line 60, in on_message
+    self.session.on_messages(msg)
+  File "/usr/local/lib/python2.7/dist-packages/sockjs/tornado/session.py", line 418, in on_messages
+    self.conn.on_message(msg)
+  File "/usr/local/lib/python2.7/dist-packages/swampdragon/connections/sockjs_connection.py", line 90, in on_message
+    raise e
+FieldError: Cannot resolve keyword 'solution_initiator_username' into field. Choices are: id, message, solution, solution_id, timestamp, username, username_id
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+-------- SwampDragon ------
+Running SwampDragon on 127.0.0.1:9999
+DRAGON_URL: http://134.88.13.52:9000/
+Version 0.4.2.2
+Debug: True
+Quit the server with ctrl+c
+---------------------------
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+ERROR:tornado.general:WebSocket
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/sockjs/tornado/transports/websocket.py", line 60, in on_message
+    self.session.on_messages(msg)
+  File "/usr/local/lib/python2.7/dist-packages/sockjs/tornado/session.py", line 418, in on_messages
+    self.conn.on_message(msg)
+  File "/usr/local/lib/python2.7/dist-packages/swampdragon/connections/sockjs_connection.py", line 90, in on_message
+    raise e
+FieldError: Cannot resolve keyword 'solution_initiator' into field. Choices are: id, message, solution, solution_id, timestamp, username, username_id
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+-------- SwampDragon ------
+Running SwampDragon on 127.0.0.1:9999
+DRAGON_URL: http://134.88.13.52:9000/
+Version 0.4.2.2
+Debug: True
+Quit the server with ctrl+c
+---------------------------
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+ERROR:tornado.general:WebSocket
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/sockjs/tornado/transports/websocket.py", line 60, in on_message
+    self.session.on_messages(msg)
+  File "/usr/local/lib/python2.7/dist-packages/sockjs/tornado/session.py", line 418, in on_messages
+    self.conn.on_message(msg)
+  File "/usr/local/lib/python2.7/dist-packages/swampdragon/connections/sockjs_connection.py", line 90, in on_message
+    raise e
+FieldError: Cannot resolve keyword 'solution_initiator_username' into field. Choices are: id, message, solution, solution_id, timestamp, username, username_id
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+-------- SwampDragon ------
+Running SwampDragon on 127.0.0.1:9999
+DRAGON_URL: http://134.88.13.52:9000/
+Version 0.4.2.2
+Debug: True
+Quit the server with ctrl+c
+---------------------------
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+ERROR:tornado.general:WebSocket
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/sockjs/tornado/transports/websocket.py", line 60, in on_message
+    self.session.on_messages(msg)
+  File "/usr/local/lib/python2.7/dist-packages/sockjs/tornado/session.py", line 418, in on_messages
+    self.conn.on_message(msg)
+  File "/usr/local/lib/python2.7/dist-packages/swampdragon/connections/sockjs_connection.py", line 90, in on_message
+    raise e
+OperationalError: unable to open database file
+Exception TypeError: TypeError('must be type, not None',) in  ignored
+-------- SwampDragon ------
+Running SwampDragon on 127.0.0.1:9999
+DRAGON_URL: http://134.88.13.52:9000/
+Version 0.4.2.2
+Debug: True
+Quit the server with ctrl+c
+---------------------------
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+ERROR:tornado.general:WebSocket
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/sockjs/tornado/transports/websocket.py", line 60, in on_message
+    self.session.on_messages(msg)
+  File "/usr/local/lib/python2.7/dist-packages/sockjs/tornado/session.py", line 418, in on_messages
+    self.conn.on_message(msg)
+  File "/usr/local/lib/python2.7/dist-packages/swampdragon/connections/sockjs_connection.py", line 90, in on_message
+    raise e
+OperationalError: unable to open database file
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+ERROR:tornado.general:WebSocket
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/sockjs/tornado/transports/websocket.py", line 60, in on_message
+    self.session.on_messages(msg)
+  File "/usr/local/lib/python2.7/dist-packages/sockjs/tornado/session.py", line 418, in on_messages
+    self.conn.on_message(msg)
+  File "/usr/local/lib/python2.7/dist-packages/swampdragon/connections/sockjs_connection.py", line 90, in on_message
+    raise e
+FieldError: Cannot resolve keyword 'solution_initiator_username' into field. Choices are: id, message, solution, solution_id, timestamp, username, username_id
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+ERROR:tornado.general:WebSocket
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/sockjs/tornado/transports/websocket.py", line 60, in on_message
+    self.session.on_messages(msg)
+  File "/usr/local/lib/python2.7/dist-packages/sockjs/tornado/session.py", line 418, in on_messages
+    self.conn.on_message(msg)
+  File "/usr/local/lib/python2.7/dist-packages/swampdragon/connections/sockjs_connection.py", line 90, in on_message
+    raise e
+FieldError: Cannot resolve keyword 'solution_problem_name' into field. Choices are: id, message, solution, solution_id, timestamp, username, username_id
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+ERROR:tornado.general:WebSocket
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/sockjs/tornado/transports/websocket.py", line 60, in on_message
+    self.session.on_messages(msg)
+  File "/usr/local/lib/python2.7/dist-packages/sockjs/tornado/session.py", line 418, in on_messages
+    self.conn.on_message(msg)
+  File "/usr/local/lib/python2.7/dist-packages/swampdragon/connections/sockjs_connection.py", line 90, in on_message
+    raise e
+OperationalError: unable to open database file
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+Traceback (most recent call last):
+  File "/home/vshekar/Desktop/multiplayer_shekar/src/manage.py", line 10, in <module>
+    execute_from_command_line(sys.argv)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/__init__.py", line 354, in execute_from_command_line
+    utility.execute()
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/__init__.py", line 346, in execute
+    self.fetch_command(subcommand).run_from_argv(self.argv)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 394, in run_from_argv
+    self.execute(*args, **cmd_options)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 445, in execute
+    output = self.handle(*args, **options)
+  File "/usr/local/lib/python2.7/dist-packages/swampdragon/management/commands/runsd.py", line 11, in handle
+    run_server(host_port=host_port)
+  File "/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py", line 55, in run_server
+    urls = discover_routes()
+  File "/usr/local/lib/python2.7/dist-packages/swampdragon/__init__.py", line 18, in discover_routes
+    import_module(target_mod)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/importlib.py", line 45, in import_module
+    __import__(name)
+  File "/home/vshekar/Desktop/multiplayer_shekar/src/crowdsource_site/routers.py", line 37
+    return self.model.objects.filter(solution.problem.name = kwargs['problem_name'], solution.initiator.username = kwargs['initiator'])
+SyntaxError: keyword can't be an expression
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+Traceback (most recent call last):
+  File "/home/vshekar/Desktop/multiplayer_shekar/src/manage.py", line 10, in <module>
+    execute_from_command_line(sys.argv)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/__init__.py", line 354, in execute_from_command_line
+    utility.execute()
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/__init__.py", line 346, in execute
+    self.fetch_command(subcommand).run_from_argv(self.argv)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 394, in run_from_argv
+    self.execute(*args, **cmd_options)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 445, in execute
+    output = self.handle(*args, **options)
+  File "/usr/local/lib/python2.7/dist-packages/swampdragon/management/commands/runsd.py", line 11, in handle
+    run_server(host_port=host_port)
+  File "/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py", line 55, in run_server
+    urls = discover_routes()
+  File "/usr/local/lib/python2.7/dist-packages/swampdragon/__init__.py", line 18, in discover_routes
+    import_module(target_mod)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/importlib.py", line 45, in import_module
+    __import__(name)
+  File "/home/vshekar/Desktop/multiplayer_shekar/src/crowdsource_site/routers.py", line 37
+    return self.model.objects.filter(solution.problem.name = kwargs['problem_name'], solution.initiator.username = kwargs['initiator'])
+SyntaxError: keyword can't be an expression
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+Traceback (most recent call last):
+  File "/home/vshekar/Desktop/multiplayer_shekar/src/manage.py", line 10, in <module>
+    execute_from_command_line(sys.argv)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/__init__.py", line 354, in execute_from_command_line
+    utility.execute()
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/__init__.py", line 346, in execute
+    self.fetch_command(subcommand).run_from_argv(self.argv)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 394, in run_from_argv
+    self.execute(*args, **cmd_options)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 445, in execute
+    output = self.handle(*args, **options)
+  File "/usr/local/lib/python2.7/dist-packages/swampdragon/management/commands/runsd.py", line 11, in handle
+    run_server(host_port=host_port)
+  File "/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py", line 55, in run_server
+    urls = discover_routes()
+  File "/usr/local/lib/python2.7/dist-packages/swampdragon/__init__.py", line 18, in discover_routes
+    import_module(target_mod)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/importlib.py", line 45, in import_module
+    __import__(name)
+  File "/home/vshekar/Desktop/multiplayer_shekar/src/crowdsource_site/routers.py", line 37
+    return self.model.objects.filter(solution.problem.name = kwargs['problem_name'], solution.initiator.username = kwargs['initiator'])
+SyntaxError: keyword can't be an expression
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+Traceback (most recent call last):
+  File "/home/vshekar/Desktop/multiplayer_shekar/src/manage.py", line 10, in <module>
+    execute_from_command_line(sys.argv)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/__init__.py", line 354, in execute_from_command_line
+    utility.execute()
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/__init__.py", line 346, in execute
+    self.fetch_command(subcommand).run_from_argv(self.argv)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 394, in run_from_argv
+    self.execute(*args, **cmd_options)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 445, in execute
+    output = self.handle(*args, **options)
+  File "/usr/local/lib/python2.7/dist-packages/swampdragon/management/commands/runsd.py", line 11, in handle
+    run_server(host_port=host_port)
+  File "/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py", line 55, in run_server
+    urls = discover_routes()
+  File "/usr/local/lib/python2.7/dist-packages/swampdragon/__init__.py", line 18, in discover_routes
+    import_module(target_mod)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/importlib.py", line 45, in import_module
+    __import__(name)
+  File "/home/vshekar/Desktop/multiplayer_shekar/src/crowdsource_site/routers.py", line 37
+    return self.model.objects.filter(solution.problem.name = kwargs['problem_name'], solution.initiator.username = kwargs['initiator'])
+SyntaxError: keyword can't be an expression
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+Traceback (most recent call last):
+  File "/home/vshekar/Desktop/multiplayer_shekar/src/manage.py", line 10, in <module>
+    execute_from_command_line(sys.argv)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/__init__.py", line 354, in execute_from_command_line
+    utility.execute()
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/__init__.py", line 346, in execute
+    self.fetch_command(subcommand).run_from_argv(self.argv)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 394, in run_from_argv
+    self.execute(*args, **cmd_options)
+  File "/usr/local/lib/python2.7/dist-packages/django/core/management/base.py", line 445, in execute
+    output = self.handle(*args, **options)
+  File "/usr/local/lib/python2.7/dist-packages/swampdragon/management/commands/runsd.py", line 11, in handle
+    run_server(host_port=host_port)
+  File "/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py", line 55, in run_server
+    urls = discover_routes()
+  File "/usr/local/lib/python2.7/dist-packages/swampdragon/__init__.py", line 18, in discover_routes
+    import_module(target_mod)
+  File "/usr/local/lib/python2.7/dist-packages/django/utils/importlib.py", line 45, in import_module
+    __import__(name)
+  File "/home/vshekar/Desktop/multiplayer_shekar/src/crowdsource_site/routers.py", line 37
+    return self.model.objects.filter(solution.problem.name = kwargs['problem_name'], solution.initiator.username = kwargs['initiator'])
+SyntaxError: keyword can't be an expression
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+ERROR:tornado.general:WebSocket
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/sockjs/tornado/transports/websocket.py", line 60, in on_message
+    self.session.on_messages(msg)
+  File "/usr/local/lib/python2.7/dist-packages/sockjs/tornado/session.py", line 418, in on_messages
+    self.conn.on_message(msg)
+  File "/usr/local/lib/python2.7/dist-packages/swampdragon/connections/sockjs_connection.py", line 90, in on_message
+    raise e
+OperationalError: unable to open database file
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+ERROR:tornado.general:WebSocket
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/sockjs/tornado/transports/websocket.py", line 60, in on_message
+    self.session.on_messages(msg)
+  File "/usr/local/lib/python2.7/dist-packages/sockjs/tornado/session.py", line 418, in on_messages
+    self.conn.on_message(msg)
+  File "/usr/local/lib/python2.7/dist-packages/swampdragon/connections/sockjs_connection.py", line 90, in on_message
+    raise e
+OperationalError: unable to open database file
+ERROR:tornado.general:WebSocket
+Traceback (most recent call last):
+  File "/usr/local/lib/python2.7/dist-packages/sockjs/tornado/transports/websocket.py", line 60, in on_message
+    self.session.on_messages(msg)
+  File "/usr/local/lib/python2.7/dist-packages/sockjs/tornado/session.py", line 418, in on_messages
+    self.conn.on_message(msg)
+  File "/usr/local/lib/python2.7/dist-packages/swampdragon/connections/sockjs_connection.py", line 90, in on_message
+    raise e
+OperationalError: unable to open database file
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+-------- SwampDragon ------
+Running SwampDragon on 127.0.0.1:9999
+DRAGON_URL: http://134.88.13.52:9000/
+Version 0.4.2.2
+Debug: True
+Quit the server with ctrl+c
+---------------------------
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+-------- SwampDragon ------
+Running SwampDragon on 127.0.0.1:9999
+DRAGON_URL: http://134.88.13.52:9000/
+Version 0.4.2.2
+Debug: True
+Quit the server with ctrl+c
+---------------------------
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+-------- SwampDragon ------
+Running SwampDragon on 127.0.0.1:9999
+DRAGON_URL: http://134.88.13.52:8001/
+Version 0.4.2.2
+Debug: True
+Quit the server with ctrl+c
+---------------------------
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+-------- SwampDragon ------
+Running SwampDragon on 127.0.0.1:9999
+DRAGON_URL: http://134.88.13.52:8002/
+Version 0.4.2.2
+Debug: True
+Quit the server with ctrl+c
+---------------------------
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+-------- SwampDragon ------
+Running SwampDragon on 127.0.0.1:9999
+DRAGON_URL: http://134.88.13.52:8001/
+Version 0.4.2.2
+Debug: True
+Quit the server with ctrl+c
+---------------------------
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+-------- SwampDragon ------
+Running SwampDragon on 127.0.0.1:9999
+DRAGON_URL: http://134.88.13.52:8002/
+Version 0.4.2.2
+Debug: True
+Quit the server with ctrl+c
+---------------------------
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+-------- SwampDragon ------
+Running SwampDragon on 127.0.0.1:9999
+DRAGON_URL: http://134.88.13.52:8002/
+Version 0.4.2.2
+Debug: True
+Quit the server with ctrl+c
+---------------------------
+Unknown command: 'runsd'
+Type 'manage.py help' for usage.
+Unknown command: 'runsd'
+Type 'manage.py help' for usage.
+Unknown command: 'runsd'
+Type 'manage.py help' for usage.
+Unknown command: 'runsd'
+Type 'manage.py help' for usage.
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+-------- SwampDragon ------
+Running SwampDragon on 127.0.0.1:9001
+DRAGON_URL: http://134.88.13.52:8003/
+Version 0.4.2.2
+Debug: True
+Quit the server with ctrl+c
+---------------------------
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+
+/usr/local/lib/python2.7/dist-packages/swampdragon/swampdragon_server.py:3: RemovedInDjango19Warning: django.utils.importlib will be removed in Django 1.9.
+  from django.utils.importlib import import_module
+

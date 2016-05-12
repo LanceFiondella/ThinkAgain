@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" style = "height: 100%;">
+<head>
+	<meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Think Again!</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{{ STATIC_URL }}/static/CSS/normalize.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+  <script src="{{ STATIC_URL }}/static/scripts/gameMenu.js"></script>
+  <script type="text/javascript">
+sessionStorage.setItem("username", '{{ user.username }}');
+
+
+  </script>
+</head>
+
+<body style = "background-color: #ffcc00; height: 100%;" onload="init()">
+
+<div id="content" >
+
+<div class= "container" style="height:100%">
+  <div id="main-menu" class="modal-dialog" >
+      <div class="modal-content">
+          <div class="modal-header" style="text-align: center; margin: 0auto;">
+              <h1 class="modal-title" >Main Menu</h1>
+          </div>
+          <div class="modal-body">
+              <div class="row">
+                
+                  <div class="col-xs-8 col-xs-offset-2">
+                      <div class="well">
+                              <a href="/game/"><button onClick="continueLast()" class="btn btn-primary raised " style="width: 100%;  ">Continue Last Game</button></a>
+                              <button onClick="showLevelList()" class="btn btn-success raised "style="width: 100%; ">Select Level</button>
+                              <button onclick="showOptions()" class="btn btn-warning raised "style="width: 100%;  ">Options</button>  
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+
+
+  <div id="options-menu" class="modal-dialog collapse" >
+      <div class="modal-content">
+          <div class="modal-header" style="text-align: center; margin: 0auto;">
+              <h1 class="modal-title" >Options</h1>
+          </div>
+          <div class="modal-body">
+              <div class="row">
+                
+                  <div class="col-xs-8 col-xs-offset-2">
+                      <div class="well">
+                              <div class="checkbox">
+                                   <label><input type="checkbox" value="sound" checked>Sound</label>
+                              </div>
+                              <div class="dropdown" >
+                                <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown" style="margin-bottom: 10 px;">Tileset
+                                <span class="caret"></span></button>
+                                <ul class="dropdown-menu">
+                                  <li><a href="#">Numbers</a></li>
+                                  <li><a href="#">English</a></li>
+                                  <li><a href="#">Hindi</a></li>
+                                </ul>
+                              </div>
+                              <button onclick="listToMainMenu()" class="btn btn-danger raised "style="width: 100%;  ">Back</button>  
+
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+
+
+  <div id="level-list" class= "container collapse">
+    
+      <h2 style = "text-align:center;">Level List</h2>
+    
+    <ul class="nav nav-tabs">
+      <li class="active" ><a id="sptab" data-toggle="tab" href="#singleplayer">Single Player</a></li>
+      <li ><a id="mptab" data-toggle="tab" href="#multiplayer">Multiplayer</a></li>
+    </ul>
+<div class="container ">
+      <div class="col-xs-3"><h5 style="color:green">Current Status<h5></div><div class="col-xs-5"><h4>Level Name</h4></div><div class="col-xs-2"><h5>Solutions<h5></div><div class="col-xs-2"><h5>Abandons<h5></div>
+      </div>
+    <div class="tab-content">
+      <div id="singleplayer" class="tab-pane fade in active">
+        
+        <div id="singlePlayerList" style="min-height: 500px; max-height: 500px; overflow-y:auto;  margin-bottom: 10px;" class="list-group col-xs-12 ">
+      </div>
+      </div>
+
+      <div id="multiplayer"  class="tab-pane fade">
+        
+        <div id="multiPlayerList" style="min-height: 500px; max-height: 500px; overflow-y:auto;  margin-bottom: 10px;" class="list-group col-xs-12 ">
+                        
+
+                        
+        </div>
+        </div>
+       
+       <div class="col-xs-4 col-xs-offset-4 ">
+       <a href="/game/"><button onclick="play()" class="btn btn-success raised "style="width: 100%;  ">Play</button></a>  
+       <button onclick="listToMainMenu()" class="btn btn-danger raised "style="width: 100%;  ">Back</button>  
+       </div>
+
+    </div>
+  </div>
+
+</div>
+
+<body>
+</html>
