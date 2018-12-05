@@ -26,7 +26,7 @@ $.ajaxSetup({
 });
 
 $.ajax({
-    url : "/get_level_list/",
+    url : "/game/get_level_list/",
     type : "POST",
     data: "username="+ sessionStorage.getItem("username"),
 
@@ -65,12 +65,14 @@ len = window.keys.length;
 
 for (i = 0; i < len; i++) {
   k = window.keys[i];
-  
   singlePlayerList.innerHTML += '<div onClick="selectedItem('+i.toString() + ')" id="singleplayer'+i.toString()+'" class="list-group-item row "><div class="col-xs-3"><h5 style="color:green">'+ window.spList[k].current_status+'<h5></div><div class="col-xs-5"><h4>'+ k + '</h4></div><div class="col-xs-2"><h4>'+window.spList[k].complete_count.toString()+'</h4></div><div class="col-xs-2"><h4>'+window.spList[k].abandoned_count.toString()+'</h4></div>';
-  multiPlayerList.innerHTML +='<div onClick="selectedMultiItem('+i.toString() + ')" id="multiplayer'+i.toString()+'" class="list-group-item row "><div class="col-xs-3"><h5 style="color:green">'+ window.mpList[k].current_status+'<h5></div><div class="col-xs-5"><h4>'+ k + '</h4></div><div class="col-xs-2"><h4>'+window.mpList[k].complete_count.toString()+'</h4></div><div class="col-xs-2"><h4>'+window.mpList[k].abandoned_count.toString()+'</h4></div>';
+  
 }
 
-
+for (i = 0; i < len; i++) {
+    k = window.keys[i];
+    multiPlayerList.innerHTML +='<div onClick="selectedMultiItem('+i.toString() + ')" id="multiplayer'+i.toString()+'" class="list-group-item row "><div class="col-xs-3"><h5 style="color:green">'+ window.mpList[k].current_status+'<h5></div><div class="col-xs-5"><h4>'+ k + '</h4></div><div class="col-xs-2"><h4>'+window.mpList[k].complete_count.toString()+'</h4></div><div class="col-xs-2"><h4>'+window.mpList[k].abandoned_count.toString()+'</h4></div>';
+  }
 
 }
 
@@ -98,10 +100,12 @@ function selectedMultiItem(id){
 }
 
 function listToMainMenu(){
-  $('#level-list').hide();
-  $('#options-menu').hide();
+    location.reload();
+  //$('#level-list').hide();
+  //$('#options-menu').hide();
+  //$('#how-to-play').hide();
   //$('#main-menu').collapse();
-  $('#main-menu').show();
+  //$('#main-menu').show();
 }
 
 function showLevelList(){
@@ -116,6 +120,13 @@ function showOptions(){
   $('#main-menu').hide();
   $('#level-list').hide();
   $('#options-menu').show();
+}
+
+function showVideo(){
+    $('#main-menu').hide();
+  $('#level-list').hide();
+  $('#options-menu').hide();
+  $('#how-to-play').show();
 }
 
 $(function() {
