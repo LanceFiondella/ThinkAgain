@@ -1,7 +1,7 @@
-#Synopsis
+# Synopsis
 'Think Again!' uses the power of crowds to solve large propositional logic problems. The problems are encoded as puzzle pieces that the has to combine and solve
 
-#Dependencies
+# Dependencies
 This project mainly uses Django 1.8 to handle the website (authentication, admin, serving static files) and swampdragon to facilitate real time data transfer for multiplayer game and chat room. Will change to Django channels when version 1.10 is out.
 
 First make sure the python-dev package is installed:
@@ -13,7 +13,7 @@ Install Swampdragon using pip:
 Make sure you have redis installed:
 `sudo apt-get -y install redis-server`
 
-#Running the project
+# Running the project
 Open 2 terminals. Navigate to the src folder in both.
 In terminal 1:
 `python manage.py runserver`
